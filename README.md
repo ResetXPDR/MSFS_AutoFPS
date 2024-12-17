@@ -97,8 +97,10 @@ Basically: Just run the Installer to either install, update or uninstall the app
 Some Notes:
 - The installer uninstalls MSFS2020_AutoFPS if currently installed but preserves its MSFS 2020 config for use in this new app beforehand if desired or applicable.
 - Your current MSFS_AutoFPS has to be exited before updating.
-- - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
-- If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
+- Mobiflight Module:
+  - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
+  - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
+  - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
 - Do not run the Installer as Admin unless it will not install otherwise due to a permissions issue!
 - If the installer will not run at all, Windows SmartScreen is potentially blocking it because the app is so new. The solution to try is:
   - Right-click on the Installer and select properties
