@@ -96,6 +96,10 @@ Basically: Just run the Installer to either install, update or uninstall the app
 
 Some Notes:
 - The installer uninstalls MSFS2020_AutoFPS if currently installed but preserves its MSFS 2020 config for use in this new app beforehand if desired or applicable.
+- If you have previously removed MSFS2020_FPS without using the installer to remove it properly, you may experience issues installing MSFS_AutoFPS. If this happens, do the following:
+  - Run the installer for the MSFS_AutoFPS and select remove to uninstall it completely.
+  - Download the installer for MSFS2020_FPS 0.4.3.1 [here](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/download/v0.4.3.1/MSFS_AutoFPS-installer-v0.4.3.1.exe) and reinstall it with no autostart options.
+  - Rerun the installer for MSFS_AutoFPS and reinstall with whatever autostart option you desire. 
 - Your current MSFS_AutoFPS has to be exited before updating.
 - Mobiflight Module:
   - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
