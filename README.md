@@ -103,12 +103,12 @@ Some Notes:
     - Click on Apply and Ok to save the change
     - Then try to install it again
   - Try creating an exception for the installer in your AV program, or just disabled the AV program temporarily while running the installer
-- MSFS_AutoFPS and MSFS2020_AutoFPS, if already installed, have to be exited before updating.
-- Do not run the Installer as Admin unless it will not install otherwise due to a permissions issue!
-- The installer uninstalls MSFS2020_AutoFPS if currently installed but preserves its MSFS 2020 config for use in this new app beforehand if desired or applicable.
+- MSFS_AutoFPS and/or MSFS2020_AutoFPS must not be running before installing/updating/upgrading.
+- Do not run the Installer as Admin unless it will not install due to a permissions issue.
+- There is no need to uninstall MSFS2020_AutoFPS before upgrading to MSFS_AutoFPS. The installer uninstalls MSFS2020_AutoFPS if currently installed but preserves its MSFS 2020 config for use in this new app beforehand if desired or applicable.
 - If you have previously removed MSFS2020_FPS without using the installer to remove it properly, you may experience issues installing MSFS_AutoFPS. If this happens, do the following:
   - Run the installer for the MSFS_AutoFPS and select remove to uninstall it completely.
-  - Download the installer for MSFS2020_FPS 0.4.3.1 [here](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/download/v0.4.3.1/MSFS_AutoFPS-installer-v0.4.3.1.exe) and reinstall it with no autostart options.
+  - Download the installer for MSFS2020_AutoFPS 0.4.3.1 [here](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/download/v0.4.3.1/MSFS_AutoFPS-installer-v0.4.3.1.exe) and reinstall it with no autostart options.
   - Rerun the installer for MSFS_AutoFPS and reinstall with whatever autostart option you desire. 
 - Mobiflight Module:
   - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
