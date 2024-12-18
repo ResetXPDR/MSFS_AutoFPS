@@ -123,7 +123,7 @@ Some Notes:
   - Logs in %appdata%\MSFS_AutoFPS\log
   - Config: %appdata%\MSFS_AutoFPS\MSFS2020_AutoFPS.config and MSFS2024_AutoFPS.config
 - If after installing and running the app your simconnect always stays red:
-  - Try downloading and installing a Microsoft official version of “Microsoft Visual C++ 2015 - 2022 Redistributable”, which may be missing from your Windows installation.
+  - Try downloading and installing a Microsoft official version of “Microsoft Visual C++ 2015 - 2022 Redistributable”, which may be missing from your Windows installation. Try https://aka.ms/vs/17/release/vc_redist.x86.exe and https://aka.ms/vs/17/release/vc_redist.x64.exe
   - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS installation so you can choose to either not run this app or to reinstall MSFS completely.
 - If you get an "MSFS compatibility test failed - app disabled." message there are three possible causes:
   - There is an issue with permissions and you may need to run the app as Administrator. This is by far the most likely cause and resolution.
