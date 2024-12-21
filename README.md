@@ -139,10 +139,10 @@ Some Notes:
 ## Usage / Configuration
 
 - General
-  - The app can be started anytime, but preferably before MSFS or in the Main Menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes. 
-  - Closing the Window does not close the app, use the Context Menu of the SysTray Icon.
-  - Clicking on the SysTray Icon opens the Window (again).
-  - If you wish to have the app window always open to the SysTray, close the app and manually change the openWindow key state in the config file to false.
+  - Can be started anytime, but preferably before MSFS or in the Main Menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes. 
+  - Exit the application, with user confirmation, by clicking on the app window's close button.
+  - The app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions.
+  - The app window's minimised or normal state will be remembered between sessions and will be restored on the next startup.
   - The app's window position will be remembered between sessions, except movements to it made while in VR due to window restoration issues. If there are issues with the window not displaying correctly on start-up, as can happen when auto-starting the app through MSFS or FSUIPC, either don't use auto-start, restart the app within 10 seconds of last closing it to auto reset the window position, or manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
   - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app. 
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
