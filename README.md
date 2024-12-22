@@ -206,7 +206,7 @@ Some Notes:
     - TLOD Max - - enabled
     - Decrease Cloud Quality
       - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
-      - can be disabled by setting DecCloudQNonExpert to false in the app config file.
+      - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
       - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
       - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
     - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100%
