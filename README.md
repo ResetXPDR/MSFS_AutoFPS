@@ -34,6 +34,15 @@ Important:<br/>
 
 ## FAQ
 
+What's with all these AutoFPS apps out now? Which one should I be using?:
+- As of Dec 24, there are three commonly used AutoFPS apps out there, all of which install to separate directories but each has a different starting name that IMO is reasonably intuitive as to what MSFS sim versions they are applicable to, namely:
+  - MSFS2020_AutoFPS - my original app that works only with MSFS 2020.
+  - MSFS2024_AutoFPS by kayJay_1c6b - kayJay_1c6b's app that works only with MSFS 2024.
+  - MSFS_AutoFPS - this app that works with both MSFS 2020 and 2024, hence the dropping of the sim version from the name and thus making MSFS2020_AutoFPS obsolete.
+ - If you like the functionality MSFS2020_AutoFPS provided for MSFS 2020 and are happy with the same functionality for MSFS 2024, regardless of which MSFS version you are currently using, then MSFS_AutoFPS is the one for you.
+ - If you want newer features for MSFS 2024 than what MSFS2020_AutoFPS offered, but no MSFS 2020 compatibility, then MSFS2024_AutoFPS by kayJay_1c6b is what you need.
+ - You can have MSFS2024_AutoFPS by kayJay_1c6b and either MSFS2020_AutoFPS or MSFS_AutoFPS installed at the same time, but you can only run one of them at a time.
+
 I am new to this app/MSFS, or I don't care for all this technical jargon. What is the simplest way to use this app to make my MSFS experience better?
 - Start the app before you load your flight,
 - Leave Use Expert Settings unchecked,
@@ -41,6 +50,12 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Enter a realistic target FPS (or click on auto target FPS for the app to pick it for you),
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
+
+Where has my system tray icon gone? I loved it so will you bring it back?
+- I've had many users confused about the app hiding in the system tray and just a handful who would prefer it to remain, so gone it has and there are no plans to bring it back. 
+- As such your choices are:
+  - Use my last [MSFS2020_AutoFPS](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/tag/v0.4.3.1) version 0.4.3.1 for MSFS 2020 and kayjay's [MSFS2024_AutoFPS](https://github.com/kayjay1c6b/MSFS2024_AutoFPS-by-kayJay_1c6) for MSFS 2024, both of which still use the system tray icon method you like.
+  - Use this app and a freeware app like https://www.4t-niagara.com/tray.html to have the icon go to the system tray as you desire.
 
 I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
 - By far the most common reason is users have enabled expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
@@ -52,15 +67,6 @@ I am getting major stuttering, freezes or CTDs in MSFS using this app. What can 
 My default MSFS TLOD, OLOD and/or cloud settings are messed up and each time I try to change them back they get messed up again. How do I fix this?
 - You are likely trying to change these default MSFS settings while the app is still running and you are in an active flight, where the app will override any such changes you try to make.
 - Either exit the app completely from the System Tray or be in the MSFS main menu (ie. NOT in a flight), then you can go to the MSFS settings screen and change your default MSFS settings to what you want and the app will restore these upon exiting.
-
-What's with all these AutoFPS apps out now? Which one should I be using?:
-- As of Dec 24, there are three commonly used AutoFPS apps out there, all of which install to separate directories but each has a different starting name that IMO is reasonably intuitive as to what MSFS sim versions they are applicable to, namely:
-  - MSFS2020_AutoFPS - my original app that works only with MSFS 2020.
-  - MSFS2024_AutoFPS by kayJay_1c6b - kayJay_1c6b's app that works only with MSFS 2024.
-  - MSFS_AutoFPS - this app that works with both MSFS 2020 and 2024, hence the dropping of the sim version from the name and thus making MSFS2020_AutoFPS obsolete.
- - If you like the functionality MSFS2020_AutoFPS provided for MSFS 2020 and are happy with the same functionality for MSFS 2024, regardless of which MSFS version you are currently using, then MSFS_AutoFPS is the one for you.
- - If you want newer features for MSFS 2024 than what MSFS2020_AutoFPS offered, but no MSFS 2020 compatibility, then MSFS2024_AutoFPS by kayJay_1c6b is what you need.
- - You can have MSFS2024_AutoFPS by kayJay_1c6b and either MSFS2020_AutoFPS or MSFS_AutoFPS installed at the same time, but you can only run one of them at a time.
 
 How does this app work for Frame Generation (FG) users?
 - The app does detect correct FG FPS when FG (native nVidia or FG mod) is enabled in MSFS, however FG is only active when MSFS is the focused window and becomes inactive when not, through your graphics driver not this app.
