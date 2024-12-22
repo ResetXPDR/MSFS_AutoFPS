@@ -54,7 +54,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 Where has my system tray icon gone? I loved it so will you bring it back?
 - I've had many users confused about the app hiding in the system tray and just a handful who would prefer it to remain, so gone it has and there are no plans to bring it back. 
 - As such your choices are:
-  - Use my last [MSFS2020_AutoFPS](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/tag/v0.4.3.1) version 0.4.3.1 for MSFS 2020 and kayjay's [MSFS2024_AutoFPS](https://github.com/kayjay1c6b/MSFS2024_AutoFPS-by-kayJay_1c6) for MSFS 2024, both of which still use the system tray icon method you like.
+  - Use my last [MSFS2020_AutoFPS](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/tag/v0.4.3.1) version 0.4.3.1 for MSFS 2020 and/or kayjay's [MSFS2024_AutoFPS](https://github.com/kayjay1c6b/MSFS2024_AutoFPS-by-kayJay_1c6) for MSFS 2024, both of which still use the system tray icon method you like.
   - Use this app and a freeware app like https://www.4t-niagara.com/tray.html to have the icon go to the system tray as you desire.
 
 I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
