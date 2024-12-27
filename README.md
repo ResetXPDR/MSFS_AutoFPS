@@ -51,12 +51,6 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
 
-Where has my system tray icon gone? I loved it so will you bring it back?
-- I've had many users confused about the app hiding in the system tray and just a handful who would prefer it to remain, so gone it has and there are no plans to bring it back. 
-- As such your choices are:
-  - Use my last [MSFS2020_AutoFPS](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/tag/v0.4.3.1) version 0.4.3.1 for MSFS 2020 and/or kayjay's [MSFS2024_AutoFPS](https://github.com/kayjay1c6b/MSFS2024_AutoFPS-by-kayJay_1c6) for MSFS 2024, both of which still use the system tray icon method you like.
-  - Use this app and a freeware app like https://www.4t-niagara.com/tray.html to have the icon go to the system tray as you desire.
-
 I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
 - By far the most common reason is users have enabled expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
 - As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer to uninstall (remove option) and reinstall, which will recreate your config file.
@@ -121,6 +115,7 @@ Some Notes:
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
+- The clean install option will recreate new configuration files without having to remove the app first.
 - For Auto-Start either your FSUIPC7.ini or EXE.xml (MSFS) is modified. The Installer does not create a Backup.
 - If you wish to remove an Auto-Start option from a previous installation, rerun the installer and select Remove Auto-Start and the click Update.
 - The app may be blocked by Windows Security or your AV-Scanner, if so try to unblock or set an exception (for the whole Folder)
@@ -135,6 +130,7 @@ Some Notes:
 - If you get an "MSFS compatibility test failed - app disabled." message there are three possible causes:
   - There is an issue with permissions and you may need to run the app as Administrator. This is by far the most likely cause and resolution.
   - You may have changed MSFS settings in your usercfg.opt file beyond what is possible to set in the MSFS settings menu. To rectify, go into MSFS settings at the main menu and reset to default (F12) the graphics settings for both PC and VR mode, then make all changes to MSFS within the MSFS settings menu.
+  - You have started MSFS, made changes to MSFS settings and then started this app. To rectify, just restart MSFS and start this app BEFORE you make any changes to MSFS settings.
   - A new version of MSFS has come out that has a different memory map to what the app expects, which has happened only once since MSFS 2020 was released, and the app can't auto adjust to the new memory location for MSFS settings. If so, I will likely be already aware of it and working on a solution, but if you may be one of the first to encounter it (eg. on an MSFS beta) then please do let me know.
 - If you get a message when starting the app that you need to install .NET desktop runtime, manually download it from [here](https://dotnet.microsoft.com/en-us/download/dotnet/7.0).
 - If you get an error message saying "XML Exception: Unexpected XML declaration" or "Exception: 'System.Xml.XMlException' during AutostartExe" when trying to install with the auto-start option for MSFS, it usually means your EXE.xml file has a corrupted data structure. To resolve, copy the content of your EXE.xml into MS Copilot and ask it to check and correct it for you. Paste the fixed structure back into your EXE.xml file, save it, then try reinstalling again.
@@ -147,8 +143,9 @@ Some Notes:
 - General
   - Can be started anytime, but preferably before MSFS or in the Main Menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes. 
   - Exit the application by clicking on the app window's close button and providing user confirmation when prompted.
-  - The app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions.
-  - The app window's minimised or normal state will be remembered between sessions and will be restored on the next startup.
+  - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions.
+  - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exists when MSFS closes.
+  - The app window's state will be remembered between sessions and will be restored on the next startup.
   - The apps window's position will be remembered between sessions, except movements to it made while in VR due to window restoration issues. If there are issues with the window not displaying correctly on start-up, as can happen when auto-starting the app through MSFS or FSUIPC, either don't use auto-start, restart the app within 10 seconds of last closing it to auto reset the window position, or manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
   - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app. 
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
