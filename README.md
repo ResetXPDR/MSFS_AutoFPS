@@ -7,10 +7,7 @@ Following MSFS_AutoFPS version 0.4.4.2 formal release, my development efforts on
 Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD and myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS.<br/><br/>
 
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
-- Automatically detects and displays the MSFS version in use and keeps separate settings for each MSFS version and a single log file for both.
-- Remembers which MSFS version you last used the app with and will start up next time with the settings for that MSFS version.
 - Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule, the latter as an expert option,
-- Improved target FPS tracking for all modes by having much smaller TLOD changes the closer you are to your target FPS, giving more consistent FPS for a better flight experience.    
 - A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type and is fully customisable in Expert mode. 
 - Auto raising and lowering of the minimum or base TLOD option, depending on low altitude performance being either very favourable or poor respectively,
 - Auto lowering of the maximum or top TLOD at night option, reducing system workload by not having to draw distant scenery that can't be seen in the dark anyway,
@@ -20,6 +17,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
 - Simultaneous PC, FG (native nVidia, FG mod and Lossless Scaling) and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - A greatly simplified non-expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
+- Auto TLOD limiting when running the GPU-Z companion app and VRAM overflow in MSFS is impending, as occurs for some users with MSFS 2024.
 - Auto disabling of Dynamic Settings in MSFS 2024 while this app is active, to prevent settings contention, and
 - Auto restoration of original MSFS settings changed by the app, recently enhanced to withstand MSFS CTDs.<br><br>
 
@@ -142,8 +140,7 @@ Some Notes:
 
 - General
   - Can be started anytime, but preferably before MSFS or in the Main Menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes. 
-  - Exit the application by clicking on the app window's close button and providing user confirmation when prompted.
-  - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions.
+  - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions. Exit by clicking on the app window's close button and providing user confirmation when prompted.
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exists when MSFS closes.
   - The app window's state will be remembered between sessions and will be restored on the next startup.
   - The apps window's position will be remembered between sessions, except movements to it made while in VR due to window restoration issues. If there are issues with the window not displaying correctly on start-up, as can happen when auto-starting the app through MSFS or FSUIPC, either don't use auto-start, restart the app within 10 seconds of last closing it to auto reset the window position, or manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
@@ -160,6 +157,13 @@ Some Notes:
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
   - FPS shows the FPS for the current graphics mode averaged over 5 seconds which will smooth out any transient FPS spikes experienced when panning or loading new scenery or objects so that automated MSFS setting changes are minimised.
 - General
+  - Auto TLOD limiting with impending VRAM overflow:
+    - **Requires the GPU-Z companion app to be installed and running to work (see Readme)**. Feature will be disabled if GPU-Z is not found running.
+    - Uses two thresholds for VRAM usage, both changeable in the app root directory config file after running the app once after updating:
+      - Hold threshold, defaults to > 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
+      - Reduce threshold, defaults to > 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
+    - When VRAM use drops back below the Hold threshold, TLOD will progressively increase up to TLOD Max/Top should favourable performance conditions exist.
+    - If you are continually experiencing auto TLOD limiting activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
