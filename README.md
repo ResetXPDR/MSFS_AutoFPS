@@ -160,7 +160,7 @@ Some Notes:
   - FPS shows the FPS for the current graphics mode averaged over 5 seconds which will smooth out any transient FPS spikes experienced when panning or loading new scenery or objects so that automated MSFS setting changes are minimised.
 - General
   - Auto TLOD limiting with impending VRAM overflow:
-    - **Requires the GPU-Z companion app to be installed and running to work (see Readme)**. Feature will be disabled if GPU-Z is not found running.
+    - **Requires the GPU-Z companion app to be installed and running to work**. The feature will be disabled if GPU-Z is not found running.
     - Uses two thresholds for VRAM usage, both changeable in the app root directory config file after running the app once after updating:
       - Hold threshold, defaults to > 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
       - Reduce threshold, defaults to > 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
