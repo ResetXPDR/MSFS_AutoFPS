@@ -1,4 +1,4 @@
-# MSFS_AutoFPS
+# MSFS_AutoFPS by ResetXPDR
 
 ## Notice
 Following MSFS_AutoFPS version 0.4.4.2 formal release, my development efforts on this app will be limited to maintenance, resilience improvements and streamlining of existing functionality only. If you wish to request functionality improvements for MSFS 2024, there is now an MSFS 2024 specific version of this app, based on my MSFS2020_AutoFPS version 0.4.3.1, developed by kayjay1c6b here https://github.com/kayjay1c6b/MSFS2024_AutoFPS-by-kayJay_1c6 where you should direct such requests. 
