@@ -164,7 +164,7 @@ Some Notes:
     - Uses two thresholds for VRAM usage, both changeable in the app root directory config file after running the app once after updating:
       - Hold threshold, defaults to > 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
       - Reduce threshold, defaults to > 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
-    - When VRAM use drops back below the Hold threshold, TLOD will progressively increase up to TLOD Max/Top should favourable performance conditions exist.
+    - When VRAM use drops back below the Hold threshold, TLOD will progressively increase up to TLOD Min/Base and the feature will disengage, should favourable performance conditions exist.
     - If you are continually experiencing auto TLOD limiting activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
