@@ -161,7 +161,8 @@ Some Notes:
 - General
   - Auto TLOD limiting with impending VRAM overflow:
     - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**.
-      - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray. 
+      - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray.
+      - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
       - The feature will be disabled if GPU-Z is not found running.
     - Uses two thresholds for VRAM usage, both changeable in the app root directory config file after running the app once after updating:
       - Hold threshold, defaults to > 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
