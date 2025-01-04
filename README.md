@@ -17,7 +17,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
 - Simultaneous PC, FG (native nVidia, FG mod and Lossless Scaling) and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - A greatly simplified non-expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
-- Auto TLOD limiting when running the GPU-Z companion app and VRAM overflow in MSFS is impending, as occurs for some users with MSFS 2024.
+- Auto TLOD limiting when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app and VRAM overflow in MSFS is impending, as occurs for some users with MSFS 2024.
 - Auto disabling of Dynamic Settings in MSFS 2024 while this app is active, to prevent settings contention, and
 - Auto restoration of original MSFS settings changed by the app, recently enhanced to withstand MSFS CTDs.<br><br>
 
@@ -160,7 +160,7 @@ Some Notes:
   - FPS shows the FPS for the current graphics mode averaged over 5 seconds which will smooth out any transient FPS spikes experienced when panning or loading new scenery or objects so that automated MSFS setting changes are minimised.
 - General
   - Auto TLOD limiting with impending VRAM overflow:
-    - **Requires the GPU-Z companion app to be installed and running to work**. The feature will be disabled if GPU-Z is not found running.
+    - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**. The feature will be disabled if GPU-Z is not found running.
     - Uses two thresholds for VRAM usage, both changeable in the app root directory config file after running the app once after updating:
       - Hold threshold, defaults to > 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
       - Reduce threshold, defaults to > 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
@@ -173,7 +173,7 @@ Some Notes:
       - Shows detected Graphics Mode (PC, FG, LSFG or VR) and DX version, app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 20 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/PC/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Min + has been activated and that a higher TLOD Min should be expected. Similarly, a + next to ATLOD indicates that TLOD Base + has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
-      - Bonus GPU load display if the optional GPU-Z companion app, downloadable separately [here](https://www.techpowerup.com/download/techpowerup-gpu-z/), is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
+      - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
@@ -289,7 +289,7 @@ Some Notes:
         - Ideally set to 50 TLOD or more above TLOD Min to provide a TLOD buffer to minimise the chance that cloud quality will constantly change down and up.
         - When + is checked, Cloud Recovery TLOD becomes relative to TLOD Min instead of absolute.
     - GPU Load (All TLOD Automation Methods)
-      - Requires the GPU-Z companion app to be installed and running for this method to work. If GPU-Z is not running, the user will be alerted to start it in on the app status line in the General section.
+      - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running for this method to work. If GPU-Z is not running, the user will be alerted to start it in on the app status line in the General section.
       - Decreases when the GPU load, as measured by the GPU-Z companion app, is higher than the user-defined Decrease GPU Load percentage. (50% - 100% allowable)
       - Cloud Recovery GPU load (5% - 90% and at least 10% less than Decrease GPU Load allowable)
         - Recovers when the GPU load is lower than the user-defined Recover GPU Load percentage.
