@@ -213,7 +213,7 @@ Some Notes:
     - On descent your TLOD will progressively work its way down to TLOD Min by the TLOD base altitude. 
   - Use Expert Options - When disabled allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set a realistic FPS target within your system's performance capability. When enabled, the UI expands to show additional MSFS settings to adjust. If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. When Use Expert Setting is unchecked, the following internal settings are used by the app:
     - If an FPS cap is automatically detected (ie. the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period), non-expert mode will use the FPS Cap TLOD automation method with the following settings:
-      - Auto Target FPS - disabled and hidden as user-specified FPS cap is in use
+      - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
       - LOD Step - 5
       - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
       - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
