@@ -115,7 +115,9 @@ Some Notes:
   - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
-- The app will automatically check for updates on startup by default and will notify you accordingly on the app status line. If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox. In test versions, all app updates will be enabled by default regardless of what you have previously chosen for update notification in order to maintain a current test baseline.
+- The app will automatically check for updates on startup by default and will notify you accordingly on the app status line.
+  - If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox.
+  - In test versions, all app updates will be enabled by default regardless of what you have previously chosen for update notification in order to maintain a current test baseline.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
 - The clean install option will recreate new configuration files without having to remove the app first.
 - For Auto-Start either your FSUIPC7.ini or EXE.xml (MSFS) is modified. The Installer does not create a Backup.
