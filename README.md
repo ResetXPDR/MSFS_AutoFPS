@@ -209,18 +209,26 @@ Some Notes:
     - On descent your TLOD will progressively work its way down to TLOD Min by the TLOD base altitude. 
   - Use Expert Options - When disabled allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set a realistic FPS target within your system's performance capability. When enabled, the UI expands to show additional MSFS settings to adjust. If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. When Use Expert Setting is unchecked, the following internal settings are used by the app:
     - If an FPS cap is automatically detected (FPS matches the target FPS over a 10 second period), non-expert mode will use the FPS Cap TLOD automation method with the following settings:
-      - Auto Target FPS - disabled
+      - Auto Target FPS - disabled and hidden as user-specified FPS cap is in use
+      - LOD Step - 5
+      - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
+      - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
+      - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
+      - TLOD Base + - enabled
+      - TLOD Top + - disabled
+      - TLOD Top - - enabled
     - Otherwise, FPS Senstivity will be used with the following settings:
       - Auto Target FPS - user selectable. Enabling automatically disables TLOD Min + due to automation control ambiguity
       - FPS Sensitivity - 5%
-      - VFR or IFR flight type - user selectable
-      - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
       - Avg Descent Rate - VFR 1000 fpm, IFR 2000 fpm
       - TLOD Minimum - VFR 100% of your current MSFS TLOD setting, IFR 50%
       - TLOD Maximum - VFR 300% of your current MSFS TLOD setting, IFR 200%
       - TLOD Min + - enabled, unless Auto Target FPS is enabled then disabled
       - TLOD Max + - disabled
       - TLOD Max - - enabled
+    - Common to both automation methods:
+      - VFR or IFR flight type - user selectable
+      - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
       - Decrease Cloud Quality
         - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
         - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
