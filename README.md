@@ -273,7 +273,7 @@ Some Notes:
       - TLOD Base + and TLOD Top + are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
       - A "Headroom+" (Hr+) checkbox in expert mode (automatically enabled in non-expert mode) allows more performance headroom, reducing stuttering and FPS cap breaches, but at the cost of a potentially higher achievable TLOD.
       - The following guidelines should be observed to get the best result from this mode:
-        - Ensure TLOD Base and TLOD Top values can be achieved within your FPS cap under the worst performance conditions flight session you expect to experience. TLOD Base + can increase if performance allows but won't drop below set values.
+        - Ensure TLOD Base and TLOD Top values can be achieved within your FPS cap under the worst performance conditions flight session you expect to experience for the flight profile you are using (IFR or VFR). TLOD Base + can increase if performance allows but won't drop below set values.
         - TLOD Base + is applied across the entire altitude schedule, potentially allowing a higher TLOD Top than set if performance conditions are favorable, so be particularly conservative when setting TLOD Top.
         - The initial seek process may cause FPS instability as it identifies performance boundaries and this is a normal part of the process. It stabilises once the ideal TLOD is found, usually within 60 seconds.
         - After the seek process, you might experience stuttering when panning due to how MSFS loads scenery with high TLODs, regardless of whether you or this app has set them that high.
