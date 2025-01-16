@@ -115,6 +115,7 @@ Some Notes:
   - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
+- The app will automatically check for updates on startup by default and will notify you accordingly on the app status line. If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox. In test versions, all app updates will be enabled by default regardless of what you have previously chosen for update notification in order to maintain a current test baseline.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
 - The clean install option will recreate new configuration files without having to remove the app first.
 - For Auto-Start either your FSUIPC7.ini or EXE.xml (MSFS) is modified. The Installer does not create a Backup.
@@ -209,7 +210,7 @@ Some Notes:
     - Once above a calculated altitude band above the the TLOD base altitude, the app priority will change from TLOD to FPS.
     - On descent your TLOD will progressively work its way down to TLOD Min by the TLOD base altitude. 
   - Use Expert Options - When disabled allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set a realistic FPS target within your system's performance capability. When enabled, the UI expands to show additional MSFS settings to adjust. If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. When Use Expert Setting is unchecked, the following internal settings are used by the app:
-    - If an FPS cap is automatically detected (FPS matches the target FPS over a 10 second period), non-expert mode will use the FPS Cap TLOD automation method with the following settings:
+    - If an FPS cap is automatically detected (ie. the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period), non-expert mode will use the FPS Cap TLOD automation method with the following settings:
       - Auto Target FPS - disabled and hidden as user-specified FPS cap is in use
       - LOD Step - 5
       - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
@@ -262,7 +263,7 @@ Some Notes:
         - If the FPS drops temporarily below the target FPS when taking off and TLOD automatically decreases, an attempt will be made to progressive restore the lost TLOD should conditions return to being favourable after climbing through Alt TLOD Top.
         - The calculated TLOD Base + will be applied as an offset that increases the entire TLOD altitude schedule by that amount.
         - Cannot be enabled with TLOD Top + due to conflicting control over TLOD Top. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
-        - The default 10 second sustained FPS drop upon which TLOD Base + reductions are triggered can be changed in the config file by modifying the MinTLODFPSDropAmount key. The default is 1, which is suitable in most instances, and I personally use a value of 2 for VR with the Quest 3 so it doesn't trigger as easily.
+        - If VRAM+ is active and VRAM limiting is in effect, TLOD Base + seeking will be cancelled, and potentially completely reset if severe enough.
       - TLOD Top + - additional TLOD Top in high elevation areas.
         - Operates the same as TLOD Max + except that it cannot be enabled with TLOD Base + due to conflicting control over TLOD Top. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
       - TLOD Top - reduced TLOD Top at night. Operates the same as TLOD Max -.
@@ -290,6 +291,7 @@ Some Notes:
     - If at any time conditions deteriorate after TLOD Min + is set, there is an automatic 20% reduction of TLOD Min + in order to maintain target FPS. 
     - Avoid rapidly changing views or panning your external view too quickly, especially initially as un-cached scenery loads in, as you will induce temporary FPS drops that may trigger an unnecessary TLOD Min + reduction.    
     - Cannot be enabled at the same time as Auto Target FPS due to automation control ambiguity. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
+    - If VRAM+ is active and VRAM limiting is in effect, TLOD Min + seeking will be cancelled, and potentially completely reset if severe enough.
   - TLOD Max - Sets the maximum TLOD the automation algorithm will use. (TLOD Min+10 - 1000 allowable)
   - TLOD Max + - additional TLOD Max in high elevation areas. 
     - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (100ft - 100000ft allowable) by the TLOD Mtn Amt amount (10 - 1000 allowable), progressively increasing by the TLOD step size per second until completely activated.
