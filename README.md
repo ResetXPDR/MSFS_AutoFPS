@@ -270,7 +270,7 @@ Some Notes:
         - Operates the same as TLOD Max + except that it cannot be enabled with TLOD Base + due to conflicting control over TLOD Top. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
       - TLOD Top - reduced TLOD Top at night. Operates the same as TLOD Max -.
     - FPS Cap - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
-      - TLOD Base + and TLOD Top+ are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
+      - TLOD Base + and TLOD Top + are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
       - A "Headroom+" (Hr+) checkbox in expert mode (automatically enabled in non-expert mode) allows more performance headroom, reducing stuttering and FPS cap breaches, but at the cost of a potentially higher achievable TLOD.
       - The following guidelines should be observed to get the best result from this mode:
         - Ensure TLOD Base and TLOD Top values can be achieved within your FPS cap under the worst performance conditions flight session you expect to experience. TLOD Base + can increase if performance allows but won't drop below set values.
