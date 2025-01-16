@@ -47,7 +47,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Start the app before you load your flight,
 - Leave Use Expert Settings unchecked,
 - Pick what type of flight you are doing via the radio buttons ie. either VFR (GA aircraft) or IFR (airliners),
-- Enter a realistic target FPS (or click on auto target FPS for the app to pick it for you),
+- If using an FPS cap, enter that as your target FPS otherwise enter a target FPS your system can usually easily achieve or click on auto target FPS for the app to pick it for you,
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
 
