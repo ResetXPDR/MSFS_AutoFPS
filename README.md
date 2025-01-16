@@ -1,7 +1,7 @@
 # MSFS_AutoFPS by ResetXPDR
 
 ## Notice
-Following MSFS_AutoFPS version 0.4.4.2 formal release, my development efforts on this app will be limited to maintenance, resilience improvements and streamlining of existing functionality only. If you wish to request functionality improvements for MSFS 2024, there is now an MSFS 2024 specific version of this app, based on my MSFS2020_AutoFPS version 0.4.3.1, developed by kayjay1c6b here https://github.com/kayjay1c6b/MSFS2024_AutoFPS-by-kayJay_1c6 where you should direct such requests. 
+My future development efforts on this app are limited to maintenance, resilience improvements and streamlining of existing functionality only. If you wish to request functionality improvements for MSFS 2024, there is now an MSFS 2024 specific version of this app, based on my MSFS2020_AutoFPS version 0.4.3.1, developed by kayjay1c6b here https://github.com/kayjay1c6b/MSFS2024_AutoFPS-by-kayJay_1c6 where you should direct such requests. 
 
 ## Summary
 Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD and myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS.<br/><br/>
@@ -12,6 +12,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
 - Auto target FPS option, which is useful if you don't know what target FPS to choose or if your flight types are so varied that a single target FPS value is not always appropriate,
 - A greatly simplified non-expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
 - An Expert Option, which allows user customisation of the following:
+  - A choice of TLOD automation method, each suitable for different specific uses of the app, namely FPS Sensitivity, FPS Tolerance, Auto TLOD and FPS Cap.
   - Auto raising and lowering of the minimum or base TLOD option, depending on low altitude performance being either very favourable or poor respectively,
   - Auto lowering of the maximum or top TLOD at night option, reducing system workload by not having to draw distant scenery that can't be seen in the dark anyway,
   - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
@@ -215,6 +216,7 @@ Some Notes:
       - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
       - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
       - TLOD Base + - enabled
+      - Headroom + - enabled
       - TLOD Top + - disabled
       - TLOD Top - - enabled
     - Otherwise, FPS Senstivity will be used with the following settings:
@@ -237,15 +239,15 @@ Some Notes:
       - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100%
       - Pause when MSFS loses focus - disabled, unless using MSFS FG then enabled
 - Expert Settings
-  - Auto Method - FPS Sensitivity generally gives the best results for most users and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD-like experience or are using an FPS cap.
-    - FPS Sensitivity (v0.4.2 and later) - smaller changes more often.
+  - Auto Method - FPS Sensitivity generally gives the best results for most users and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD-like experience. Use FPS Cap if you use an FPS cap on your system.
+    - FPS Sensitivity - smaller changes more often.
       - Determines how sensitive the app will be to the variance between your current and target FPS.
       - Also determines the largest TLOD step size you will see, being double the FPS sensitivity number.
       - The lower the setting the smaller the changes will be, which is useful if you are experiencing stuttering with the default value of 5. Vice versa for higher settings. (1 - 20 allowable)
-    - FPS Tolerance (all versions except 0.4.2) - larger changes less often.
+    - FPS Tolerance - larger changes less often.
       - Determines how much variance from your target FPS must occur before the app will adjust MSFS settings to achieve the target FPS and what nominal magnitude those changes will be.
       - The lower the setting, the more reactive the app will be, the more MSFS settings changes will occur and the changes will be smaller. (1% - 20% allowable)
-    - Auto TLOD - functions similar to Auto OLOD by using an altitude schedule and is best for when using system FPS caps.
+    - Auto TLOD - functions similar to Auto OLOD by using an altitude schedule.
       - TLOD will adjust based on an altitude band with a base and top level and with TLOD values defined for each of these altitudes.
       - The app will set TLOD Base at or below the Alt TLOD Base (AGL), set the TLOD Top at or above Alt TLOD Top (AGL) and interpolate in between.
       - The nominal LOD Step Size can be set to allow users experiencing stuttering issues to try different LOD step sizes to help resolve the issue. The default value is 5. (1 - 20 allowable)
@@ -263,7 +265,16 @@ Some Notes:
         - The default 10 second sustained FPS drop upon which TLOD Base + reductions are triggered can be changed in the config file by modifying the MinTLODFPSDropAmount key. The default is 1, which is suitable in most instances, and I personally use a value of 2 for VR with the Quest 3 so it doesn't trigger as easily.
       - TLOD Top + - additional TLOD Top in high elevation areas.
         - Operates the same as TLOD Max + except that it cannot be enabled with TLOD Base + due to conflicting control over TLOD Top. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
-      - TLOD Top - reduced TLOD Top at night. Operates the same as TLOD Max -. 
+      - TLOD Top - reduced TLOD Top at night. Operates the same as TLOD Max -.
+    - FPS Cap - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
+      - TLOD Base + and TLOD Top+ are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
+      - A "Headroom+" (Hr+) checkbox in expert mode (automatically enabled in non-expert mode) allows more performance headroom, reducing stuttering and FPS cap breaches, but at the cost of a potentially higher achievable TLOD.
+      - The following guidelines should be observed to get the best result from this mode:
+        - Ensure TLOD Base and TLOD Top values can be achieved within your FPS cap under the worst performance conditions flight session you expect to experience. TLOD Base + can increase if performance allows but won't drop below set values.
+        - TLOD Base + is applied across the entire altitude schedule, potentially allowing a higher TLOD Top than set if performance conditions are favorable, so be particularly conservative when setting TLOD Top.
+        - The initial seek process may cause FPS instability as it identifies performance boundaries and this is a normal part of the process. It stabilises once the ideal TLOD is found, usually within 60 seconds.
+        - After the seek process, you might experience stuttering when panning due to how MSFS loads scenery with high TLODs, regardless of whether you or this app has set them that high.
+        - If stuttering is still unacceptable after following these guidelines, consider using AutoTLOD with TLOD Base + disabled instead to give you the lowest possible TLOD when on the ground.
   - Pause when MSFS loses focus
     - Will stop LODs and, if applicable, cloud quality from changing while you are focused on another app and not MSFS.
     - Particularly useful for when using MSFS FG as the FG active and inactive frame rate can vary quite considerably and because FG is not always an exact doubling of non-FG FPS. 
