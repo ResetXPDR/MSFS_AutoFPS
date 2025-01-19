@@ -213,8 +213,8 @@ Some Notes:
     - Once above a calculated altitude band above the the TLOD base altitude, the app priority will change from TLOD to FPS.
     - On descent your TLOD will progressively work its way down to TLOD Min by the TLOD base altitude. 
   - Use Expert Options
-    - Non-Expert Mode (unchecked)
-      - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set a realistic FPS target within your system's performance capability.
+    - Non-Expert Mode (unchecked and default)
+      - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability.
       - The app will first attempt to automatically detect if an FPS Cap is use by checking to see if the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period.
       - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
         - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
