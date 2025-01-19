@@ -214,40 +214,40 @@ Some Notes:
     - On descent your TLOD will progressively work its way down to TLOD Min by the TLOD base altitude. 
   - Use Expert Options
     - Non-Expert Mode (unchecked)
-      -  Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set a realistic FPS target within your system's performance capability.
-      -  The following internal settings are used by the app:
-        - If an FPS cap is automatically detected (ie. the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period), non-expert mode will use the FPS Cap TLOD automation method with the following settings:
-          - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
-          - LOD Step - 5
-          - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
-          - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
-          - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
-          - TLOD Base + - enabled
-          - Headroom + - enabled
-          - TLOD Top + - disabled
-          - TLOD Top - - enabled
-        - Otherwise, FPS Senstivity will be used with the following settings:
-          - Auto Target FPS - user selectable. Enabling automatically disables TLOD Min + due to automation control ambiguity
-          - FPS Sensitivity - 5%
-          - Avg Descent Rate - VFR 1000 fpm, IFR 2000 fpm
-          - TLOD Minimum - VFR 100% of your current MSFS TLOD setting, IFR 50%
-          - TLOD Maximum - VFR 300% of your current MSFS TLOD setting, IFR 200%
-          - TLOD Min + - enabled, unless Auto Target FPS is enabled then disabled
-          - TLOD Max + - disabled
-          - TLOD Max - - enabled
-        - Common to both automation methods:
-          - VFR or IFR flight type - user selectable
-          - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
-          - Decrease Cloud Quality
-            - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
-            - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
-            - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
-            - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
-          - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100%
-          - Pause when MSFS loses focus - disabled, unless using MSFS FG then enabled
-      - Expert Mode (checked)
-        - The UI expands to show additional MSFS settings to adjust.
-        - If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. 
+      - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set a realistic FPS target within your system's performance capability.
+      - The app will first attempt to automatically detect if an FPS Cap is use by checking to see if the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period.
+      - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
+        - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
+        - LOD Step - 5
+        - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
+        - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
+        - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
+        - TLOD Base + - enabled
+        - Headroom + - enabled
+        - TLOD Top + - disabled
+        - TLOD Top - - enabled
+      - Otherwise, FPS Senstivity will be used with the following settings:
+        - Auto Target FPS - user selectable. Enabling automatically disables TLOD Min + due to automation control ambiguity
+        - FPS Sensitivity - 5%
+        - Avg Descent Rate - VFR 1000 fpm, IFR 2000 fpm
+        - TLOD Minimum - VFR 100% of your current MSFS TLOD setting, IFR 50%
+        - TLOD Maximum - VFR 300% of your current MSFS TLOD setting, IFR 200%
+        - TLOD Min + - enabled, unless Auto Target FPS is enabled then disabled
+        - TLOD Max + - disabled
+        - TLOD Max - - enabled
+      - Common to both automation methods:
+        - VFR or IFR flight type - user selectable
+        - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
+        - Decrease Cloud Quality
+          - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
+          - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
+          - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
+          - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
+        - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100%
+        - Pause when MSFS loses focus - disabled, unless using MSFS FG then enabled
+    - Expert Mode (checked)
+      - The UI expands to show additional MSFS settings to adjust.
+      - If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. 
 - Expert Settings
   - Auto Method - FPS Sensitivity generally gives the best results for most users and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD-like experience. Use FPS Cap if you use an FPS cap on your system.
     - FPS Sensitivity - smaller changes more often.
