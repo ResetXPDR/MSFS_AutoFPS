@@ -215,7 +215,7 @@ Some Notes:
   - Use Expert Options
     - Non-Expert Mode (unchecked and default)
       - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability.
-      - The app will first attempt to automatically detect if an FPS Cap is use by checking to see if the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period.
+      - The app will first attempt to automatically detect if an FPS cap is use by checking to see if the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period.
       - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
         - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
         - LOD Step - 5
@@ -226,7 +226,7 @@ Some Notes:
         - Headroom + - enabled
         - TLOD Top + - disabled
         - TLOD Top - - enabled
-      - Otherwise, FPS Senstivity will be used with the following settings:
+      - Otherwise, FPS Sensitivity will be used with the following settings:
         - Auto Target FPS - user selectable. Enabling automatically disables TLOD Min + due to automation control ambiguity
         - FPS Sensitivity - 5%
         - Avg Descent Rate - VFR 1000 fpm, IFR 2000 fpm
