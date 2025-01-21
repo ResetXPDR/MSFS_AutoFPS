@@ -67,6 +67,7 @@ How does this app work for Frame Generation (FG) users?
 - To see correct MSFS FG FPS, use the app's "On Top" option to overlay this app over MSFS and give MSFS the focus.
 - If MSFS FG is being incorrectly reported as enabled by the app, the likely reason is that either the FG mod had been installed and removed or you have disabled Hardware Accelerated Graphics Scheduling under Windows settings and the now the now greyed out MSFS FG setting may show that it is off but it is still set to on internally to MSFS. To fix, change the DLSSG line in your UserCfg.opt file to be DLSSG 0.
 - Lossless Scaling (LS) FG, including the scaling multiplier used, is also detected and the correct LSFG multiplied FPS is displayed.
+  - Make sure your LSFG app is updated to the latest version that supports LSFG 3.0 (2.13.2 or later).
   - The app will first try to use an LS profile with the specific name MSFS2020 or MSFS2024, depending on which MSFS version is currently in use, to obtain these settings.
   - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the Default profile will be used.
   - If you are using LSFG 1.1 in LS and AutoFPS is not showing a 2X multiplier, temporarily select LSFG 2.3 in LS and select the 2X multiplier, switch back to LSFG 1.1 then press the AutoFPS's Reset button.
@@ -170,9 +171,9 @@ Some Notes:
       - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
       - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
       - The feature will be disabled if GPU-Z is not found running.
-    - Uses two thresholds for VRAM usage, both changeable in the app root directory config file after running the app once after updating:
-      - Hold threshold, defaults to > 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
-      - Reduce threshold, defaults to > 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
+    - Uses two thresholds for VRAM usage, both changeable in the app root directory config file (not the one in the bin subdirectory) after running the app once after updating:
+      - VRAMOverflowHoldTLOD threshold, defaults to > 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
+      - VRAMOverflowReduceTLOD threshold, defaults to > 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
     - When VRAM use drops back below the Hold threshold and favourable performance conditions exist, TLOD will progressively increase up to TLOD Min/Base and the feature will disengage.
     - If you are continually experiencing auto TLOD limiting activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Status Message - Displays key system messages, such as:
@@ -211,36 +212,42 @@ Some Notes:
     - Once in the air and above either a pre-determined (non-expert) or user-selectable (expert) TLOD base altitude, TLOD will be allowed to change to the lower of either the schedule based on your TLODs, FPS sensitivity/tolerance and average descent rate settings or what your current performance dictates.
     - Once above a calculated altitude band above the the TLOD base altitude, the app priority will change from TLOD to FPS.
     - On descent your TLOD will progressively work its way down to TLOD Min by the TLOD base altitude. 
-  - Use Expert Options - When disabled allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set a realistic FPS target within your system's performance capability. When enabled, the UI expands to show additional MSFS settings to adjust. If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. When Use Expert Setting is unchecked, the following internal settings are used by the app:
-    - If an FPS cap is automatically detected (ie. the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period), non-expert mode will use the FPS Cap TLOD automation method with the following settings:
-      - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
-      - LOD Step - 5
-      - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
-      - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
-      - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
-      - TLOD Base + - enabled
-      - Headroom + - enabled
-      - TLOD Top + - disabled
-      - TLOD Top - - enabled
-    - Otherwise, FPS Senstivity will be used with the following settings:
-      - Auto Target FPS - user selectable. Enabling automatically disables TLOD Min + due to automation control ambiguity
-      - FPS Sensitivity - 5%
-      - Avg Descent Rate - VFR 1000 fpm, IFR 2000 fpm
-      - TLOD Minimum - VFR 100% of your current MSFS TLOD setting, IFR 50%
-      - TLOD Maximum - VFR 300% of your current MSFS TLOD setting, IFR 200%
-      - TLOD Min + - enabled, unless Auto Target FPS is enabled then disabled
-      - TLOD Max + - disabled
-      - TLOD Max - - enabled
-    - Common to both automation methods:
-      - VFR or IFR flight type - user selectable
-      - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
-      - Decrease Cloud Quality
-        - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
-        - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
-        - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
-        - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
-      - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100%
-      - Pause when MSFS loses focus - disabled, unless using MSFS FG then enabled
+  - Use Expert Options
+    - Non-Expert Mode (unchecked and default)
+      - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability.
+      - The app will first attempt to automatically detect if an FPS cap is use by checking to see if the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period.
+      - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
+        - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
+        - LOD Step - 5
+        - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
+        - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
+        - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
+        - TLOD Base + - enabled
+        - Headroom + - enabled
+        - TLOD Top + - disabled
+        - TLOD Top - - enabled
+      - Otherwise, FPS Sensitivity will be used with the following settings:
+        - Auto Target FPS - user selectable. Enabling automatically disables TLOD Min + due to automation control ambiguity
+        - FPS Sensitivity - 5%
+        - Avg Descent Rate - VFR 1000 fpm, IFR 2000 fpm
+        - TLOD Minimum - VFR 100% of your current MSFS TLOD setting, IFR 50%
+        - TLOD Maximum - VFR 300% of your current MSFS TLOD setting, IFR 200%
+        - TLOD Min + - enabled, unless Auto Target FPS is enabled then disabled
+        - TLOD Max + - disabled
+        - TLOD Max - - enabled
+      - Common to both automation methods:
+        - VFR or IFR flight type - user selectable
+        - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
+        - Decrease Cloud Quality
+          - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
+          - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
+          - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
+          - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
+        - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100%
+        - Pause when MSFS loses focus - disabled, unless using MSFS FG then enabled
+    - Expert Mode (checked)
+      - The UI expands to show additional MSFS settings to adjust.
+      - If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. 
 - Expert Settings
   - Auto Method - FPS Sensitivity generally gives the best results for most users and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD-like experience. Use FPS Cap if you use an FPS cap on your system.
     - FPS Sensitivity - smaller changes more often.
