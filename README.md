@@ -44,6 +44,7 @@ What's with all these AutoFPS apps out now? Which one should I be using?:
  - You can have MSFS2024_AutoFPS by kayJay_1c6b and either MSFS2020_AutoFPS or MSFS_AutoFPS installed at the same time, but you can only run one of them at a time.
 
 I am new to this app/MSFS, or I don't care for all this technical jargon. What is the simplest way to use this app to make my MSFS experience better?
+- Leave your relevant MSFS settings (TLOD, OLOD and Cloud Quality) set as you normally would without this app, 
 - Start the app before you load your flight,
 - Leave Use Expert Settings unchecked,
 - Pick what type of flight you are doing via the radio buttons ie. either VFR (GA aircraft) or IFR (airliners),
