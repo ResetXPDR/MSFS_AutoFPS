@@ -37,7 +37,7 @@ Important:<br/>
 What's with all these AutoFPS apps out now? Which one should I be using?:
 - As of Dec 24, there are three commonly used AutoFPS apps out there, all of which install to separate directories but each has a different starting name that IMO is reasonably intuitive as to what MSFS sim versions they are applicable to, namely:
   - MSFS2020_AutoFPS - my original app that works only with MSFS 2020.
-  - MSFS2024_AutoFPS by kayJay_1c6b - kayJay_1c6b's app that works only with MSFS 2024 up to version 1.2.11.0.
+  - MSFS2024_AutoFPS by kayJay_1c6b - kayJay_1c6b's app that works only with MSFS 2024 up to version 1.2.11.0 (Pre-SU1).
   - MSFS_AutoFPS - this app that works with both MSFS 2020 and 2024, hence the dropping of the sim version from the name and thus making MSFS2020_AutoFPS obsolete.
  - If you like the functionality MSFS2020_AutoFPS provided for MSFS 2020 and are happy with the same functionality for MSFS 2024, regardless of which MSFS version you are currently using, then MSFS_AutoFPS is the one for you.
  - If you want newer features for MSFS 2024 than what MSFS2020_AutoFPS offered, but no MSFS 2020 compatibility, then MSFS2024_AutoFPS by kayJay_1c6b is what you need.
