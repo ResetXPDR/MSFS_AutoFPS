@@ -17,9 +17,10 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
   - Auto lowering of the maximum or top TLOD at night option, reducing system workload by not having to draw distant scenery that can't be seen in the dark anyway,
   - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
   - Automatic OLOD adjustment option based on an automatic or user-definable OLOD range and altitude band (AGL),
-- Simultaneous PC, FG (native nVidia, FG mod or Lossless Scaling), MFG and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous PC, FG (native nVidia, MFG, FG mod or Lossless Scaling), and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - Auto TLOD limiting when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app and VRAM overflow in MSFS is impending, as occurs for some users with MSFS 2024.
+- Auto installation of app updates (optional except for mandatory updates),
 - Auto disabling of Dynamic Settings in MSFS 2024 while this app is active, to prevent settings contention, and
 - Auto restoration of original MSFS settings changed by the app, enhanced to withstand MSFS CTDs.<br><br>
 
@@ -173,6 +174,17 @@ Some Notes:
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
   - FPS shows the FPS for the current graphics mode averaged over 5 seconds which will smooth out any transient FPS spikes experienced when panning or loading new scenery or objects so that automated MSFS setting changes are minimised.
 - General
+  - Update Management
+    - **Auto Updates** (default) will auto-install updates.
+      - Mandatory updates will auto install regardless of user settings.
+      - Optional updates will seek user confirmation and switch to **Show Updates** if declined.
+      - Installer runs automatically, showing Release Notes in Notepad and auto-starting the new version.
+    - **Show Updates** displays available updates and download links.
+    - **Mandatory Updates Only** displays and installs only mandatory updates.
+    - **+ Test** opts users into test version updates.
+      - Test version users will have **+ Test** force enabled and greyed out.
+      - **Mandatory Updates Only** will be unavailable until the app updates to a release version.
+    - App startup sequence ensures update check is completed before connecting to MSFS.
   - Auto TLOD limiting with impending VRAM overflow:
     - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**.
       - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
