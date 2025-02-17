@@ -17,7 +17,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
   - Auto lowering of the maximum or top TLOD at night option, reducing system workload by not having to draw distant scenery that can't be seen in the dark anyway,
   - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
   - Automatic OLOD adjustment option based on an automatic or user-definable OLOD range and altitude band (AGL),
-- Simultaneous PC, FG (native nVidia, FG mod or Lossless Scaling) and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous PC, FG (native nVidia, FG mod or Lossless Scaling), MFG and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - Auto TLOD limiting when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app and VRAM overflow in MSFS is impending, as occurs for some users with MSFS 2024.
 - Auto disabling of Dynamic Settings in MSFS 2024 while this app is active, to prevent settings contention, and
@@ -74,6 +74,10 @@ How does this app work for Frame Generation (FG) users?
   - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the Default profile will be used.
   - If you are using LSFG 1.1 in LS and AutoFPS is not showing a 2X multiplier, temporarily select LSFG 2.3 in LS and select the 2X multiplier, switch back to LSFG 1.1 then press the AutoFPS's Reset button.
   - If you make changes to your LS settings after starting a flight, press AutoFPS's Reset button so that AutoFPS can redetect them correctly.
+- Multi Frame Generation, available only for users with 5000 series nVidia GPUs, is unable to be auto detected by the app at this time due to the privileged access need to read this setting.
+  - In the interim, a manual MFG multiplier and target MFG FPS selection will be presented on the UI when a 5000 series nVidia GPU is detected.
+  - Match the app's MFG multiplier with what you have set for MFG with MSFS in nVidia settings.
+  - Feature can be removed by the user setting MfgModeMultEnabled to false in MSFS_AutoFPS.config in the app root directory.
 - Detection of FG is normally only performed upon starting a flight. If FG is enabled or LS is started after this detection is normally performed, press the Reset button for it to be detected.
 - Only one type of FG can be active at a time for the app to show FPS correctly. In particular, using native nVidia or the FG mod AND LSFG will cause incorrect FPS calculations in the app because they function differently when MSFS loses focus. Choose one or the other if you want to use them with this app.
 
