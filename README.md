@@ -77,6 +77,7 @@ How does this app work for Frame Generation (FG) users?
 - Multi Frame Generation, available only for users with 5000 series nVidia GPUs, is unable to be auto detected by the app at this time due to the privileged access need to read this setting.
   - In the interim, a manual MFG multiplier and target MFG FPS selection will be presented on the UI when a 5000 series nVidia GPU is detected.
   - Match the app's MFG multiplier with what you have set for MFG with MSFS in nVidia settings.
+  - Set to MFG Off if not using MFG or using an alternative FG method.
   - Feature can be removed by the user setting MfgModeMultEnabled to false in MSFS_AutoFPS.config in the app root directory.
 - Detection of FG is normally only performed upon starting a flight. If FG is enabled or LS is started after this detection is normally performed, press the Reset button for it to be detected.
 - Only one type of FG can be active at a time for the app to show FPS correctly. In particular, using native nVidia or the FG mod AND LSFG will cause incorrect FPS calculations in the app because they function differently when MSFS loses focus. Choose one or the other if you want to use them with this app.
