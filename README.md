@@ -201,7 +201,7 @@ Some Notes:
     - Flight is loaded
       - Shows detected Graphics Mode (PC, FG, LSFG or VR) and DX version, app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 20 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/PC/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
-      - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Min + has been activated and that a higher TLOD Min should be expected. Similarly, a + next to ATLOD indicates that TLOD Base + has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
+      - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Min + has been activated and that a higher TLOD Min should be expected. Similarly, a + next to ATLOD or FPSCap indicates that TLOD Base + has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
@@ -242,7 +242,7 @@ Some Notes:
         - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
         - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
         - TLOD Base + - enabled
-        - Headroom + - enabled
+        - TLOD Base - - disabled
         - TLOD Top + - disabled
         - TLOD Top - - enabled
       - Otherwise, FPS Sensitivity will be used with the following settings:
@@ -283,12 +283,18 @@ Some Notes:
       - When TLOD Base + is unchecked, this method completely ignores FPS hence all FPS-related settings are removed from the UI.
       - TLOD Base + - additional TLOD with favourable performance conditions.
         - When enabled, a target FPS will be required for the logic to work, which you should preferably set to your FPS cap if you use one or, if not, slightly lower than your normally achievable FPS.
-        - The TLOD Base + seek process will automatically start when commencing a flight, regardless of your aircraft's position, and at the conclusion of a flight when on the ground and stopped.
+        - TLOD Base + seek process will automatically start:
+          - When TLOD Base - is unchecked and commencing a flight, regardless of your aircraft's position, and at the conclusion of a flight when on the ground and stopped.
+          - When Climbing through Alt TLOD Top.
+          - Periodically, every 5 minutes above Alt TLOD Top, if not already at 2 times TLOD Top.
         - This seek process can be manually restarted by pressing the Reset button, should flight conditions change such that the original TLOD Base + is no longer valid.
-        - When seeking, TLOD Base + will increase in steps of the original TLOD Base until either TLOD Top is achieved or the FPS cannot consistently achieve the target FPS. If the the latter, TLOD Base + will backtrack to the previous TLOD Base +, where the FPS target was easily achieved.
-        - At any time, if the 10 second FPS trend drops below a small threshold under the target FPS then TLOD Base + will automatically reduce by a step of the original TLOD base, down to zero if necessary. In external view, this threshold is greater to account for anticipated temporary FPS dips when scenery gets cached when panning.
+        - When seeking there will be:
+          - Large steps of the lesser of TLOD Base and 50 on the ground, prioritising timeliness of completion.
+          - Small steps of the TLOD Step Size in the air, prioritising stutter minimisation.
+          - Intentional overshoot then reduction by a headroom amount to create headroom.
+        - FPS cap breaches trigger an immediate reduction of the headroom amount.
         - Avoid rapidly changing views or panning your external view too quickly, especially initially as un-cached scenery loads in, as you will induce temporary FPS drops that may trigger an unnecessary TLOD Top + reduction.    
-        - If the FPS drops temporarily below the target FPS when taking off and TLOD automatically decreases, an attempt will be made to progressive restore the lost TLOD should conditions return to being favourable after climbing through Alt TLOD Top.
+        - If TLOD Base - is unchecked and the FPS drops temporarily below the target FPS when taking off and TLOD automatically decreases, an attempt will be made to progressive restore the lost TLOD should conditions return to being favourable after climbing through Alt TLOD Top.
         - The calculated TLOD Base + will be applied as an offset that increases the entire TLOD altitude schedule by that amount.
         - Cannot be enabled with TLOD Top + due to conflicting control over TLOD Top. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
         - If VRAM+ is active and VRAM limiting is in effect, TLOD Base + seeking will be cancelled, and potentially completely reset if severe enough.
