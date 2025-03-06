@@ -124,7 +124,7 @@ Some Notes:
   - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
-  - If the installer fails when checking/updating Mobiflight despite the latest version being correctly installed in your MSFS Community folder, create a shortcut for the installer, add the command line option "-bypassmobiflight" to the target text box, then run the shortcut to be able to bypass this installation step.
+  - If the installer fails when checking/updating Mobiflight, despite the latest version being correctly installed in your MSFS Community folder, create a shortcut for the installer, add the command line option "-bypassmobiflight" to the target text box, then run the shortcut to be able to bypass this installation step.
 - The app will automatically check for updates on startup by default and will notify you accordingly on the app status line.
   - If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox.
   - In test versions, all app updates will be enabled by default regardless of what you have previously chosen for update notification in order to maintain a current test baseline.
@@ -169,7 +169,6 @@ Some Notes:
   - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app. 
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
   - Do not change TLOD, OLOD and Cloud Quality MSFS settings manually while in a flight with this app running as it will conflict with what the app is managing and they will not restore to what you set when you exit your flight. If you wish to change the defaults for these MSFS settings, you must do so either without this app running or, if it is, only while you are in the MSFS main menu (ie not in a flight).
-  - If you wish to activate additional logging of settings changes and sim values, as currently happens automatically in test versions, you need to manually edit your config file and add a LogSimValues key, if it doesn't already exist, and set its value to true ie.  ```<add key="LogSimValues" value="true" />```
 - Connection Status
   - Red values indicate not connected, green is connected.
   - Automatically identifies which MSFS version is in use as either MSFS2020 or MSFS2024. 
