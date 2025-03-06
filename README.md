@@ -283,6 +283,11 @@ Some Notes:
       - When TLOD Base + is unchecked, this method completely ignores FPS hence all FPS-related settings are removed from the UI.
       - TLOD Base + - additional TLOD with favourable performance conditions.
         - When enabled, set the target FPS to your FPS cap if you use one, or slightly below your usual FPS if not, for the logic to function properly.
+        - Applicable to FPS Cap mode, Auto TLOD mode with TLOD Base + enabled and non-expert mode when an FPS cap is auto-detected.
+        - On the ground and below Alt TLOD Top:
+          - TLOD Base - checked, only available in FPS Cap mode, fixes total TLOD to TLOD Base.
+          - Otherwise, in all other applicable modes, allows total TLOD up to 2 times TLOD Base.
+        - Above Alt TLOD Top allows total TLOD up to 2 times TLOD Top.
         - TLOD Base + seek process will automatically start:
           - When commencing a flight, irrespective of aircraft position, and at the end when on the ground and stopped.
           - When Climbing through Alt TLOD Top.
@@ -305,12 +310,12 @@ Some Notes:
       - TLOD Base + and TLOD Top + are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
       - A TLOD Base - checkbox is provided in expert mode which excludes TLOD Base + occurring below Alt TLOD Top when checked.
       - The following guidelines should be observed to get the best result from this mode:
-        - Ensure TLOD Base and TLOD Top values can be achieved within your FPS cap under the worst performance conditions flight session you expect to experience for the flight profile you are using (IFR or VFR). TLOD Base + can increase if performance allows but won't drop below set values.
-        - TLOD Base + is applied across the entire altitude schedule, potentially allowing a higher TLOD Top than set if performance conditions are favorable, so be particularly conservative when setting TLOD Top.
-        - On the ground and stopped:
-           - The initial seek process on the ground may cause FPS instability as it identifies performance boundaries and this is a normal part of the process. It stabilises once the ideal TLOD is found, usually within 60 seconds.
-           - After the seek process, you might experience stuttering when panning due to how MSFS loads scenery with high TLODs, regardless of whether you or this app has set them that high.
-           - If stuttering is still unacceptable after following these guidelines, consider checking TLOD Base - or using AutoTLOD with TLOD Base + disabled instead to give you the lowest possible TLOD when on the ground.
+        - Set TLOD Base and TLOD Top values within your FPS cap for worst-case performance during your flight profile (IFR or VFR). TLOD Base + may increase with better performance but won't drop below the set values.
+        - TLOD Base + is applied across the entire altitude schedule, potentially allowing a doubling of TLOD Top if performance conditions are favorable, so be particularly conservative when setting TLOD Top.
+        - On the ground and stopped with TLOD Base - unchecked:
+           - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
+           - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
+           - If stuttering persists, either uncheck TLOD Base - or use AutoTLOD with TLOD Base + disabled for the lowest possible TLOD on the ground.
   - Pause when MSFS loses focus
     - Will stop LODs and, if applicable, cloud quality from changing while you are focused on another app and not MSFS.
     - Particularly useful for when using MSFS FG as the FG active and inactive frame rate can vary quite considerably and because FG is not always an exact doubling of non-FG FPS. 
