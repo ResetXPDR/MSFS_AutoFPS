@@ -73,7 +73,7 @@ How does this app work for Frame Generation (FG) users?
   - Make sure your LSFG app is updated to the latest version that supports LSFG 3.0 (2.13.2 or later).
   - The app will first try to use an LS profile with the specific name MSFS2020 or MSFS2024, depending on which MSFS version is currently in use, to obtain these settings.
   - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the Default profile will be used.
-  - If you are using LSFG 1.1 in LS and AutoFPS is not showing a 2X multiplier, temporarily select LSFG 2.3 in LS and select the 2X multiplier, switch back to LSFG 1.1 then press the AutoFPS's Reset button.
+  - When adaptive frame generation is detected, a base FPS will be used for the target FPS because the frame generation multiplier is variable.
   - If you make changes to your LS settings after starting a flight, press AutoFPS's Reset button so that AutoFPS can redetect them correctly.
 - Multi Frame Generation, available only for users with 5000 series nVidia GPUs, is unable to be auto detected by the app at this time due to the privileged access need to read this setting.
   - In the interim, a manual MFG multiplier and target MFG FPS selection will be presented on the UI when a 5000 series nVidia GPU is detected.
@@ -124,6 +124,7 @@ Some Notes:
   - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
+  - If the installer fails when checking/updating Mobiflight despite the latest version being correctly installed in your MSFS Community folder, create a shortcut for the installer, add the command line option "-bypassmobiflight" to the target text box, then run the shortcut to be able to bypass this installation step.
 - The app will automatically check for updates on startup by default and will notify you accordingly on the app status line.
   - If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox.
   - In test versions, all app updates will be enabled by default regardless of what you have previously chosen for update notification in order to maintain a current test baseline.
@@ -141,6 +142,10 @@ Some Notes:
   - Try downloading and installing/repairing the NET desktop runtime from [here](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.20-windows-x64-installer) and [here](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.20-windows-x86-installer).
   - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS installation so you can choose to either not run this app or to reinstall MSFS completely.
   - If reinstalling MSFS 2024, you need to do a clean install, as outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC), which only takes around 15 minutes to complete and all your settings, controller assignments, career progression and your pilot profile are retained.
+- If you get an "Unable to attach MSFS - app disabled." message, the most likely cause is that MSFS and this app are running at different permission privilege levels and/or your anti-virus/malware app is blocking this app. To resolve, try the following:
+  - Check that MSFS is not running as administrator.
+  - Set an exclusion for this app in your anti-virus/malware app.
+  - If all else fails, try running this app as administrator.
 - If you get an "MSFS compatibility test failed - app disabled." message there are numerous possible causes:
   - You have started MSFS, made changes to MSFS settings and then started this app. To rectify:
     - First, try exiting this app, go to the MSFS settings menu, toggle any simple setting eg. vsync, save changes then restart this app.
@@ -191,8 +196,8 @@ Some Notes:
       - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
       - The feature will be disabled if GPU-Z is not found running.
     - Uses two thresholds for VRAM usage, both changeable in the app root directory config file (not the one in the bin subdirectory) after running the app once after updating:
-      - VRAMOverflowHoldTLOD threshold, defaults to > 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
-      - VRAMOverflowReduceTLOD threshold, defaults to > 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
+      - VRAMOverflowHoldTLOD threshold, defaults to >= 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
+      - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
     - When VRAM use drops back below the Hold threshold and favourable performance conditions exist, TLOD will progressively increase up to TLOD Min/Base and the feature will disengage.
     - If you are continually experiencing auto TLOD limiting activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Status Message - Displays key system messages, such as:
@@ -303,6 +308,7 @@ Some Notes:
         - The calculated TLOD Base + will be applied as an offset that increases the entire TLOD altitude schedule by that amount.
         - TLOD Top + cannot be enabled simultaneously due to conflicting controls. The most recent selection will activate, disabling the other, with a dialog box notification.
         - If VRAM+ is active and VRAM limiting applies, TLOD Base + will be frozen or fully reset if the limitation is severe.
+        - Config file settings can be changed for headroom amount, re-seek enabled, re-seek interval (seconds), and TLOD Base multiplier limits for IFR and VFR.
       - TLOD Top + - additional TLOD Top in high elevation areas.
         - Operates the same as TLOD Max + except that it cannot be enabled with TLOD Base + due to conflicting control over TLOD Top. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
       - TLOD Top - reduced TLOD Top at night. Operates the same as TLOD Max -.
