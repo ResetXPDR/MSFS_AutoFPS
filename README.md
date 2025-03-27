@@ -1,10 +1,10 @@
 # MSFS_AutoFPS by ResetXPDR
 
 ## Notice
-My future development efforts on this app are limited to maintenance, resilience improvements and streamlining of existing functionality only. 
+My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however this is only if it is consistent with AutoFPS's existing design, is achievable, is useful to the majority of users and with neglible, or preferably no, UI impact.
 
 ## Summary
-Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD and myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS.<br/><br/>
+Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS.<br/><br/>
 
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
 - Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule, the latter as an expert option,
