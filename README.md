@@ -53,6 +53,17 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
   - resume your flight, then
   - restart AutoFPS.
 
+What does this VRAM+ feature for MSFS 2024 do? How do I use it?
+- MSFS 2024 is very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
+- VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and make MSFS much more prone to CTD.
+- While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM are still regularly encountering VRAM overflow situations, even with modest settings.
+- VRAM+ mitigates these potential overflow events by detecting when an impending VRAM overflow is about to occur and either hold or, if close enough, commence reducing key settings known to free up VRAM.
+- (0.4.4.8) Settings will automatically reduce, up to 50% for LODs and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
+- When VRAM usage reduces to an acceptable level, these setting will automatically increase again, potentially back to their default values if sufficient VRAM headroom now exists.
+- In order to use VRAM+ automatically, you will need to have VRAM+ enabled (default) and also run the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app as it is needed to provide current VRAM usage to the app.
+  - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
+  - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
+
 I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
 - By far the most common reason is users have enabled expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
 - As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer to uninstall (remove option) and reinstall, which will recreate your config file.
