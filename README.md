@@ -275,6 +275,7 @@ Some Notes:
           - Floor: Lowest,
           - Reduction Settings Suite: Full Reduction Suite, and
           - Recovery: Alt TLOD Top.
+        - (MSFS 2024 only with 0.4.4.8) Auto Increase Clouds - enabled
         - (MSFS 2024 only) VRAM+ - enabled,
           - Only functional if GPU-Z is running.
           - (0.4.4.8) Imposes different auto settings reduction settings, namely Floor: off and Recovery: Ground with 5% VRAM reduction achieved. 
@@ -413,6 +414,21 @@ Some Notes:
       - Only shows settings currently available for reduction based on the chosen reduction settings suite and when a flight session is active, except Custom which shows all the time.
       - Default values are shown in black and reduced values are shown in red.
     - The Reset button will restore all settings to their default values.
+  - (MSFS 2024 only) VRAM+
+    - Optional VRAM overflow protection that invokes auto settings reduction if VRAM usage exceeds a reduction threshold, nominally 98% and changeable in the config file.
+    - Enabled by default and applies globally, including non-expert mode.
+    - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running.
+      - If non-expert users are running GPU-Z and want to disable VRAM+, they must switch to expert mode, uncheck it, then switch back to non-expert mode.
+      - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 20 second settle timer of each session.
+    - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
+    - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
+    - User auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
+    - VRAM TLOD reductions occur at twice the rate of normal TLOD reductions to more quickly address VRAM overflow. VRAM TLOD recovery rate is half the normal TLOD recovery rate to more gently recover from VRAM overflow.
+    - VRAM protection will limit TLOD reduction to 50% max, aligning it with normal settings reduction. The broader settings adjustment now eliminates the need for the previous severe reduction down to 25.
+    - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
+    - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use being required before recovery is allowed.
+    - Full settings reduction panel will show whenever VRAM+ has triggered settings reduction beyond just LOD level so that the user can see what is going on.
+    - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
   - (MSFS 2024 only with 0.4.4.8) Auto Increase Clouds
     - Auto increase cloud quality option with TLOD Min/Base + enabled.
     - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process. 
