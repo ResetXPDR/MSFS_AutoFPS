@@ -1,4 +1,4 @@
-# MSFS_AutoFPS by ResetXPDR
+# MSFS_AutoFPS by ResetXPDR (Updated for 0.4.4.8 imminent formal release)
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -15,10 +15,10 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
   - A choice of TLOD automation method, each suitable for different specific uses of the app, namely FPS Sensitivity, FPS Tolerance, Auto TLOD and FPS Cap,
   - Auto raising and lowering of the minimum or base TLOD option, depending on low altitude performance being either very favourable or poor respectively,
   - Auto lowering of the maximum or top TLOD at night option, reducing system workload by not having to draw distant scenery that can't be seen in the dark anyway,
-  - MSFS 2020 only (0.4.4.8 or later)
+  - MSFS 2020 only 
     - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
     - Automatic OLOD adjustment option based on an automatic or user-definable OLOD range and altitude band (AGL),
-  - MSFS 2024 only (0.4.4.8)
+  - MSFS 2024 only 
     - Auto settings reduction option for MSFS 2024, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
     - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists.
 - Simultaneous PC, FG (native nVidia, MFG, FG mod, FSR3 or Lossless Scaling), and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
@@ -54,7 +54,7 @@ What does this VRAM+ feature for MSFS 2024 do? How do I use it?
 - VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and makes MSFS much more prone to CTD.
 - While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM are still regularly encountering VRAM overflow situations, even with modest settings.
 - VRAM+ mitigates these potential overflow events by detecting when an impending VRAM overflow is about to occur and either hold or, if close enough, commence reducing key settings known to free up VRAM.
-- (0.4.4.8) Settings will automatically reduce, up to 50% for LODs and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
+- Settings will automatically reduce, up to 50% for LODs and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
 - When VRAM usage reduces to an acceptable level, these setting will automatically increase again, potentially back to their default values if sufficient VRAM headroom now exists.
 - In order to use VRAM+ automatically, you will need to have VRAM+ enabled (default) and also run the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app as it is needed to provide current VRAM usage to the app.
   - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
@@ -88,8 +88,7 @@ How does this app work for Frame Generation (FG) users?
   - Match the app's MFG multiplier with what you have set for MFG with MSFS in nVidia settings.
   - Set to MFG Off if not using MFG or using an alternative FG method.
   - Feature can be removed by the user setting MfgModeMultEnabled to false in MSFS_AutoFPS.config in the app root directory.
-- (0.4.4.7 or earlier) Detection of FG is normally only performed upon starting a flight. If FG is enabled or LS is started after this detection is normally performed, press the Reset button for it to be detected.
-- (0.4.4.8) Detection of all FG types other than LSFG is automatic within 5 seconds of making the change. Detection of LSFG is normally only performed upon starting a flight. If LSFG is started after this detection is normally performed, press the Reset button for it to be detected.
+- Detection of all FG types other than LSFG is automatic within 5 seconds of making the change. Detection of LSFG is normally only performed upon starting a flight. If LSFG is started after this detection is normally performed, press the Reset button for it to be detected.
 - Only one type of FG can be active at a time for the app to show FPS correctly. In particular, using native nVidia or the FG mod AND LSFG will cause incorrect FPS calculations in the app because they function differently when MSFS loses focus. Choose one or the other if you want to use them with this app.
 
 Why am I getting a dangerous/Unsafe program warning when trying to download or install?
@@ -280,23 +279,20 @@ Some Notes:
       - Common to both automation methods:
         - VFR or IFR flight type - user selectable
         - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
-        - (MSFS 2020 only with 0.4.4.8) Decrease Cloud Quality
-          - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
-          - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
-          - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
-          - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
-        - (MSFS 2020 only with 0.4.4.8) Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
-        - (0.4.4.7 or earlier) Pause when MSFS loses focus - disabled, unless using MSFS FG then enabled
-        - (MSFS 2024 only with 0.4.4.8) Auto Settings Reduction - enabled
-          - Max Levels: 2,
-          - Floor: Lowest,
-          - Reduction Settings Suite: Full Reduction Suite, and
-          - Recovery: Alt TLOD Top.
-        - (MSFS 2024 only with 0.4.4.8) Auto Increase Clouds - enabled
-        - (MSFS 2024 only) VRAM+ - enabled,
-          - Only functional if GPU-Z is running.
-          - (0.4.4.8) Imposes different auto settings reduction settings, namely Floor: off and Recovery: Ground with 5% VRAM reduction achieved. 
-          - (0.4.4.8) Can be disabled by switching to Expert mode, unchecking VRAM+, then switching back to Non-Expert mode.
+        - MSFS 2020 only
+          - Decrease Cloud Quality
+            - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
+            - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
+            - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
+            - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
+          - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
+        - MSFS 2024 only
+          - Auto Settings Reduction - enabled with Max Levels: 2, Floor: Lowest, Reduction Settings Suite: Full Reduction Suite, and Recovery: Alt TLOD Top.
+          - Auto Increase Clouds - enabled
+          - VRAM+ - enabled,
+            - Only functional if GPU-Z is running.
+            - Imposes different auto settings reduction settings, namely Floor: off and Recovery: Ground with 5% VRAM reduction achieved. 
+            - Can be disabled by switching to Expert mode, unchecking VRAM+, then switching back to Non-Expert mode.
     - Expert Mode (checked)
       - The UI expands to show additional MSFS settings to adjust.
       - If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. 
@@ -358,7 +354,7 @@ Some Notes:
     - Requires at least 15% FPS headroom above target FPS to work at all. If you use an FPS cap, set your target FPS to at least 15% below it, preferably more.
     - When enabled, the TLOD Min + seek process will automatically start when commencing a flight, regardless of your aircraft's position, and at the conclusion of a flight when on the ground and stopped.
     - This seeking process can be manually restarted by pressing the Reset button, should flight conditions change such that the original TLOD Min + is no longer valid.
-    - When seeking on the ground, TLOD Min + will progressively increase, in larger steps at first, until a higher TLOD Min with less than 15% FPS headroom is available (0.4.4.8) or a maximum of nominally 2 times TLOD Min, changeable in the config file.
+    - When seeking on the ground, TLOD Min + will progressively increase, in larger steps at first, until a higher TLOD Min with less than 15% FPS headroom is available or a maximum of nominally 2 times TLOD Min, changeable in the config file.
     - On climb out, TLOD Min + will remain set until your aircraft passes the calculated altitude threshold for the app priority mode to transition from TLOD to FPS priority.
     - While in FPS priority mode, TLOD Min + will calculate to be 50% (IFR) or 25% (VFR) of the lower of either whatever TLOD you are currently getting or TLOD Max without TLOD Mtn Amt, but no lower than TLOD Min.
     - On descent through the calculated TLOD priority mode transition altitude, TLOD Min + will lock until landed to give the app time to reduce TLOD to Min at a moderate rate.
@@ -381,75 +377,77 @@ Some Notes:
   - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Min. (100ft - 100000ft allowable)
   - Avg Descent Rate- Used in combination with FPS sensitivity to determine the altitude band in which TLOD will be interpolated between TLOD Min at the Alt TLOD base starting point and the lower of TLOD Max and the maximum TLOD your system can achieve while achieving at least your desired FPS target at a calculated top altitude. (200fpm - 10000fpm allowable)
     - This band ensures that, if you descend at your set Avg Descent Rate or less, that the app can decrement TLOD from TLOD Max to TLOD Min by the Alt TLOD Base without exceeding the LOD Step rate associated with the FPS sensitivity level you have set.
-  - (MSFS 2020 only with 0.4.4.8) Decrease Cloud Quality - When enabled, will reduce/restore cloud quality by one level if the activation condition is met.
-    - Activation Methods
-      - TLOD is the original method and is most suitable for systems where TLOD has the largest impact on desired MSFS performance.
-      - GPU Load is the new method that allows cloud quality changes to occur independently of TLOD
-        - Most suitable for systems where cloud quality has a similar or larger impact on desired MSFS performance than TLOD does.
-        - Reduction occurs only when FPS falls below target by at least the margin specified by the current TLOD automation method.
-      - IFR and VFR flight modes will use the same cloud reduction method.
-    - TLOD (FPS Sensitivity and FPS Tolerance TLOD Automation Methods)
-      - Decreases when TLOD has already auto reduced to TLOD Min and FPS is still below target FPS by more than the FPS tolerance.
-      - Cloud Recovery TLOD with optional + (resultant TLOD must fall within TLOD Min+5 and TLOD Max-5)
-        - The TLOD level required to cancel an active cloud quality reduction state and restore cloud quality back to its initial higher quality level.
-        - Ideally set to 50 TLOD or more above TLOD Min to provide a TLOD buffer to minimise the chance that cloud quality will constantly change down and up.
-        - When + is checked, Cloud Recovery TLOD becomes relative to TLOD Min instead of absolute.
-    - GPU Load (All TLOD Automation Methods)
-      - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running for this method to work. If GPU-Z is not running, the user will be alerted to start it in on the app status line in the General section.
-      - Decreases when the GPU load, as measured by the GPU-Z companion app, is higher than the user-defined Decrease GPU Load percentage. (50% - 100% allowable)
-      - Cloud Recovery GPU load (5% - 90% and at least 10% less than Decrease GPU Load allowable)
-        - Recovers when the GPU load is lower than the user-defined Recover GPU Load percentage.
-        - Ideally set to at least 15% lower than the Decrease GPU Load percentage to provide a GPU load buffer to minimise the chance that cloud quality will constantly change down and up.
-  - (MSFS 2020 only with 0.4.4.8) Auto OLOD
-    -  When enabled, four user definable parameters relating to this feature will be revealed on the UI.
-    -  Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
-    -  The app will set OLOD @ Base at or below the Alt OLOD Base (AGL), set the OLOD @ Top at or above Alt OLOD Top (AGL) and interpolate in between. Note that OLOD @ Base can be higher, lower or the same value as the OLOD @ Top, depending on whether you want OLOD to decrease, increase or stay the same respectively as you ascend. 
-  - (MSFS 2024 only with 0.4.4.8) Automatic Settings Reduction
-    - Optional and activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
-    - Only applicable to MSFS 2024, as existing MSFS 2020 functionality is considered acceptable and MSFS 2024 tends to experience VRAM overflow, where such setting reductions are intended to help alleviate, much more frequently.
-    - Not applicable to AutoLOD mode with TLOD Base + disabled as it has no TLOD or FPS recovery mechanisms, except reduction will still occur with impending VRAM overflow situations. 
-    - Default settings will be saved on flight session commencement and restored on completion.
-    - Settings reduction will only function and show when in a flight session and the secondary compatibility test passed.
-    - Settings reduction value panel only shows as much as needed depending on the selected reduction settings suite.
-    - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
-    - Enabled for non-expert mode users, using default values of Max Levels: 2, Floor: Lowest, Reduction Settings Suite: Full Reduction Suite, and Recovery: Alt TLOD Top.
-    - Disabled by default for expert users. When enabled the default values of the applicable settings are the same as for non-expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
-      - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
-      - OLOD reductions are proportional to TLOD reductions.
-      - Settings reduction activation cancels the TLOD Min/Base + seek process if active.
-    - Automatically restores settings if the current FPS rises above the target FPS by the default tolerance or if the current FPS matches the target FPS and the TLOD has automatically increased by an acceptable margin.
-      - Settings recovery will commence recovery immediately in any mode if the current FPS is above the target FPS by the FPS tolerance amount.
-      - In AutoTLOD with TLOD Base + and FPS Cap modes, the reseek process will be triggered at least 60 seconds after the last time settings reduction level was reduced and the target FPS is being achieved once again.
-      - Displacement Maps will not restore to enabled until above 100 ft AGL, as it is known to cause texture corruption at low altitudes.
-    - TLOD Min/Base and OLOD will be progressively reduced at the user-defined LOD step rate by up to 50%.
-      - TLOD Top gets reduced by the same proportional amount that TLOD Base gets reduced for FPS Cap mode and Auto TLOD with TLOD Base + enabled mode.
-    - Max Levels setting determines how many levels the settings other than LODs will be reduced by in subsequent reduction cycles. 
-    - Floor setting determines the minimum setting quality level that settings will be reduced to, including off if an allowable state for a setting.
-    - Recover setting determines at which altitude (ground, Alt TLOD Base or Alt TLOD Top / equivalent) settings reduction recovery can occur as enabling it at lower altitudes may not be acceptable for some users. The default is Alt TLOD Top.
-    - Reduction Settings Suite setting determines which settings set will be reduced. 
-      - The presets are based on research that identified the settings most likely to improve FPS and/or reduce VRAM consumption when they are reduced, in decreasing order of effectiveness.
-      - Custom Reduction Settings Suite allow the user to select which individual settings to reduce rather than the preset sets.
-    - Reduction setting status panel:
-      - Only shows settings currently available for reduction based on the chosen reduction settings suite and when a flight session is active, except Custom which shows all the time.
-      - Default values are shown in black and reduced values are shown in red.
-    - The Reset button will restore all settings to their default values.
-  - (MSFS 2024 only) VRAM+
-    - Optional VRAM overflow protection that invokes auto settings reduction if VRAM usage exceeds a reduction threshold, nominally 98% and changeable in the config file.
-    - Enabled by default and applies globally, including non-expert mode.
-    - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running.
-      - If non-expert users are running GPU-Z and want to disable VRAM+, they must switch to expert mode, uncheck it, then switch back to non-expert mode.
-      - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 20 second settle timer of each session.
-    - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
-    - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
-    - User auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
-    - VRAM TLOD reductions occur at twice the rate of normal TLOD reductions to more quickly address VRAM overflow. VRAM TLOD recovery rate is half the normal TLOD recovery rate to more gently recover from VRAM overflow.
-    - VRAM protection will limit TLOD reduction to 50% max, aligning it with normal settings reduction. The broader settings adjustment now eliminates the need for the previous severe reduction down to 25.
-    - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
-    - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use being required before recovery is allowed.
-    - Full settings reduction panel will show whenever VRAM+ has triggered settings reduction beyond just LOD level so that the user can see what is going on.
-    - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
-  - (MSFS 2024 only with 0.4.4.8) Auto Increase Clouds
-    - Auto increase cloud quality option with TLOD Min/Base + enabled.
-    - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process. 
-    - Removed immediately if the FPS cap is breached.
+  - MSFS 2020 only
+    - Decrease Cloud Quality - When enabled, will reduce/restore cloud quality by one level if the activation condition is met.
+      - Activation Methods
+        - TLOD is the original method and is most suitable for systems where TLOD has the largest impact on desired MSFS performance.
+        - GPU Load is the new method that allows cloud quality changes to occur independently of TLOD
+          - Most suitable for systems where cloud quality has a similar or larger impact on desired MSFS performance than TLOD does.
+          - Reduction occurs only when FPS falls below target by at least the margin specified by the current TLOD automation method.
+        - IFR and VFR flight modes will use the same cloud reduction method.
+      - TLOD (FPS Sensitivity and FPS Tolerance TLOD Automation Methods)
+        - Decreases when TLOD has already auto reduced to TLOD Min and FPS is still below target FPS by more than the FPS tolerance.
+        - Cloud Recovery TLOD with optional + (resultant TLOD must fall within TLOD Min+5 and TLOD Max-5)
+          - The TLOD level required to cancel an active cloud quality reduction state and restore cloud quality back to its initial higher quality level.
+          - Ideally set to 50 TLOD or more above TLOD Min to provide a TLOD buffer to minimise the chance that cloud quality will constantly change down and up.
+          - When + is checked, Cloud Recovery TLOD becomes relative to TLOD Min instead of absolute.
+      - GPU Load (All TLOD Automation Methods)
+        - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running for this method to work. If GPU-Z is not running, the user will be alerted to start it in on the app status line in the General section.
+        - Decreases when the GPU load, as measured by the GPU-Z companion app, is higher than the user-defined Decrease GPU Load percentage. (50% - 100% allowable)
+        - Cloud Recovery GPU load (5% - 90% and at least 10% less than Decrease GPU Load allowable)
+          - Recovers when the GPU load is lower than the user-defined Recover GPU Load percentage.
+          - Ideally set to at least 15% lower than the Decrease GPU Load percentage to provide a GPU load buffer to minimise the chance that cloud quality will constantly change down and up.
+    - Auto OLOD
+      - When enabled, four user definable parameters relating to this feature will be revealed on the UI.
+      - Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
+      -  The app will set OLOD @ Base at or below the Alt OLOD Base (AGL), set the OLOD @ Top at or above Alt OLOD Top (AGL) and interpolate in between. Note that OLOD @ Base can be higher, lower or the same value as the OLOD @ Top, depending on whether you want OLOD to decrease, increase or stay the same respectively as you ascend. 
+  - MSFS 2024 only
+    - Automatic Settings Reduction
+      - Optional and activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
+      - Only applicable to MSFS 2024, as existing MSFS 2020 functionality is considered acceptable and MSFS 2024 tends to experience VRAM overflow, where such setting reductions are intended to help alleviate, much more frequently.
+      - Not applicable to AutoLOD mode with TLOD Base + disabled as it has no TLOD or FPS recovery mechanisms, except reduction will still occur with impending VRAM overflow situations. 
+      - Default settings will be saved on flight session commencement and restored on completion.
+      - Settings reduction will only function and show when in a flight session and the secondary compatibility test passed.
+      - Settings reduction value panel only shows as much as needed depending on the selected reduction settings suite.
+      - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
+      - Enabled for non-expert mode users, using default values of Max Levels: 2, Floor: Lowest, Reduction Settings Suite: Full Reduction Suite, and Recovery: Alt TLOD Top.
+      - Disabled by default for expert users. When enabled the default values of the applicable settings are the same as for non-expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
+        - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
+        - OLOD reductions are proportional to TLOD reductions.
+        - Settings reduction activation cancels the TLOD Min/Base + seek process if active.
+      - Automatically restores settings if the current FPS rises above the target FPS by the default tolerance or if the current FPS matches the target FPS and the TLOD has automatically increased by an acceptable margin.
+        - Settings recovery will commence recovery immediately in any mode if the current FPS is above the target FPS by the FPS tolerance amount.
+        - In AutoTLOD with TLOD Base + and FPS Cap modes, the reseek process will be triggered at least 60 seconds after the last time settings reduction level was reduced and the target FPS is being achieved once again.
+        - Displacement Maps will not restore to enabled until above 100 ft AGL, as it is known to cause texture corruption at low altitudes.
+      - TLOD Min/Base and OLOD will be progressively reduced at the user-defined LOD step rate by up to 50%.
+        - TLOD Top gets reduced by the same proportional amount that TLOD Base gets reduced for FPS Cap mode and Auto TLOD with TLOD Base + enabled mode.
+      - Max Levels setting determines how many levels the settings other than LODs will be reduced by in subsequent reduction cycles. 
+      - Floor setting determines the minimum setting quality level that settings will be reduced to, including off if an allowable state for a setting.
+      - Recover setting determines at which altitude (ground, Alt TLOD Base or Alt TLOD Top / equivalent) settings reduction recovery can occur as enabling it at lower altitudes may not be acceptable for some users. The default is Alt TLOD Top.
+      - Reduction Settings Suite setting determines which settings set will be reduced. 
+        - The presets are based on research that identified the settings most likely to improve FPS and/or reduce VRAM consumption when they are reduced, in decreasing order of effectiveness.
+        - Custom Reduction Settings Suite allow the user to select which individual settings to reduce rather than the preset sets.
+      - Reduction setting status panel:
+        - Only shows settings currently available for reduction based on the chosen reduction settings suite and when a flight session is active, except Custom which shows all the time.
+        - Default values are shown in black and reduced values are shown in red.
+      - The Reset button will restore all settings to their default values.
+    - VRAM+
+      - Optional VRAM overflow protection that invokes auto settings reduction if VRAM usage exceeds a reduction threshold, nominally 98% and changeable in the config file.
+      - Enabled by default and applies globally, including non-expert mode.
+      - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running.
+        - If non-expert users are running GPU-Z and want to disable VRAM+, they must switch to expert mode, uncheck it, then switch back to non-expert mode.
+        - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 20 second settle timer of each session.
+      - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
+      - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
+      - User auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
+      - VRAM TLOD reductions occur at twice the rate of normal TLOD reductions to more quickly address VRAM overflow. VRAM TLOD recovery rate is half the normal TLOD recovery rate to more gently recover from VRAM overflow.
+      - VRAM protection will limit TLOD reduction to 50% max, aligning it with normal settings reduction. The broader settings adjustment now eliminates the need for the previous severe reduction down to 25.
+      - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
+      - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use being required before recovery is allowed.
+      - Full settings reduction panel will show whenever VRAM+ has triggered settings reduction beyond just LOD level so that the user can see what is going on.
+      - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
+    - Auto Increase Clouds
+      - Auto increase cloud quality option with TLOD Min/Base + enabled.
+      - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process. 
+      - Removed immediately if the FPS cap is breached.
 <br/><br/>
