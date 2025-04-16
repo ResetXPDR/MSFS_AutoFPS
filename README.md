@@ -99,7 +99,8 @@ Why am I getting a dangerous/Unsafe program warning when trying to download or i
 ## Requirements
 
 The Installer will install the following Software:
-- .NET 7 Desktop Runtime (x64)
+- .NET 8 Desktop Runtime (x64)
+- Visual C++ Redistributable (x64)
 - MobiFlight Event/WASM Module
 
 <br/>
@@ -138,7 +139,9 @@ Some Notes:
   - If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox.
   - In test versions, all app updates will be enabled by default regardless of what you have previously chosen for update notification in order to maintain a current test baseline.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
-- The clean install option will recreate new configuration files without having to remove the app first.
+- The "Clean Install" option will recreate new configuration files without having to remove the app first.
+- The "Install Latest Redistributables" option will silently (other than UAC prompts) update your system with the latest Visual C++ Redistributable and .NET 8 runtime versions.
+  - Mandatory for initial installations, optional for manual updates, and disabled for quick updates to avoid UAC prompts.
 - For Auto-Start either your FSUIPC7.ini or EXE.xml (MSFS) is modified. The Installer does not create a Backup.
 - If you wish to remove an Auto-Start option from a previous installation, rerun the installer and select Remove Auto-Start and the click Update.
 - The app may be blocked by Windows Security or your AV-Scanner, if so try to unblock or set an exception (for the whole Folder)
@@ -212,14 +215,20 @@ Some Notes:
     - Before loading a flight - whether a newer version of the app is available to download and install,
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
     - Flight is loaded
-      - Shows detected Graphics Mode (PC, FG, LSFG or VR) and DX version, app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
+      - Shows currnt sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
+      - Shows detected Graphics Mode (PC, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 20 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/PC/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Min + has been activated and that a higher TLOD Min should be expected. Similarly, a + next to ATLOD or FPSCap indicates that TLOD Base + has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
-    - There is a setting for each graphics mode (PC, FG, LSFG and VR) and each flight mode (VFR and IFR), which you can only change while in those mode pairs. This is particularly useful if regularly switching between FG mode and VR mode in your flights as the FG FPS target can be significantly higher than the one for VR.
+    - There is a setting for each graphics mode (PC, FG, LSFG, MFG, FSR3 and VR) and each flight mode (VFR and IFR). Automatically defaults to the currently detected graphips mode, however the user can change the target FPS for graphics modes other than what is currently active.
+      - Selectable by using the drop down list of target FPS types in the app window.
+      - Target FPS type drop down list background will change to orange when the target FPS type is different to the current graphics mode to clearly indicate this difference to the user.
+      - Changes to target FPS for a type different to the current graphics mode will be saved to the config file without reloading the UI as it does not affect any other displayed settings.
+      - Changes to any other setting on the UI will reload the target FPS type for the current graphics mode.
+      - Particularly useful for VR users who have previously had to be in VR and remove their headset to change this setting.
     - If using MSFS FG, the target FPS you set is your desired FG Active FPS, not the FG Inactive FPS you see when this app has the focus instead of MSFS. 
     - If using an FPS cap, or Vsync for the same purpose, it is strongly recommended you use the FPS Cap automation method, available under expert settings, with an FPS target matching your FPS cap and works well in such instances.
     - If using such an FPS cap with either FPS Sensitivity or Tolerance automation methods you will need to set your target FPS to be at least 5% lower than that cap to allow the automation logic to function correctly. This potentially introduces screen tearing, or breaks motion reprojection in VR, hence why Auto TLOD is preferred.
@@ -239,6 +248,7 @@ Some Notes:
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
   - Flight type - VFR or IFR
     - In non-expert mode, VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR to account for the greater performance expectation that GA flights in rural areas will have.
+    - Use the -ifr and -vfr command line arguments for the app to force the use of the respective flight profile on app start up.
     - Expert mode will default to similar settings differences, however the settings for each flight type are fully customisable and will save to and restore from separate profiles for VFR and IFR.
     - On the ground, TLOD will be locked to either a pre-determined (non-expert) or user-selectable (expert) TLOD Min.
     - Once in the air and above either a pre-determined (non-expert) or user-selectable (expert) TLOD base altitude, TLOD will be allowed to change to the lower of either the schedule based on your TLODs, FPS sensitivity/tolerance and average descent rate settings or what your current performance dictates.
@@ -374,7 +384,9 @@ Some Notes:
   - (MSFS 2020 only with 0.4.4.8) Decrease Cloud Quality - When enabled, will reduce/restore cloud quality by one level if the activation condition is met.
     - Activation Methods
       - TLOD is the original method and is most suitable for systems where TLOD has the largest impact on desired MSFS performance.
-      - GPU Load is the new method that allows cloud quality changes to occur independently of TLOD and is most suitable for systems where cloud quality has a similar or larger impact on desired MSFS performance than TLOD does.
+      - GPU Load is the new method that allows cloud quality changes to occur independently of TLOD
+        - Most suitable for systems where cloud quality has a similar or larger impact on desired MSFS performance than TLOD does.
+        - Reduction occurs only when FPS falls below target by at least the margin specified by the current TLOD automation method.
       - IFR and VFR flight modes will use the same cloud reduction method.
     - TLOD (FPS Sensitivity and FPS Tolerance TLOD Automation Methods)
       - Decreases when TLOD has already auto reduced to TLOD Min and FPS is still below target FPS by more than the FPS tolerance.
