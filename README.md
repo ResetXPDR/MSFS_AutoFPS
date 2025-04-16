@@ -47,11 +47,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - If using an FPS cap, enter that as your target FPS otherwise enter a target FPS your system can usually easily achieve or click on auto target FPS for the app to pick it for you,
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
-- Due to potential settings conflict, if you want to change MSFS graphics settings while in a flight with AutoFPS already running:
-  - exit AutoFPS,
-  - change and save your MSFS settings,
-  - resume your flight, then
-  - restart AutoFPS.
+- Due to potential settings conflict, don't change any MSFS graphics settings while in a flight with AutoFPS already running.
 
 What does this VRAM+ feature for MSFS 2024 do? How do I use it?
 - MSFS 2024 is very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
