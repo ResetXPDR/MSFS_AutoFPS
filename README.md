@@ -346,9 +346,6 @@ Some Notes:
            - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
            - If stuttering persists, either uncheck TLOD Base - or use AutoTLOD with TLOD Base + disabled for the lowest possible TLOD on the ground.
-  - (0.4.4.7 and earlier) Pause when MSFS loses focus
-    - Will stop LODs and, if applicable, cloud quality from changing while you are focused on another app and not MSFS.
-    - Particularly useful for when using MSFS FG as the FG active and inactive frame rate can vary quite considerably and because FG is not always an exact doubling of non-FG FPS. 
   - TLOD Min - Sets the minimum TLOD the automation algorithm will use. (10 - TLOD Max-10 allowable)
   - TLOD Min + - additional TLOD Min with favourable performance conditions.
     - Requires at least 15% FPS headroom above target FPS to work at all. If you use an FPS cap, set your target FPS to at least 15% below it, preferably more.
