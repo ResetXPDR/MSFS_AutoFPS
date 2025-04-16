@@ -153,8 +153,8 @@ Some Notes:
   - Try downloading and installing/repairing the NET desktop runtime from [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/8.0.15/windowsdesktop-runtime-8.0.15-win-x64.exe) if still available. Alternatively, go to the Micrsoft .NET 8.0 download page [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) and download and install the latest .NET Desktop Runtime X64 version.
   - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS installation so you can choose to either not run this app or to reinstall MSFS completely.
   - If reinstalling MSFS 2024, you need to do a clean install, as outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC).
+    - **Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the resintallation is complete.**
     - Only takes around 15 minutes to complete and all your settings, controller assignments, career progression and your pilot profile are retained.
-    **- Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the resintallation is complete.**
 - If you get an "Unable to attach MSFS - app disabled." message, the most likely cause is that MSFS and this app are running at different permission privilege levels and/or your anti-virus/malware app is blocking this app. To resolve, try the following:
   - Check that MSFS is not running as administrator.
   - Set an exclusion for this app in your anti-virus/malware app.
