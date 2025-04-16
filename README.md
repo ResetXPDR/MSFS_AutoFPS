@@ -174,14 +174,14 @@ Some Notes:
 ## Usage / Configuration
 
 - General
-  - Can be started anytime, but preferably just after MSFS has loaded in to the Main Menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes. 
+  - Can be started anytime, but preferably just after MSFS has loaded in to the main menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes. 
   - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions. Exit by clicking on the app window's close button and providing user confirmation when prompted.
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exits when MSFS closes.
   - The app window's minimised/maximised state will be remembered between sessions and will be restored on the next startup.
   - The apps window's position will be remembered between sessions, except movements to it made while in VR due to window restoration issues. If there are issues with the window not displaying correctly on start-up, as can happen when auto-starting the app through MSFS or FSUIPC, either don't use auto-start, restart the app within 10 seconds of last closing it to auto reset the window position, or manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
   - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app. 
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
-  - Do not change TLOD, OLOD and Cloud Quality MSFS settings manually while in a flight with this app running as it will conflict with what the app is managing and they will not restore to what you set when you exit your flight. If you wish to change the defaults for these MSFS settings, you must do so either without this app running or, if it is, only while you are in the MSFS main menu (ie not in a flight).
+  - Do NOT change MSFS graphics settings manually while in a flight with this app running as it will conflict with what the app is managing and they will not restore to what you set when you exit your flight. If you wish to change the defaults for these MSFS settings, you must do so either without this app running or, if it is, only while you are in the MSFS main menu (ie not in a flight).
 - Connection Status
   - Red values indicate not connected, green is connected.
   - Automatically identifies which MSFS version is in use as either MSFS2020 or MSFS2024. 
