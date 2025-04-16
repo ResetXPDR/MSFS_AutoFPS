@@ -33,14 +33,14 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
 - Notwithstanding, there is a new MSFS wishlist item requesting simconnect variables access to MSFS settings, which would allow me to make this app legitimate in MS/Abobo's eyes and expand the range of possibilities of what this app could do in future. Please vote for it [here](https://forums.flightsimulator.com/t/expose-tlod-olod-clouds-etc-via-simconnect-l-vars/634075). 
 
 Important:<br/> 
-- This app directly accesses active MSFS memory locations while MSFS is running to read and set TLOD, OLOD and cloud quality settings on the fly at a maximum rate of one read and change per setting per second, normally much less. The app will first verify that the MSFS memory locations being used are still valid and if not, likely because of an MSFS version change, will attempt to find where they have been relocated. If it does find the new memory locations and they pass validation tests, the app will update itself automatically and will function as normal. If it can't find or validate MSFS memory locations at any time when starting up, the app will self-restrict to read only mode to prevent the app making changes to unknown MSFS memory locations.
+- This app directly accesses active MSFS memory locations while MSFS is running to read and set MSFS graphics settings on the fly at a maximum rate of one read and change per setting per second, normally much less. The app will first verify that the MSFS memory locations being used are still valid and if not, likely because of an MSFS version change, will attempt to find where they have been relocated. If it does find the new memory locations and they pass validation tests, the app will update itself automatically and will function as normal. If it can't find or validate MSFS memory locations at any time when starting up, the app will self-restrict to read only mode to prevent the app making changes to unknown MSFS memory locations.
 - As such, I believe the app to be robust in its interaction with validated MSFS memory locations and to be responsible in disabling itself if it can't guarantee that. Nonetheless, this app is offered as is and no responsibility will be taken for unintended negative side effects. Use at your own risk!<br/><br/>
 
 
 ## FAQ
 
 I am new to this app/MSFS, or I don't care for all this technical jargon. What is the simplest way to use this app to make my MSFS experience better?
-- Leave your relevant MSFS settings (TLOD, OLOD and Cloud Quality) set as you normally would without this app, 
+- Leave your relevant MSFS graphics settings set as you normally would without this app, 
 - Start the app before you load your flight,
 - Leave Use Expert Settings unchecked,
 - Pick what type of flight you are doing via the radio buttons ie. either VFR (GA aircraft) or IFR (airliners),
@@ -67,7 +67,7 @@ I am getting major stuttering, freezes or CTDs in MSFS using this app. What can 
 - If this doesn't resolve it, try enabling expert options and reducing the FPS Sensitivity setting to 2, to allow smaller TLOD changes.
 - If still not resolved, try the FPS Tolerance mode, which was the automation method in the original release version that had larger TLOD changes but they occurred less often, with a setting of 5.
 
-My default MSFS TLOD, OLOD and/or cloud settings are messed up and each time I try to change them back they get messed up again. How do I fix this?
+My default MSFS graphics settings are messed up and each time I try to change them back they get messed up again. How do I fix this?
 - You are likely trying to change these default MSFS settings while the app is still running and you are in an active flight, where the app will override any such changes you try to make.
 - Either exit the app completely or be in the MSFS main menu (ie. NOT in a flight), then you can go to the MSFS settings screen and change your default MSFS settings to what you want and the app will restore these upon exiting.
 
