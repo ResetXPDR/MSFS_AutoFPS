@@ -17,7 +17,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
   - Auto lowering of the maximum or top TLOD at night option, reducing system workload by not having to draw distant scenery that can't be seen in the dark anyway,
   - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
   - Automatic OLOD adjustment option based on an automatic or user-definable OLOD range and altitude band (AGL),
-- Simultaneous PC, FG (native nVidia, MFG, FG mod or Lossless Scaling), and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous PC, FG (native nVidia, MFG, FG mod, FSR3 or Lossless Scaling), and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - Auto TLOD limiting when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app and VRAM overflow in MSFS is impending, as occurs for some users with MSFS 2024.
 - Auto installation of app updates (optional except for mandatory updates),
@@ -35,16 +35,6 @@ Important:<br/>
 
 ## FAQ
 
-What's with all these AutoFPS apps out now? Which one should I be using?:
-- As of Dec 24, there are three commonly used AutoFPS apps out there, all of which install to separate directories but each has a different starting name that IMO is reasonably intuitive as to what MSFS sim versions they are applicable to, namely:
-  - MSFS2020_AutoFPS - my original app that works only with MSFS 2020.
-  - MSFS2024_AutoFPS by kayJay_1c6b - kayJay_1c6b's app that works only with MSFS 2024 up to version 1.2.11.0 (Pre-SU1).
-  - MSFS_AutoFPS - this app that works with both MSFS 2020 and 2024, hence the dropping of the sim version from the name and thus making MSFS2020_AutoFPS obsolete.
- - If you like the functionality MSFS2020_AutoFPS provided for MSFS 2020 and are happy with the same functionality for MSFS 2024, regardless of which MSFS version you are currently using, then MSFS_AutoFPS is the one for you.
- - If you want newer features for MSFS 2024 than what MSFS2020_AutoFPS offered, but no MSFS 2020 compatibility, then MSFS2024_AutoFPS by kayJay_1c6b is what you need.
- - You can have MSFS2024_AutoFPS by kayJay_1c6b and either MSFS2020_AutoFPS or MSFS_AutoFPS installed at the same time, but you can only run one of them at a time.
- - As of 26 Jan 24, kayJay_1c6b has decided to pause development on his app. As such, unless that changes in the future or another AutoFPS-like app is created by someone else, MSFS_AutoFPS will be the only AutoFPS version compatible with MSFS 2024 SU1 and later.
-
 I am new to this app/MSFS, or I don't care for all this technical jargon. What is the simplest way to use this app to make my MSFS experience better?
 - Leave your relevant MSFS settings (TLOD, OLOD and Cloud Quality) set as you normally would without this app, 
 - Start the app before you load your flight,
@@ -53,6 +43,11 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - If using an FPS cap, enter that as your target FPS otherwise enter a target FPS your system can usually easily achieve or click on auto target FPS for the app to pick it for you,
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
+- Due to potential settings conflict, if you want to change MSFS graphics settings while in a flight with AutoFPS already running:
+  - exit AutoFPS,
+  - change and save your MSFS settings,
+  - resume your flight, then
+  - restart AutoFPS.
 
 I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
 - By far the most common reason is users have enabled expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
@@ -75,6 +70,8 @@ How does this app work for Frame Generation (FG) users?
   - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the Default profile will be used.
   - When adaptive frame generation is detected, a base FPS will be used for the target FPS because the frame generation multiplier is variable and is not currently detectable.
   - If you make changes to your LS settings after starting a flight, press AutoFPS's Reset button so that AutoFPS can redetect them correctly.
+- FSR3 FG is now supported for MSFS 2024 as of SU2.
+  - Although FSR3 FG can be implemented with an adaptive multiplier, MSFS currently implements it with a fixed 2X multiplier that is active regardless of whether MSFS has the focus or not.
 - Multi Frame Generation, available only for users with 5000 series nVidia GPUs, is unable to be auto detected by the app at this time due to the privileged access need to read this setting.
   - In the interim, a manual MFG multiplier and target MFG FPS selection will be presented on the UI when a 5000 series nVidia GPU is detected.
   - Match the app's MFG multiplier with what you have set for MFG with MSFS in nVidia settings.
