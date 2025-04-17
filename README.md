@@ -53,7 +53,7 @@ What does this VRAM+ feature for MSFS 2024 do? How do I use it?
 - MSFS 2024 is very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
 - VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and makes MSFS much more prone to CTD.
 - While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM are still regularly encountering VRAM overflow situations, even with modest settings.
-- VRAM+ mitigates these potential overflow events by detecting when an impending VRAM overflow is about to occur and either hold or, if close enough, commence reducing key settings known to free up VRAM.
+- VRAM+ mitigates these potential overflow events by detecting an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
 - Settings will automatically reduce, up to 50% for LODs and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
 - When VRAM usage reduces to an acceptable level, these setting will automatically increase again, potentially back to their default values if sufficient VRAM headroom now exists.
 - In order to use VRAM+ automatically, you will need to have VRAM+ enabled (default) and also run the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app as it is needed to provide current VRAM usage to the app.
