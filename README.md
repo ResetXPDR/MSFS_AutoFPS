@@ -216,7 +216,7 @@ Some Notes:
     - Before loading a flight - whether a newer version of the app is available to download and install,
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
     - Flight is loaded
-      - Shows currnt sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
+      - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
       - Shows detected Graphics Mode (PC, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 20 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/PC/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Min + has been activated and that a higher TLOD Min should be expected. Similarly, a + next to ATLOD or FPSCap indicates that TLOD Base + has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
