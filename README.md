@@ -155,7 +155,8 @@ Some Notes:
   - If reinstalling MSFS 2024, you need to do a clean install, as outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC).
     - **Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the resintallation is complete.**
     - Only takes around 15 minutes to complete and all your settings, controller assignments, career progression and your pilot profile are retained.
-- If you get an "Unable to attach MSFS - app disabled." message, the most likely cause is that MSFS and this app are running at different permission privilege levels and/or your anti-virus/malware app is blocking this app. To resolve, try the following:
+- If you get an "Unable to attach MSFS - app disabled." message, the most likely causes are that MSFS is loading in very slowly and the attachment process is timing out, MSFS and this app are running at different permission privilege levels, or your anti-virus/malware app is blocking this app. To resolve, try the following:
+  - Restart this app after MSFS has loaded in to the main menu.
   - Check that MSFS is not running as administrator.
   - Set an exclusion for this app in your anti-virus/malware app.
   - If all else fails, try running this app as administrator.
