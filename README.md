@@ -47,7 +47,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - If using an FPS cap, enter that as your target FPS otherwise enter a target FPS your system can usually easily achieve or click on auto target FPS for the app to pick it for you,
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
-- If MSFS performance drops significantly in complex scenarios or you receive memory capacity warnings, VRAM+ may help. The following FAQ entry explains how to configure this feature.
+- If MSFS performance still drops significantly in complex scenarios or you receive memory capacity warnings, VRAM+ may help. The following FAQ entry explains how to configure this feature.
 - Due to potential settings conflict, don't change any MSFS graphics settings while in a flight with AutoFPS already running.
 
 What does this VRAM+ feature for MSFS 2024 do? How do I use it?
