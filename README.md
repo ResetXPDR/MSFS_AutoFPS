@@ -230,7 +230,7 @@ Some Notes:
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
-    - There is a setting for each graphics mode (PC, FG, LSFG, MFG, FSR3 and VR) and each flight mode (VFR and IFR). Automatically defaults to the currently detected graphips mode, however the user can change the target FPS for graphics modes other than what is currently active.
+    - There is a setting for each graphics mode (PC, FG, LSFG, MFG, FSR3 and VR) and each flight mode (VFR and IFR). Automatically defaults to the currently detected graphics mode, however the user can change the target FPS for graphics modes other than what is currently active.
       - Selectable by using the drop down list of target FPS types in the app window.
       - Target FPS type drop down list background will change to orange when the target FPS type is different to the current graphics mode to clearly indicate this difference to the user.
       - Changes to target FPS for a type different to the current graphics mode will be saved to the config file without reloading the UI as it does not affect any other displayed settings.
