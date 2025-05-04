@@ -432,7 +432,7 @@ Some Notes:
         - TLOD Top gets reduced by the same proportional amount that TLOD Base gets reduced for FPS Cap mode and Auto TLOD with TLOD Base + enabled mode.
       - Max Levels setting determines how many levels the settings other than LODs will be reduced by in subsequent reduction cycles. 
       - Floor setting determines the minimum setting quality level that settings will be reduced to, including off if an allowable state for a setting.
-      - Recover setting determines at which altitude (ground, Alt TLOD Base or Alt TLOD Top / equivalent) settings reduction recovery can occur as enabling it at lower altitudes may not be acceptable for some users. The default is Alt TLOD Top.
+      - Recover setting determines at which altitude (ground, Alt TLOD Base or Alt TLOD Top / equivalent) settings reduction recovery can occur as enabling it at lower altitudes may not be acceptable for some users. The default is Alt TLOD Base, being the middle option.
       - Reduction Settings Suite setting determines which settings set will be reduced. 
         - The presets are based on research that identified the settings most likely to improve FPS and/or reduce VRAM consumption when they are reduced, in decreasing order of effectiveness.
         - Custom Reduction Settings Suite allow the user to select which individual settings to reduce rather than the preset sets, the individual settings for which will appear when the user mouses over the reduction settings suite label or drop down list and Custom is currently selected. 
