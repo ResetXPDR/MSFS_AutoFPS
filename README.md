@@ -47,7 +47,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - If using an FPS cap, enter that as your target FPS otherwise enter a target FPS your system can usually easily achieve or click on auto target FPS for the app to pick it for you,
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
-- Due to potential settings conflict, don't change any MSFS graphics settings while in a flight with AutoFPS already running.
+- Due to potential settings conflict, don't change any MSFS graphics settings that could be adjusted by AutoFPS while in a flight with AutoFPS already running.
 - If MSFS 2024 performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
 
 What does this VRAM+ feature for MSFS 2024 do? How do I use it?
@@ -214,10 +214,10 @@ Some Notes:
       - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
       - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
       - The feature will be disabled if GPU-Z is not found running.
-    - Uses two thresholds for VRAM usage, both changeable in the app root directory config file (not the one in the bin subdirectory) after running the app once after updating:
+    - Uses three thresholds for VRAM usage, all changeable in the app root directory config file (not the one in the bin subdirectory) after running the app once after updating:
       - VRAMOverflowHoldTLOD threshold, defaults to >= 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
       - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
-    - When VRAM use drops back below the Hold threshold and favourable performance conditions exist, settings will progressively increase until the feature disengages.
+      - VRAMOverflowSettingsRecovery threshold, must be at least 5% less than VRAMOverflowReduceTLOD (ie. 93% by default) and will allow settings to progressively increase with favourable performance conditions until the feature disengages. 
     - VRAM+ setting:
       - Non-Expert mode:
         - Checkbox only visible if GPU-Z is running
@@ -459,10 +459,10 @@ Some Notes:
       - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
       - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
       - User auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
-      - VRAM TLOD reductions occur at twice the rate of normal TLOD reductions to more quickly address VRAM overflow. VRAM TLOD recovery rate is half the normal TLOD recovery rate to more gently recover from VRAM overflow.
-      - VRAM protection will limit TLOD reduction to 50% max, aligning it with normal settings reduction. The broader settings adjustment now eliminates the need for the previous severe reduction down to 25.
+      - VRAM LOD reductions occur at twice the rate of normal LOD reductions to more quickly address VRAM overflow. VRAM LOD recovery rate is half the normal LOD recovery rate to more gently recover from VRAM overflow.
+      - VRAM protection will limit LOD reductions to 50% max, aligning it with normal settings reduction. 
       - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
-      - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use being required before recovery is allowed.
+      - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use below the VRAM reduce threshold being required before recovery is allowed.
         - Each VRAM+ recovery will increase the recovery altitude setting by one, up to Alt TLOD Top, to reduce instances of VRAM+ cycling too often.
       - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
     - Auto Increase Clouds
