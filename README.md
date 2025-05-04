@@ -218,9 +218,14 @@ Some Notes:
       - VRAMOverflowHoldTLOD threshold, defaults to >= 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
       - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
     - When VRAM use drops back below the Hold threshold and favourable performance conditions exist, settings will progressively increase until the feature disengages.
-    - Can be disabled completely by selecting Off for the VRAM+ option, even in non-expert mode. 
-    - By default, VRAM+ uses the full settings reduction suite minus clouds (to minimise impact on user experience) with the Max VRAM+ option.
-    - In expert mode, VRAM+ settings can be customised by selecting Set as the VRAM+ option then adjusted using the auto settings reduction options than will now be available.
+    - VRAM+ setting:
+      - Non-Expert mode:
+        - Checkbox only visible if GPU-Z is running
+        - Enabling uses the Max setting described for Expert mode.
+      - Expert mode:
+        - Off: disables the feature completely.
+        - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
+        - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
     - If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
@@ -228,7 +233,7 @@ Some Notes:
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
       - Shows detected Graphics Mode (PC, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
-      - The FPS settle timer runs for up to 20 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/PC/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
+      - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/PC/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Min + has been activated and that a higher TLOD Min should be expected. Similarly, a + next to ATLOD or FPSCap indicates that TLOD Base + has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
@@ -258,8 +263,16 @@ Some Notes:
     - Useful to reinitialise and recommence the seek process for TLOD Min/Top + should conditions change significantly from what they were on initial start-up.
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
   - Flight type - VFR or IFR (any mode), and four additional user profiles (expert mode)
-    - In non-expert mode, VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR to account for the greater performance expectation that GA flights in rural areas will have.
-    - Expert mode will default to similar settings differences, with user1 through user4 being initially based on the IFR profile, and are fully customisable and saved to/restored from the respective profile.
+    - Non-expert mode:
+      - VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR.
+      - Accounts for the greater performance expectation that GA flights in rural areas will have.
+    - Expert mode:
+      - Defaults to similar settings differences as non-expert mode for VFR and IFR.
+      - user1 through user4 profiles are initially based on the IFR profile.
+      - Settings are fully customisable and saved to/restored from the respective profile.
+      - Profile names can be edited, including VFR and IFR:
+        - Double clicking on the profile combo box text area toggles edit-ability, with non-editable being the initial state on startup.
+        - Press Enter, press Tab or click on another control on the app UI for the changed text to be accepted.
     - Command line argument support for flight type profiles is as follows:
       - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in expert mode.
       - -user1 to -user4 now open their corresponding user profiles, restricted to expert mode.
@@ -267,7 +280,7 @@ Some Notes:
   - Use Expert Options
     - Non-Expert Mode (unchecked and default)
       - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability.
-      - The app will first attempt to automatically detect if an FPS cap is use by checking to see if the FPS matches the target FPS over a 10 second period at the end of the initial 20 second settling period.
+      - The app will first attempt to automatically detect if an FPS cap is use by checking to see if the FPS matches the target FPS over a 10 second period at the end of the initial 30 second settling period.
       - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
         - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
         - LOD Step - 5
@@ -442,7 +455,7 @@ Some Notes:
       - Enabled by default and applies globally, including non-expert mode.
       - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running.
         - If non-expert users are running GPU-Z and want to disable VRAM+, they must switch to expert mode, uncheck it, then switch back to non-expert mode.
-        - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 20 second settle timer of each session.
+        - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 30 second settle timer of each session.
       - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
       - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
       - User auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
@@ -450,7 +463,7 @@ Some Notes:
       - VRAM protection will limit TLOD reduction to 50% max, aligning it with normal settings reduction. The broader settings adjustment now eliminates the need for the previous severe reduction down to 25.
       - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
       - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use being required before recovery is allowed.
-      - Full settings reduction panel will show whenever VRAM+ has triggered settings reduction beyond just LOD level so that the user can see what is going on.
+        - Each VRAM+ recovery will increase the recovery altitude setting by one, up to Alt TLOD Top, to reduce instances of VRAM+ cycling too often.
       - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
     - Auto Increase Clouds
       - Auto increase cloud quality option with TLOD Min/Base + enabled.
