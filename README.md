@@ -195,6 +195,7 @@ Some Notes:
 - Sim Values
   - Will not show valid values unless all three connections are green. n/a means not available right now.
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
+  - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
   - FPS shows the FPS for the current graphics mode averaged over 5 seconds which will smooth out any transient FPS spikes experienced when panning or loading new scenery or objects so that automated MSFS setting changes are minimised.
 - General
   - Update Management
@@ -383,6 +384,10 @@ Some Notes:
   - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Min. (100ft - 100000ft allowable)
   - Avg Descent Rate- Used in combination with FPS sensitivity to determine the altitude band in which TLOD will be interpolated between TLOD Min at the Alt TLOD base starting point and the lower of TLOD Max and the maximum TLOD your system can achieve while achieving at least your desired FPS target at a calculated top altitude. (200fpm - 10000fpm allowable)
     - This band ensures that, if you descend at your set Avg Descent Rate or less, that the app can decrement TLOD from TLOD Max to TLOD Min by the Alt TLOD Base without exceeding the LOD Step rate associated with the FPS sensitivity level you have set.
+  - Auto OLOD
+    - When enabled, four user definable parameters relating to this feature will be revealed on the UI when the user mouses over the Auto OLOD checkbox.
+    - Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
+    -  The app will set OLOD @ Base at or below the Alt OLOD Base (AGL), set the OLOD @ Top at or above Alt OLOD Top (AGL) and interpolate in between. Note that OLOD @ Base can be higher, lower or the same value as the OLOD @ Top, depending on whether you want OLOD to decrease, increase or stay the same respectively as you ascend. 
   - MSFS 2020 only
     - Decrease Cloud Quality - When enabled, will reduce/restore cloud quality by one level if the activation condition is met.
       - Activation Methods
@@ -403,20 +408,14 @@ Some Notes:
         - Cloud Recovery GPU load (5% - 90% and at least 10% less than Decrease GPU Load allowable)
           - Recovers when the GPU load is lower than the user-defined Recover GPU Load percentage.
           - Ideally set to at least 15% lower than the Decrease GPU Load percentage to provide a GPU load buffer to minimise the chance that cloud quality will constantly change down and up.
-    - Auto OLOD
-      - When enabled, four user definable parameters relating to this feature will be revealed on the UI.
-      - Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
-      -  The app will set OLOD @ Base at or below the Alt OLOD Base (AGL), set the OLOD @ Top at or above Alt OLOD Top (AGL) and interpolate in between. Note that OLOD @ Base can be higher, lower or the same value as the OLOD @ Top, depending on whether you want OLOD to decrease, increase or stay the same respectively as you ascend. 
   - MSFS 2024 only
     - Automatic Settings Reduction
       - Optional and activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
       - Only applicable to MSFS 2024, as existing MSFS 2020 functionality is considered acceptable and MSFS 2024 tends to experience VRAM overflow, where such setting reductions are intended to help alleviate, much more frequently.
-      - Not applicable to AutoLOD mode with TLOD Base + disabled as it has no TLOD or FPS recovery mechanisms, except reduction will still occur with impending VRAM overflow situations. 
+      - Not applicable to AutoTLOD mode with TLOD Base + disabled as it has no TLOD or FPS recovery mechanisms. 
       - Default settings will be saved on flight session commencement and restored on completion.
       - Settings reduction will only function and show when in a flight session and the secondary compatibility test passed.
-      - Settings reduction value panel only shows as much as needed depending on the selected reduction settings suite.
       - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
-      - Enabled for non-expert mode users, using default values of Max Levels: 2, Floor: Lowest, Reduction Settings Suite: Full Reduction Suite, and Recovery: Alt TLOD Top.
       - Disabled by default for expert users. When enabled the default values of the applicable settings are the same as for non-expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
         - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
         - OLOD reductions are proportional to TLOD reductions.
@@ -432,10 +431,7 @@ Some Notes:
       - Recover setting determines at which altitude (ground, Alt TLOD Base or Alt TLOD Top / equivalent) settings reduction recovery can occur as enabling it at lower altitudes may not be acceptable for some users. The default is Alt TLOD Top.
       - Reduction Settings Suite setting determines which settings set will be reduced. 
         - The presets are based on research that identified the settings most likely to improve FPS and/or reduce VRAM consumption when they are reduced, in decreasing order of effectiveness.
-        - Custom Reduction Settings Suite allow the user to select which individual settings to reduce rather than the preset sets.
-      - Reduction setting status panel:
-        - Only shows settings currently available for reduction based on the chosen reduction settings suite and when a flight session is active, except Custom which shows all the time.
-        - Default values are shown in black and reduced values are shown in red.
+        - Custom Reduction Settings Suite allow the user to select which individual settings to reduce rather than the preset sets, the individual settings for which will appear when the user mouses over the reduction settings suite label or drop down list and Custom is currently selected. 
       - The Reset button will restore all settings to their default values.
     - VRAM+
       - Optional VRAM overflow protection that invokes auto settings reduction if VRAM usage exceeds a reduction threshold, nominally 98% and changeable in the config file.
