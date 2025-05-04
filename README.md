@@ -209,16 +209,19 @@ Some Notes:
       - Test version users will have **+ Test** force enabled and greyed out.
       - **Mandatory Updates Only** will be unavailable until the app updates to a release version.
     - App startup sequence ensures update check is completed before connecting to MSFS.
-  - Auto TLOD limiting with impending VRAM overflow:
+  - VRAM+ - detects an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
     - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**.
       - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
       - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
       - The feature will be disabled if GPU-Z is not found running.
     - Uses two thresholds for VRAM usage, both changeable in the app root directory config file (not the one in the bin subdirectory) after running the app once after updating:
       - VRAMOverflowHoldTLOD threshold, defaults to >= 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
-      - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively reduce TLOD down until the Hold threshold is achieved, but no lower than the default low-end setting in MSFS of 25.
-    - When VRAM use drops back below the Hold threshold and favourable performance conditions exist, TLOD will progressively increase up to TLOD Min/Base and the feature will disengage.
-    - If you are continually experiencing auto TLOD limiting activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
+      - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
+    - When VRAM use drops back below the Hold threshold and favourable performance conditions exist, settings will progressively increase until the feature disengages.
+    - Can be disabled completely by selecting Off for the VRAM+ option, even in non-expert mode. 
+    - By default, VRAM+ uses the full settings reduction suite minus clouds with the Max VRAM+ option.
+    - In expert mode, VRAM+ settings can be customised by selecting Set as the VRAM+ option then adjusted using the auto settings reduction options than will now be available.
+    - If you are continually experiencing VRAM+, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
