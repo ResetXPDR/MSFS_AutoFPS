@@ -1,4 +1,4 @@
-# MSFS_AutoFPS by ResetXPDR (Updated for 0.4.4.8)
+# MSFS_AutoFPS by ResetXPDR (Updated for v0.4.4.9)
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -43,7 +43,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Leave your relevant MSFS graphics settings set as you normally would without this app, 
 - Start the app before you load your flight,
 - Leave Use Expert Settings unchecked,
-- Pick what type of flight you are doing via the radio buttons ie. either VFR (GA aircraft) or IFR (airliners),
+- Pick what type of flight you are doing via the drop down list ie. either VFR (GA aircraft) or IFR (airliners),
 - If using an FPS cap, enter that as your target FPS otherwise enter a target FPS your system can usually easily achieve or click on auto target FPS for the app to pick it for you,
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
@@ -230,7 +230,7 @@ Some Notes:
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
-    - There is a setting for each graphics mode (PC, FG, LSFG, MFG, FSR3 and VR) and each flight mode (VFR and IFR). Automatically defaults to the currently detected graphics mode, however the user can change the target FPS for graphics modes other than what is currently active.
+    - There is a setting for each graphics mode (PC, FG, LSFG, MFG, FSR3 and VR) and each flight type (VFR, IFR and, if expert mode, 4 user profiles). Automatically defaults to the currently detected graphics mode, however the user can change the target FPS for graphics modes other than what is currently active.
       - Selectable by using the drop down list of target FPS types in the app window.
       - Target FPS type drop down list background will change to orange when the target FPS type is different to the current graphics mode to clearly indicate this difference to the user.
       - Changes to target FPS for a type different to the current graphics mode will be saved to the config file without reloading the UI as it does not affect any other displayed settings.
@@ -243,7 +243,7 @@ Some Notes:
     - Cannot be enabled at the same time as TLOD Min + due to automation control ambiguity. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
     - When checked, a target FPS will automatically be calculated, following any initial FPS settling, when stationary on the ground or any time you are in the air.
     - Automatically recalulated if performance conditions are too low for the calculated target FPS, on the ground after arriving at a new destination, if you change graphics mode or if you uncheck then check the option again for a quick recalibration.
-    - With IFR it will range from 95% of your current average FPS on the ground to 85% at or above 3000 ft, the latter being lower to give head room for Max TLOD.
+    - With IFR, or any of the user profiles in expert mode, it will range from 95% of your current average FPS on the ground to 85% at or above 3000 ft, the latter being lower to give head room for Max TLOD.
     - With VFR it will be 5% less than each of the IFR percentages respectively to better suit the greater performance expectation with VFR flights.
   - On Top
     - Allows the app to overlay your MSFS session if desired, with MSFS having the focus.
@@ -253,14 +253,14 @@ Some Notes:
     - Resets TLOD, Clouds, Auto Target FPS and graphics mode detection to initial state.
     - Useful to reinitialise and recommence the seek process for TLOD Min/Top + should conditions change significantly from what they were on initial start-up.
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
-  - Flight type - VFR or IFR
+  - Flight type - VFR or IFR (non-expert mode), 4 additional user profiles (expert mode)
     - In non-expert mode, VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR to account for the greater performance expectation that GA flights in rural areas will have.
-    - Use the -ifr and -vfr command line arguments for the app to force the use of the respective flight profile on app start up.
-    - Expert mode will default to similar settings differences, however the settings for each flight type are fully customisable and will save to and restore from separate profiles for VFR and IFR.
-    - On the ground, TLOD will be locked to either a pre-determined (non-expert) or user-selectable (expert) TLOD Min.
+    - Use the -ifr and -vfr, or -user1 through -user4 in expert mode, command line arguments for the app to force the use of the respective flight profile on app start up.
+    - Expert mode will default to similar settings differences, however the settings for each flight type are fully customisable and will save to and restore from separate profiles.
+    - On the ground, TLOD will be locked to either a pre-determined (non-expert) or user-selectable (expert) TLOD Min/Base.
     - Once in the air and above either a pre-determined (non-expert) or user-selectable (expert) TLOD base altitude, TLOD will be allowed to change to the lower of either the schedule based on your TLODs, FPS sensitivity/tolerance and average descent rate settings or what your current performance dictates.
-    - Once above a calculated altitude band above the the TLOD base altitude, the app priority will change from TLOD to FPS.
-    - On descent your TLOD will progressively work its way down to TLOD Min by the TLOD base altitude. 
+    - In FPS sensitivity/tolerance modes, once above a calculated altitude band above the the TLOD base altitude, the app priority will change from TLOD to FPS.
+    - On descent your TLOD will progressively work its way down to TLOD Min/Base by the TLOD base altitude. 
   - Use Expert Options
     - Non-Expert Mode (unchecked and default)
       - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability.
