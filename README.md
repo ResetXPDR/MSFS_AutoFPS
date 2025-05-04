@@ -26,7 +26,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
 - VRAM+ overflow protection option for MSFS 2024, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
 - Auto installation of app updates (optional except for mandatory updates),
 - Auto disabling of Dynamic Settings in MSFS 2024 while this app is active, to prevent settings contention, and
-- Auto restoration of original MSFS settings changed by the app, enhanced to withstand MSFS CTDs.<br><br>
+- Auto restoration of original MSFS settings changed by the app during a flight session, enhanced to withstand MSFS CTDs.<br><br>
 
 **Really, really important:**
 - Do not even mention, let alone try to discuss, this app on the MSFS official forums, even in personal messages, as they have taken the view that this app modifies licenced data, regardless of how harmless the way in which the app does it, and is therefore a violation of their Terms of Service and Code of Conduct for that website. If you do so, your post/personal message will be flagged by moderators and you may get banned from the MSFS official forums. You have been warned!
@@ -79,7 +79,7 @@ How does this app work for Frame Generation (FG) users?
 - Lossless Scaling (LS) FG, including the scaling multiplier used, is also detected and the correct LSFG multiplied FPS is displayed.
   - Make sure your LSFG app is updated to the latest version that supports LSFG 3.0 (2.13.2 or later).
   - The app will first try to use an LS profile with the specific name MSFS2020 or MSFS2024, depending on which MSFS version is currently in use, to obtain these settings.
-  - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the Default profile will be used.
+  - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the first profile found in the config file, usually named Default, will be used.
   - When adaptive frame generation is detected, a base FPS will be used for the target FPS because the frame generation multiplier is variable and is not currently detectable.
   - If you make changes to your LS settings after starting a flight, press AutoFPS's Reset button so that AutoFPS can redetect them correctly.
 - FSR3 FG is now supported for MSFS 2024 as of SU2.
@@ -190,7 +190,7 @@ Some Notes:
   - Do NOT change MSFS graphics settings manually while in a flight with this app running as it will conflict with what the app is managing and they will automatically restore to what they originally were when you exit your flight. If you wish to change the defaults for these MSFS settings, you must do so either without this app running or, if it is, only while you are in the MSFS main menu (ie not in a flight).
 - Connection Status
   - Red values indicate not connected, green is connected.
-  - Automatically identifies which MSFS version is in use as either MSFS2020 or MSFS2024. 
+  - Automatically identifies which MSFS version is in use as either MSFS2020 or MSFS2024 and the version number. 
   - If the sim version is showing in red and is not the MSFS version you wish to configure before starting that MSFS version, click the 20>24 or 24>20 button, as applicable, and it will change to that.
 - Sim Values
   - Will not show valid values unless all three connections are green. n/a means not available right now.
@@ -219,9 +219,9 @@ Some Notes:
       - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
     - When VRAM use drops back below the Hold threshold and favourable performance conditions exist, settings will progressively increase until the feature disengages.
     - Can be disabled completely by selecting Off for the VRAM+ option, even in non-expert mode. 
-    - By default, VRAM+ uses the full settings reduction suite minus clouds with the Max VRAM+ option.
+    - By default, VRAM+ uses the full settings reduction suite minus clouds (to minimise impact on user experience) with the Max VRAM+ option.
     - In expert mode, VRAM+ settings can be customised by selecting Set as the VRAM+ option then adjusted using the auto settings reduction options than will now be available.
-    - If you are continually experiencing VRAM+, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
+    - If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
@@ -257,9 +257,9 @@ Some Notes:
     - Resets TLOD, Clouds, Auto Target FPS and graphics mode detection to initial state.
     - Useful to reinitialise and recommence the seek process for TLOD Min/Top + should conditions change significantly from what they were on initial start-up.
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
-  - Flight type - VFR or IFR (non-expert mode), 4 additional user profiles (expert mode)
+  - Flight type - VFR or IFR (any mode), and four additional user profiles (expert mode)
     - In non-expert mode, VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR to account for the greater performance expectation that GA flights in rural areas will have.
-    - Expert mode will default to similar settings differences, with user1 through user4 being initially based on the IFR profile, however the settings for each flight type are fully customisable and will save to and restore from separate profiles.
+    - Expert mode will default to similar settings differences, with user1 through user4 being initially based on the IFR profile, and are fully customisable and saved to/restored from the respective profile.
     - Command line argument support for flight type profiles is as follows:
       - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in expert mode.
       - -user1 to -user4 now open their corresponding user profiles, restricted to expert mode.
@@ -299,7 +299,7 @@ Some Notes:
             - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
         - MSFS 2024 only
           - Auto Settings Reduction - enabled with Max Levels: 2, Floor: Lowest, and Recovery: Alt TLOD Base. Reduction Settings Suite:
-            - IFR: full reduction suite minus clouds
+            - IFR: Full reduction suite minus clouds (to minimise impact on user experience)
             - VFR: Flora (Trees, Plants, Grass), Ray Traced and Terrain Shadows and Displacement Mapping 
           - Auto Increase Clouds - enabled
           - VRAM+ - enabled,
@@ -390,7 +390,8 @@ Some Notes:
   - Auto OLOD
     - When enabled, four user definable parameters relating to this feature will be revealed on the UI when the user mouses over the Auto OLOD checkbox.
     - Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
-    -  The app will set OLOD @ Base at or below the Alt OLOD Base (AGL), set the OLOD @ Top at or above Alt OLOD Top (AGL) and interpolate in between. Note that OLOD @ Base can be higher, lower or the same value as the OLOD @ Top, depending on whether you want OLOD to decrease, increase or stay the same respectively as you ascend. 
+    -  The app will set OLOD @ Base at or below the Alt OLOD Base (AGL), set the OLOD @ Top at or above Alt OLOD Top (AGL) and interpolate in between. Note that OLOD @ Base can be higher, lower or the same value as the OLOD @ Top, depending on whether you want OLOD to decrease, increase or stay the same respectively as you ascend.
+    -  In MSFS2024, integrates with auto settings reduction and VRAM+. 
   - MSFS 2020 only
     - Decrease Cloud Quality - When enabled, will reduce/restore cloud quality by one level if the activation condition is met.
       - Activation Methods
