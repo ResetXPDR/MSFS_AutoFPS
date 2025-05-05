@@ -453,7 +453,7 @@ Some Notes:
     - VRAM+
       - Optional VRAM overflow protection that invokes auto settings reduction if VRAM usage exceeds a reduction threshold, nominally 98% and changeable in the config file.
       - Enabled by default and applies globally, including Non-Expert mode.
-      - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running. See the section on GPU-Z for details on how to configure correctly.
+      - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running. See the FAQ section VRAM+ entry for details on how to configure correctly.
         - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 30 second settle timer of each session.
       - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
       - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
