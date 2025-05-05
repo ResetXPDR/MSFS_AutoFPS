@@ -7,11 +7,11 @@ My future development efforts on this app are mainly limited to maintenance, res
 Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS.<br/><br/>
 
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
-- Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule, the latter as an expert option,
-- A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type and is fully customisable with four additional profiles available in Expert mode.
+- Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule,
+- A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type and in Expert mode is fully customisable with four additional profiles available.
 - Auto target FPS option, which is useful if you don't know what target FPS to choose or if your flight types are so varied that a single target FPS value is not always appropriate,
-- A greatly simplified non-expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
-- An Expert Option, which allows user customisation of the following:
+- A greatly simplified Non-Expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
+- An Expert mode Option, which allows user customisation of the following:
   - A choice of TLOD automation method, each suitable for different specific uses of the app, namely FPS Sensitivity, FPS Tolerance, Auto TLOD and FPS Cap,
   - Auto raising and lowering of the minimum or base TLOD option, depending on low altitude performance being either very favourable or poor respectively,
   - Auto lowering of the maximum or top TLOD at night option, reducing system workload by not having to draw distant scenery that can't be seen in the dark anyway,
@@ -62,10 +62,10 @@ What does this VRAM+ feature for MSFS 2024 do? How do I use it?
   - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
 
 I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
-- By far the most common reason is users have enabled expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
+- By far the most common reason is users have enabled Expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
 - As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer to uninstall (remove option) and reinstall, which will recreate your config file.
-- Rerun the app and try non-expert mode with IFR flight type and Auto Target FPS checked.
-- If this doesn't resolve it, try enabling expert options and reducing the FPS Sensitivity setting to 2, to allow smaller TLOD changes.
+- Rerun the app and try Non-Expert mode with IFR flight type and Auto Target FPS checked.
+- If this doesn't resolve it, try enabling Expert options and reducing the FPS Sensitivity setting to 2, to allow smaller TLOD changes.
 - If still not resolved, try the FPS Tolerance mode, which was the automation method in the original release version that had larger TLOD changes but they occurred less often, with a setting of 5.
 
 My default MSFS graphics settings are messed up and each time I try to change them back they get messed up again. How do I fix this?
@@ -185,7 +185,7 @@ Some Notes:
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exits when MSFS closes.
   - The app window's minimised/maximised state will be remembered between sessions and will be restored on the next startup.
   - The apps window's position will be remembered between sessions, except movements to it made while in VR due to window restoration issues. If there are issues with the window not displaying correctly on start-up, as can happen when auto-starting the app through MSFS or FSUIPC, either don't use auto-start, restart the app within 10 seconds of last closing it to auto reset the window position, or manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
-  - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app. 
+  - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the Expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app. 
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
   - Do NOT change MSFS graphics settings manually while in a flight with this app running as it will conflict with what the app is managing and they will automatically restore to what they originally were when you exit your flight. If you wish to change the defaults for these MSFS settings, you must do so either without this app running or, if it is, only while you are in the MSFS main menu (ie not in a flight).
 - Connection Status
@@ -239,20 +239,20 @@ Some Notes:
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
-    - There is a setting for each graphics mode (PC, FG, LSFG, MFG, FSR3 and VR) and each flight type (VFR, IFR and, if expert mode, 4 user profiles). Automatically defaults to the currently detected graphics mode, however the user can change the target FPS for graphics modes other than what is currently active.
+    - There is a setting for each graphics mode (PC, FG, LSFG, MFG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles). Automatically defaults to the currently detected graphics mode, however the user can change the target FPS for graphics modes other than what is currently active.
       - Selectable by using the drop down list of target FPS types in the app window.
       - Target FPS type drop down list background will change to orange when the target FPS type is different to the current graphics mode to clearly indicate this difference to the user.
       - Changes to target FPS for a type different to the current graphics mode will be saved to the config file without reloading the UI as it does not affect any other displayed settings.
       - Changes to any other setting on the UI will reload the target FPS type for the current graphics mode.
       - Particularly useful for VR users who have previously had to be in VR and remove their headset to change this setting.
     - If using MSFS FG, the target FPS you set is your desired FG Active FPS, not the FG Inactive FPS you see when this app has the focus instead of MSFS. 
-    - If using an FPS cap, or Vsync for the same purpose, it is strongly recommended you use the FPS Cap automation method, available under expert settings, with an FPS target matching your FPS cap and works well in such instances.
+    - If using an FPS cap, or Vsync for the same purpose, it is strongly recommended you use the FPS Cap automation method, available in Expert mode, with an FPS target matching your FPS cap and works well in such instances.
     - If using such an FPS cap with either FPS Sensitivity or Tolerance automation methods you will need to set your target FPS to be at least 5% lower than that cap to allow the automation logic to function correctly. This potentially introduces screen tearing, or breaks motion reprojection in VR, hence why Auto TLOD is preferred.
   - Auto Target FPS
     - Cannot be enabled at the same time as TLOD Min + due to automation control ambiguity. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
     - When checked, a target FPS will automatically be calculated, following any initial FPS settling, when stationary on the ground or any time you are in the air.
     - Automatically recalulated if performance conditions are too low for the calculated target FPS, on the ground after arriving at a new destination, if you change graphics mode or if you uncheck then check the option again for a quick recalibration.
-    - With IFR, or any of the user profiles in expert mode, it will range from 95% of your current average FPS on the ground to 85% at or above 3000 ft, the latter being lower to give head room for Max TLOD.
+    - With IFR, or any of the user profiles in Expert mode, it will range from 95% of your current average FPS on the ground to 85% at or above 3000 ft, the latter being lower to give head room for Max TLOD.
     - With VFR it will be 5% less than each of the IFR percentages respectively to better suit the greater performance expectation with VFR flights.
   - On Top
     - Allows the app to overlay your MSFS session if desired, with MSFS having the focus.
@@ -262,21 +262,21 @@ Some Notes:
     - Resets TLOD, Clouds, Auto Target FPS and graphics mode detection to initial state.
     - Useful to reinitialise and recommence the seek process for TLOD Min/Top + should conditions change significantly from what they were on initial start-up.
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
-  - Flight type - VFR or IFR (any mode), and four additional user profiles (expert mode)
-    - Non-expert mode:
+  - Flight type - VFR or IFR (any mode), and four additional user profiles (Expert mode)
+    - Non-Expert mode:
       - VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR.
       - Accounts for the greater performance expectation that GA flights in rural areas will have.
     - Expert mode:
-      - Defaults to similar settings differences as non-expert mode for VFR and IFR.
+      - Defaults to similar settings differences as Non-Expert mode for VFR and IFR.
       - user1 through user4 profiles are initially based on the IFR profile.
       - Settings are fully customisable and saved to/restored from the respective profile.
       - Profile names can be edited, including VFR and IFR:
         - Double clicking on the profile combo box text area toggles edit-ability, with non-editable being the initial state on startup.
         - Press Enter, press Tab or click on another control on the app UI for the changed text to be accepted.
     - Command line argument support for flight type profiles is as follows:
-      - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in expert mode.
-      - -user1 to -user4 now open their corresponding user profiles, restricted to expert mode.
-      - -profile "`<profile name>`" loads the specified profile in expert mode, requiring an exact match.
+      - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in Expert mode.
+      - -user1 to -user4 now open their corresponding user profiles, restricted to Expert mode.
+      - -profile "`<profile name>`" loads the specified profile in Expert mode, requiring an exact match.
   - Use Expert Options
     - Non-Expert Mode (unchecked and default)
       - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability.
@@ -338,7 +338,7 @@ Some Notes:
       - When TLOD Base + is unchecked, this method completely ignores FPS hence all FPS-related settings are removed from the UI.
       - TLOD Base + - additional TLOD with favourable performance conditions.
         - When enabled, set the target FPS to your FPS cap if you use one, or slightly below your usual FPS if not, for the logic to function properly.
-        - Applicable to FPS Cap mode, Auto TLOD mode with TLOD Base + enabled and non-expert mode when an FPS cap is auto-detected.
+        - Applicable to FPS Cap mode, Auto TLOD mode with TLOD Base + enabled and Non-Expert mode when an FPS cap is auto-detected.
         - On the ground and below Alt TLOD Top:
           - TLOD Base - checked, only available in FPS Cap mode, fixes total TLOD to TLOD Base.
           - Otherwise, in all other applicable modes, allows total TLOD up to 2 times TLOD Base.
@@ -364,7 +364,7 @@ Some Notes:
       - TLOD Top - reduced TLOD Top at night. Operates the same as TLOD Max -.
     - FPS Cap - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
       - TLOD Base + and TLOD Top + are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
-      - A TLOD Base - checkbox is provided in expert mode which excludes TLOD Base + occurring below Alt TLOD Top when checked.
+      - A TLOD Base - checkbox is provided in Expert mode which excludes TLOD Base + occurring below Alt TLOD Top when checked.
       - The following guidelines should be observed to get the best result from this mode:
         - Set TLOD Base and TLOD Top values within your FPS cap for worst-case performance during your flight type profile. TLOD Base + may increase with better performance but won't drop below the set values.
         - TLOD Base + is applied across the entire altitude schedule, potentially allowing a doubling of TLOD Top if performance conditions are favorable, so be particularly conservative when setting TLOD Top.
@@ -393,7 +393,7 @@ Some Notes:
   - TLOD Max - - reduced TLOD Max at night
     - Halves TLOD Max/Top at night to reduce system workload by not drawing scenery out to distances that can't be seen in the dark anyway.
     - Works with all automation methods: FPS Sensitivity, FPS Tolerance and Auto TLOD.
-    - Defaults to enabled in non-expert mode. Enabled in Expert mode by checking the - box to the right of the TLOD Max/Top textbox.
+    - Defaults to enabled in Non-Expert mode. Enabled in Expert mode by checking the - box to the right of the TLOD Max/Top textbox.
     - When your flight transitions from day to night time, based on your location and the local time, TLOD Max/Top will progressively reduce to half its normal value, including the progressive removal of any TLOD Min/Base + and TLOD Max/Top + in use.
     - When your flight transitions from night to day time, based on your location and the local time, TLOD Max/Top will first progressively increase to its normal value then, providing you are either stopped on the ground or are in the air above Alt TLOD Min/Base, will activate the seeking process if TLOD Min/Base + is enabled and reactivate TLOD Max/Top + if enabled.
     - The status line will show either Day or Night when activated and Δ while transitioning between them.
@@ -433,7 +433,7 @@ Some Notes:
       - Default settings will be saved on flight session commencement and restored on completion.
       - Settings reduction will only function and show when in a flight session and the secondary compatibility test passed.
       - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
-      - Disabled by default for expert users. When enabled the default values of the applicable settings are the same as for non-expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
+      - Disabled by default for Expert mode. When enabled the default values of the applicable settings are the same as for Non-Expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
         - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
         - OLOD reductions are proportional to TLOD reductions.
         - Settings reduction activation cancels the TLOD Min/Base + seek process if active.
@@ -452,9 +452,8 @@ Some Notes:
       - The Reset button will restore all settings to their default values.
     - VRAM+
       - Optional VRAM overflow protection that invokes auto settings reduction if VRAM usage exceeds a reduction threshold, nominally 98% and changeable in the config file.
-      - Enabled by default and applies globally, including non-expert mode.
-      - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running.
-        - If non-expert users are running GPU-Z and want to disable VRAM+, they must switch to expert mode, uncheck it, then switch back to non-expert mode.
+      - Enabled by default and applies globally, including Non-Expert mode.
+      - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running. See the section on GPU-Z for details on how to configure correctly.
         - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 30 second settle timer of each session.
       - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
       - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
