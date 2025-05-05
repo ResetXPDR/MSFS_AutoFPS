@@ -1,4 +1,4 @@
-# MSFS_AutoFPS by ResetXPDR (Updated for 0.4.4.9 Imminent Release)
+# MSFS_AutoFPS by ResetXPDR (Updated for 0.4.4.9)
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
