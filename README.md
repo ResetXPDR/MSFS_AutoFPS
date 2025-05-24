@@ -1,4 +1,4 @@
-# MSFS_AutoFPS by ResetXPDR (Updated for 0.4.4.9)
+# MSFS_AutoFPS 0.4.4.10
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -137,7 +137,7 @@ Some Notes:
   - If the installer fails when checking/updating Mobiflight, despite the latest version being correctly installed in your MSFS Community folder, create a shortcut for the installer, add the command line option "-bypassmobiflight" to the target text box, then run the shortcut to be able to bypass this installation step.
 - The app will automatically check for updates on startup by default and will notify you accordingly on the app status line.
   - If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox.
-  - In test versions, all app updates will be enabled by default regardless of what you have previously chosen for update notification in order to maintain a current test baseline.
+  - In test versions, notification of all app updates will be enabled as a minimum by default, regardless of what you have previously chosen for update notification, in order to encourage maintainance of a current test baseline.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
 - The "Clean Install" option will recreate new configuration files without having to remove the app first.
 - The "Install Latest Redistributables" option will silently (other than UAC prompts) update your system with the latest Visual C++ Redistributable and .NET 8 runtime versions.
@@ -195,6 +195,7 @@ Some Notes:
 - Sim Values
   - Will not show valid values unless all three connections are green. n/a means not available right now.
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
+  - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
   - FPS shows the FPS for the current graphics mode averaged over 5 seconds which will smooth out any transient FPS spikes experienced when panning or loading new scenery or objects so that automated MSFS setting changes are minimised.
 - General
