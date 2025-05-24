@@ -50,6 +50,13 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Due to potential settings conflict, don't change any MSFS graphics settings that could be adjusted by AutoFPS while in a flight with AutoFPS already running.
 - If MSFS 2024 performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
 
+You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
+- The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is?
+- Additonally, there are now thousands of users of this app and I simply don't have the time to provide individual settings advice to everyone that asks.
+- As such, your best course of action is to start off with non-expert mode to see what the app actually does and when.
+- Once you are comfortable with how the app operates, enable expert settings and start reading the tooltip and readme on what each setting does.
+- When making changes, it is best to make small changes to only a few settings so that you can see the effect of them and adjust as desired.
+
 What does this VRAM+ feature for MSFS 2024 do? How do I use it?
 - MSFS 2024 is very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
 - VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and makes MSFS much more prone to CTD.
@@ -386,6 +393,10 @@ Some Notes:
     - Avoid rapidly changing views or panning your external view too quickly, especially initially as un-cached scenery loads in, as you will induce temporary FPS drops that may trigger an unnecessary TLOD Min + reduction.    
     - Cannot be enabled at the same time as Auto Target FPS due to automation control ambiguity. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
     - If VRAM+ is active and VRAM limiting is in effect, TLOD Min + seeking will be cancelled, and potentially completely reset if severe enough.
+  - Line of Sight Correction ⌒:
+    - Adjusts TLOD between Alt TLOD Base and Top such that the viewing distance grows quickly at lower altitudes but more slowly at higher altitudes.
+    - Provides a more realistic experience of horizon expansion as altitude increases, rather than the linear increase when disabled, following a square root curve.
+    - Disabled by default, as the larger TLOD changes it makes at lower altitudes may cause FPS drops and stutters on some systems.
   - TLOD Base - - Excludes TLOD Base + occurring below Alt TLOD Top in FPS Cap mode only.
   - TLOD Max - Sets the maximum TLOD the automation algorithm will use. (TLOD Min+10 - 1000 allowable)
   - TLOD Max + - additional TLOD Max in high elevation areas. 
