@@ -52,7 +52,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 
 You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
 - The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
-- Additonally, there are now thousands of users of this app and I simply don't have the time to provide individual settings advice to everyone that asks.
+- Additionally, there are now thousands of users of this app and I simply don't have the time to provide individual settings advice to everyone that asks.
 - As such, your best course of action is to start off with non-expert mode to see what the app actually does and when.
 - Once you are comfortable with how the app operates, enable expert settings and start reading the tooltip and readme on what each setting does.
 - When making changes, it is best to make small changes to only a few settings so that you can see the effect of them and adjust as desired.
