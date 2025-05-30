@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.4.10
+# MSFS_AutoFPS v0.4.4.11
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -21,7 +21,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
   - MSFS 2024 only 
     - Auto settings reduction option for MSFS 2024, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
     - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists.
-- Simultaneous PC, FG (native nVidia, MFG, FG mod, FSR3 or Lossless Scaling), and VR mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option for MSFS 2024, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
 - Auto installation of app updates (optional except for mandatory updates),
@@ -174,7 +174,7 @@ Some Notes:
     - First, try exiting this app, go to the MSFS settings menu, toggle any simple setting eg. vsync, save changes then restart this app.
     - If that doesn't work, try exiting this app and MSFS completely, start this app then start MSFS.
   - There is an issue with permissions and you may need to run the app as Administrator. 
-  - You may have changed MSFS settings in your UserCfg.opt file beyond what is possible to set in the MSFS settings menu. To rectify, go into MSFS settings at the main menu and reset to default (F12) the graphics settings for both PC and VR mode, then make all changes to MSFS within the MSFS settings menu.
+  - You may have changed MSFS settings in your UserCfg.opt file beyond what is possible to set in the MSFS settings menu. To rectify, go into MSFS settings at the main menu and reset to default (F12) the graphics settings for both PC in MSFS 2020 or General in MSFS 2024 and VR for either, then make all changes to MSFS within the MSFS settings menu.
   - A new version of MSFS has come out that has a different memory map to what the app expects and the app can't auto adjust to the new memory location for MSFS settings. If so, I will likely be already aware of it and working on a solution, but if you may be one of the first to encounter it (eg. on an MSFS beta) then please raise an issue on github or contribute to an existing one if it has already been raised.
 - If you get an error message saying "XML Exception: Unexpected XML declaration" or "Exception: 'System.Xml.XMlException' during AutostartExe" when trying to install with the auto-start option for MSFS, it usually means your EXE.xml file has a corrupted data structure. To resolve, copy the content of your EXE.xml into MS Copilot and ask it to check and correct it for you. Paste the fixed structure back into your EXE.xml file, save it, then try reinstalling again.
 - To uninstall
@@ -240,14 +240,14 @@ Some Notes:
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
-      - Shows detected Graphics Mode (PC, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
-      - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/PC/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
+      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
+      - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Min + has been activated and that a higher TLOD Min should be expected. Similarly, a + next to ATLOD or FPSCap indicates that TLOD Base + has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
-    - There is a setting for each graphics mode (PC, FG, LSFG, MFG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles). Automatically defaults to the currently detected graphics mode, however the user can change the target FPS for graphics modes other than what is currently active.
+    - There is a setting for each graphics mode (NFR, FG, LSFG, MFG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles). Automatically defaults to the currently detected graphics mode, however the user can change the target FPS for graphics modes other than what is currently active.
       - Selectable by using the drop down list of target FPS types in the app window.
       - Target FPS type drop down list background will change to orange when the target FPS type is different to the current graphics mode to clearly indicate this difference to the user.
       - Changes to target FPS for a type different to the current graphics mode will be saved to the config file without reloading the UI as it does not affect any other displayed settings.
