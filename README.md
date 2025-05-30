@@ -39,6 +39,14 @@ Important:<br/>
 
 ## FAQ
 
+What is this new acronym NFR showing in the target FPS dropdown list and on the app status line? What was wrong with PC, the acronym it replaces?
+- This app was originally developed for MSFS 2020 in the days before any form of frame generation existed, hence the original term PC, taken from the MSFS 2020 graphics settings menu, was used to refer to non-VR graphics settings.
+- Frame Generation (FG) then came into existence, first as native nVidia FG, then FG mod, LSFG, MFG and finally FSR3, the latter two of the MSFS 2024 era.
+- MSFS 2024 followed and replaced the term PC with General when referring to non-VR graphics settings.
+- As a result, the term PC is no longer intuitive, especially for new app users perhaps only familiar with MSFS 2024 which does not use this term at all.
+- As such, the term NFR, meaning Native Frame Rate, will be used henceforth as it is the most accurate term to describe the MSFS graphics mode it represents.
+- To ease the transition to this new term, new tooltips are provided for both the target FPS drop down list and the app status line to define it.
+
 I am new to this app/MSFS, or I don't care for all this technical jargon. What is the simplest way to use this app to make my MSFS experience better?
 - Leave your relevant MSFS graphics settings set as you normally would without this app, 
 - Start the app before you load your flight,
