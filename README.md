@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.4.12
+# MSFS_AutoFPS v0.4.5.0
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -93,6 +93,7 @@ How does this app work for Frame Generation (FG) users?
 - If MSFS FG is being incorrectly reported as enabled by the app, the likely reason is that either the FG mod had been installed and removed or you have disabled Hardware Accelerated Graphics Scheduling under Windows settings and the now the now greyed out MSFS FG setting may show that it is off but it is still set to on internally to MSFS. To fix, change the DLSSG line in your UserCfg.opt file to be DLSSG 0.
 - Lossless Scaling FG (LSFG), including the scaling multiplier used, is also detected and the correct LSFG multiplied FPS is displayed.
   - Make sure your LSFG app is updated to the latest version that supports LSFG 3.0 (2.13.2 or later).
+  - Due to LSFG activation not currently being detectable, the app will consider LSFG to be active whenever it detects LS running, even if you are yet to activate it for MSFS. 
   - The app will first try to use an LS profile with the specific name MSFS2020 or MSFS2024, depending on which MSFS version is currently in use, to obtain these settings.
   - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the first profile found in the config file, usually named Default, will be used.
   - When adaptive frame generation is detected, a base FPS will be used for the target FPS because the frame generation multiplier is variable and is not currently detectable.
@@ -212,7 +213,21 @@ Some Notes:
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
   - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
-  - FPS shows the FPS for the current graphics mode averaged over 5 seconds which will smooth out any transient FPS spikes experienced when panning or loading new scenery or objects so that automated MSFS setting changes are minimised.
+  - FPS shows the average FPS for the current graphics mode.
+    - Averaging smooths out any transient FPS spikes experienced when panning or loading new scenery or objects so that undesired automated MSFS setting changes are minimised.
+    - Default averaging period is 5 seconds and can be changed in the config file for each MSFS version by changing the **fpsAverageSeconds** key.
+  - Detailed FPS logging.
+    - Available in all test versions and in release versions when the **TestMode** key is set to true in the common config file in the app’s root directory
+    - Activated by clicking the FPS value during flight sessions.
+    - Default log period is 30 seconds, changeable with the **logFPSDetailsCountMax** key in MSFS_AutoFPS.config in the app root directory.
+    - Logs the raw FPS and average FPS to one decimal place every second.
+    - FPS value is displayed in two alternating purple shades when logging FPS details.
+    - Clicking the FPS display while logging is active will cancel the current logging event.
+  - FPS source icon - RTSS (RivaTuner Statistics Server) or MSFS.
+    - **[RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)**, is a well-established tool for FPS monitoring, widely used in the gaming community and fully compatible with MSFS.
+    - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running.
+    - Clicking the FPS source icon will switch the FPS source to the alternate source and the icon will change accordingly, with the added requirement that RTSS must be running in order to switch to RTSS as a source.
+    - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
 - General
   - Update Management
     - **Auto Updates** (default) will auto-install updates.
@@ -255,8 +270,10 @@ Some Notes:
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
-    - There is a setting for each graphics mode (NFR, FG, LSFG, MFG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles). Automatically defaults to the currently detected graphics mode, however the user can change the target FPS for graphics modes other than what is currently active.
-      - Selectable by using the drop down list of target FPS types in the app window.
+    - There is a setting for each graphics mode (NFR, FG, LSFG, MFG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles).
+      - On app startup, automatically defaults to the graphics mode in use when the app was last used.
+      - Automatically switches to the currently detected graphics mode upon loading in to a flight session.
+      - The user can change the target FPS for graphics modes other than what is currently active by using the drop down list of target FPS types in the app window.
       - Target FPS type drop down list background will change to orange when the target FPS type is different to the current graphics mode to clearly indicate this difference to the user.
       - Changes to target FPS for a type different to the current graphics mode will be saved to the config file without reloading the UI as it does not affect any other displayed settings.
       - Changes to any other setting on the UI will reload the target FPS type for the current graphics mode.
