@@ -96,7 +96,7 @@ How does this app work for Frame Generation (FG) users?
   - Due to LSFG activation not currently being detectable, the app will consider LSFG to be active whenever it detects LS running, even if you are yet to activate it for MSFS. 
   - The app will first try to use an LS profile with the specific name MSFS2020 or MSFS2024, depending on which MSFS version is currently in use, to obtain these settings.
   - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the first profile found in the config file, usually named Default, will be used.
-  - When adaptive frame generation is detected, a base FPS will be used for the target FPS because the frame generation multiplier is variable and is not currently detectable.
+  - When adaptive frame generation is detected, a base (ie. NFR) FPS will be used for the target FPS because the frame generation multiplier is variable and is not currently detectable.
   - If you make changes to your LS settings after starting a flight, press AutoFPS's Reset button so that AutoFPS can redetect them correctly.
 - FSR3 FG is now supported for MSFS 2024 as of SU2.
   - Although FSR3 FG can be implemented with an adaptive multiplier, MSFS currently implements it with a fixed 2X multiplier that is active regardless of whether MSFS has the focus or not.
