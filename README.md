@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.0
+# MSFS_AutoFPS v0.4.5.1
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -8,6 +8,7 @@ Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by
 
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
 - Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule,
+- Improved FPS smoothing (FPS+) to filter out brief performance spikes and dips, delivering a more resilient user experience,
 - A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type and in Expert mode is fully customisable with four additional profiles available.
 - Auto target FPS option, which is useful if you don't know what target FPS to choose or if your flight types are so varied that a single target FPS value is not always appropriate,
 - A greatly simplified Non-Expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
@@ -96,7 +97,7 @@ How does this app work for Frame Generation (FG) users?
   - Due to LSFG activation not currently being detectable, the app will consider LSFG to be active whenever it detects LS running, even if you are yet to activate it for MSFS. 
   - The app will first try to use an LS profile with the specific name MSFS2020 or MSFS2024, depending on which MSFS version is currently in use, to obtain these settings.
   - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the first profile found in the config file, usually named Default, will be used.
-  - When adaptive frame generation is detected, a base FPS will be used for the target FPS because the frame generation multiplier is variable and is not currently detectable.
+  - When adaptive frame generation is detected, a base (ie. NFR) FPS will be used for the target FPS because the frame generation multiplier is variable and is not currently detectable.
   - If you make changes to your LS settings after starting a flight, press AutoFPS's Reset button so that AutoFPS can redetect them correctly.
 - FSR3 FG is now supported for MSFS 2024 as of SU2.
   - Although FSR3 FG can be implemented with an adaptive multiplier, MSFS currently implements it with a fixed 2X multiplier that is active regardless of whether MSFS has the focus or not.
@@ -200,7 +201,7 @@ Some Notes:
   - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions. Exit by clicking on the app window's close button and providing user confirmation when prompted.
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exits when MSFS closes.
   - The app window's minimised/maximised state will be remembered between sessions and will be restored on the next startup.
-  - The apps window's position will be remembered between sessions, except movements to it made while in VR due to window restoration issues. If there are issues with the window not displaying correctly on start-up, as can happen when auto-starting the app through MSFS or FSUIPC, either don't use auto-start, restart the app within 10 seconds of last closing it to auto reset the window position, or manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
+  - The apps window's position will be remembered between sessions, except movements to it made while in VR due to window restoration issues. If there are issues with the window not displaying correctly on start-up, as can happen when auto-starting the app through MSFS or FSUIPC, either don't use auto-start, restart the app within 15 seconds of last closing it to auto reset the window position, or manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
   - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the Expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app. 
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
   - Do NOT change MSFS graphics settings manually while in a flight with this app running as it will conflict with what the app is managing and they will automatically restore to what they originally were when you exit your flight. If you wish to change the defaults for these MSFS settings, you must do so either without this app running or, if it is, only while you are in the MSFS main menu (ie not in a flight).
@@ -213,16 +214,13 @@ Some Notes:
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
   - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
-  - FPS shows the average FPS for the current graphics mode.
-    - Averaging smooths out any transient FPS spikes experienced when panning or loading new scenery or objects so that undesired automated MSFS setting changes are minimised.
+  - FPS+ - shows the average FPS, filtered for spikes and dips, for the current graphics mode.
+    - Smooths out any transient FPS spikes or dips experienced - such as those caused by sudden changes in view, panning, scenery loading or other transient events - so that undesired automated MSFS setting changes are minimised.
+    - FPS values within 15% (FPS Sensitivity and Tolerance automation modes) or 10% (AutoTLOD and FPS Cap automation modes) of the current average are averaged over a 5 second rolling window of FPS values
+      - When **TestMode** is enabled in the common config file, the percentage deviation can be changed by modifying the **fpsDeviationPercent** key in the MSFS version config file.
+    - FPS values outside of this range are considered outliers and are not included in the average until a sustained change over 3 seconds in the same direction is detected.
+    - The average will recover more quickly if the very recent trend is detected to have minimal variance.
     - Default averaging period is 5 seconds and can be changed in the config file for each MSFS version by changing the **fpsAverageSeconds** key.
-  - Detailed FPS logging.
-    - Available in all test versions and in release versions when the **TestMode** key is set to true in the common config file in the app’s root directory
-    - Activated by clicking the FPS value during flight sessions.
-    - Default log period is 30 seconds, changeable with the **logFPSDetailsCountMax** key in MSFS_AutoFPS.config in the app root directory.
-    - Logs the raw FPS and average FPS to one decimal place every second.
-    - FPS value is displayed in two alternating purple shades when logging FPS details.
-    - Clicking the FPS display while logging is active will cancel the current logging event.
   - FPS source icon - RTSS (RivaTuner Statistics Server) or MSFS.
     - **[RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)**, is a well-established tool for FPS monitoring, widely used in the gaming community and fully compatible with MSFS.
     - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running.
@@ -506,4 +504,33 @@ Some Notes:
       - Auto increase cloud quality option with TLOD Min/Base + enabled.
       - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process. 
       - Removed immediately if the FPS cap is breached.
+- TestMode - Advanced testing and logging features:
+  - Additional logging and features are available when the **TestMode** key is set to "true" in the common config file in the app’s root directory.
+  - Detailed FPS logging:
+    - Activated by clicking the FPS value during flight sessions.
+    - Default log period is 30 seconds, changeable with the **logFPSDetailsCountMax** key in MSFS_AutoFPS.config in the app root directory.
+    - Logs the raw FPS and average FPS to one decimal place every second.
+    - FPS value is displayed in two alternating purple shades when logging FPS details.
+    - Clicking the FPS display while logging is active will cancel the current logging event.
+  - Auto detailed FPS logging on outlier FPS events.
+    - Logs for 1 second before (memorised) the first detected outlier FPS event and 10 seconds after the last outlier FPS event of an outlier sequence.
+    - Can run concurrently with the existing detailed FPS logging which is manually enabled by the user.
+  - Additional FPS averaging modes and associated logging:
+    - **1 – Rolling Average**  - The extant averaging method, which is a simple average over recent frames. Smooth and consistent, but **can lag or dip noticeably** during sudden FPS drops. 
+    - **2 – Adaptive Exponential Moving Average (EMA) with Confirmation** - Applies exponential smoothing but only accepts major trend shifts after a consistent pattern, filtering brief spikes or dips.
+    - **3 – Sigma-Clipped Average** - Averages recent FPS values while filtering out statistical outliers. Ideal for reducing noise without flattening real changes.
+    - **4 – Confirmed Windowed Average**  - A rolling average that only updates large deviations if they are sustained, making it resistant to transient drops but slower to respond.
+    - Clicking the FPS label cycles through the different average types and also sub-settings applicable to the current type.
+    - The FPS label is shown in the in the format FPSX_Y: where:
+      - X is the FPS average type number for types 2 through 4.
+      - Y is the sub-mode, either confirmation duration in seconds for FPS average types 2 and 4 or sigma multiplier for type 3.
+    - FPS average types 2 and 4 support adjustable confirmation durations (2–4 seconds). The recommended value is 3.
+      - Higher values improve resilience to FPS spikes but delay responsiveness to sustained changes.
+      - Lower values respond quicker but may allow brief noise into the average.
+    - FPS average type 3 introduces a configurable sigma multiplier (1.00–2.00 in 0.25 increments). The default is 1.50.
+      - Lower values apply stricter spike rejection; higher values are more permissive and responsive.
+    - When changing away from FPS average types 2 through 4, the default confirmation duration and sigma multiplier is restored, as applicable, such that detailed FPS logging shows the default behaviour of these FPS average types when they are not currently selected.
+  - Virtual screen coordinates and window position logging on app startup.
+
+
 <br/><br/>
