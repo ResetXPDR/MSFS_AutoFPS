@@ -533,6 +533,7 @@ Some Notes:
       - Lower values apply stricter spike rejection; higher values are more permissive and responsive.
     - When changing away from FPS average types 2 through 4, the default confirmation duration and sigma multiplier is restored, as applicable, such that detailed FPS logging shows the default behaviour of these FPS average types when they are not currently selected.
   - Virtual screen coordinates and window position logging on app startup.
+  - Verbose compatibility test results in log file.
 
 
 <br/><br/>
