@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.1
+# MSFS_AutoFPS v0.4.5.2
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -167,13 +167,15 @@ Some Notes:
   - Logs in %appdata%\MSFS_AutoFPS\log
   - Config: %appdata%\MSFS_AutoFPS\MSFS_AutoFPS.config (common), MSFS2020_AutoFPS.config and MSFS2024_AutoFPS.config
 - If after installing and running the app your simconnect always stays red, your TLOD and OLOD values show as zero or you see "Critical Exception occurred: MSFS_AutoFPS - Unable to load DLL 'GpuzShMem.x64.dll' or one of its dependencies" in the log file:
-  - Try reinstalling the app with the "Clean Install" and "Install Latest Redistributables" options selected.
-  - Try downloading and installing/repairing a Microsoft official version of “Microsoft Visual C++ 2015 - 2022 Redistributable”, which may be missing from your Windows installation. Try installing [this](https://aka.ms/vs/17/release/vc_redist.x86.exe) and [this](https://aka.ms/vs/17/release/vc_redist.x64.exe).
-  - Try downloading and installing/repairing the NET desktop runtime from [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/8.0.15/windowsdesktop-runtime-8.0.15-win-x64.exe) if still available. Alternatively, go to the Micrsoft .NET 8.0 download page [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) and download and install the latest .NET Desktop Runtime X64 version.
-  - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS installation so you can choose to either not run this app or to reinstall MSFS completely.
-  - If reinstalling MSFS 2024, you need to do a clean install, as outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC).
-    - **Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the resintallation is complete.**
-    - Only takes around 15 minutes to complete and all your settings, controller assignments, career progression and your pilot profile are retained.
+  - Try reinstalling the app with the "Install Latest Redistributable" options selected. If any of the redistributables fail to install during this process, try downloading and installing/repairing (as applicable):
+    - A Microsoft official version of “Microsoft Visual C++ 2015 - 2022 Redistributable”, which may be missing from your Windows installation. Try installing [this](https://aka.ms/vs/17/release/vc_redist.x86.exe) and [this](https://aka.ms/vs/17/release/vc_redist.x64.exe).
+    - The NET desktop runtime from [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/8.0.15/windowsdesktop-runtime-8.0.15-win-x64.exe) if still available. Alternatively, go to the Micrsoft .NET 8.0 download page [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) and download and install the latest .NET Desktop Runtime X64 version.
+  - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS WASM installation.
+    - First, try deleting the MSFS WASM folder, located under the Microsoft Flight Simulator directory in either %appdata% or %localappdata% for Steam and MS Store install directories respectively, which will rebuild when you next run MSFS.
+    - If that doesn't fix it, a full clean reinstall of MSFS will be required, which can be done in less than 15 minutes for MSFS 2024 but may take many hours for MSFS 2020.
+      - If reinstalling MSFS 2024, you need to do a clean install, as outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC).
+        - **Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the reinstallation is complete.**
+        - All your settings, controller assignments, career progression and your pilot profile are retained.
 - If you get an "Unable to attach MSFS - app disabled." message, the most likely causes are that MSFS is loading in very slowly and the attachment process is timing out, MSFS and this app are running at different permission privilege levels, or your anti-virus/malware app is blocking this app. To resolve, try the following:
   - Restart this app after MSFS has loaded in to the main menu.
   - Check that MSFS is not running as administrator.
@@ -280,11 +282,11 @@ Some Notes:
     - If using an FPS cap, or Vsync for the same purpose, it is strongly recommended you use the FPS Cap automation method, available in Expert mode, with an FPS target matching your FPS cap and works well in such instances.
     - If using such an FPS cap with either FPS Sensitivity or Tolerance automation methods you will need to set your target FPS to be at least 5% lower than that cap to allow the automation logic to function correctly. This potentially introduces screen tearing, or breaks motion reprojection in VR, hence why Auto TLOD is preferred.
   - Auto Target FPS
-    - Cannot be enabled at the same time as TLOD Min + due to automation control ambiguity. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
     - When checked, a target FPS will automatically be calculated, following any initial FPS settling, when stationary on the ground or any time you are in the air.
-    - Automatically recalulated if performance conditions are too low for the calculated target FPS, on the ground after arriving at a new destination, if you change graphics mode or if you uncheck then check the option again for a quick recalibration.
+    - Automatically recalulated if performance conditions are too low for the calculated target FPS, on the ground after arriving at a new destination, if you change graphics mode, press the Reset button or if you uncheck then check the option again for a quick recalibration.
     - With IFR, or any of the user profiles in Expert mode, it will range from 95% of your current average FPS on the ground to 85% at or above 3000 ft, the latter being lower to give head room for Max TLOD.
     - With VFR it will be 5% less than each of the IFR percentages respectively to better suit the greater performance expectation with VFR flights.
+    - Auto settings reduction and TLOD Min + will be automatically disabled, and the options greyed out if in Expert mode, as these features are mutually exclusive when Auto Target FPS is active.
   - On Top
     - Allows the app to overlay your MSFS session if desired, with MSFS having the focus.
     - Mainly useful for adjusting settings and seeing the outcome over the top of your flight as it progresses.
@@ -342,7 +344,7 @@ Some Notes:
             - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
             - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
         - MSFS 2024 only
-          - Auto Settings Reduction - enabled with Max Levels: 2, Floor: Lowest, and Recovery: Alt TLOD Base. Reduction Settings Suite:
+          - Auto Settings Reduction - enabled with Max Levels: 2, Floor: Lowest, and Recovery: Ground. Reduction Settings Suite:
             - IFR: Full reduction suite minus clouds (to minimise impact on user experience)
             - VFR: Flora (Trees, Plants, Grass), Ray Traced and Terrain Shadows and Displacement Mapping 
           - Auto Increase Clouds - enabled
@@ -469,13 +471,14 @@ Some Notes:
       - Default settings will be saved on flight session commencement and restored on completion.
       - Settings reduction will only function and show when in a flight session and the secondary compatibility test passed.
       - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
+      - Activation and recovery are automatically paused during critical flight phases (takeoff, initial climb, final approach, landing).
       - Disabled by default for Expert mode. When enabled the default values of the applicable settings are the same as for Non-Expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
         - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
         - OLOD reductions are proportional to TLOD reductions.
         - Settings reduction activation cancels the TLOD Min/Base + seek process if active.
       - Automatically restores settings if the current FPS rises above the target FPS by the default tolerance or if the current FPS matches the target FPS and the TLOD has automatically increased by an acceptable margin.
         - Settings recovery will commence recovery immediately in any mode if the current FPS is above the target FPS by the FPS tolerance amount.
-        - In AutoTLOD with TLOD Base + and FPS Cap modes, the reseek process will be triggered at least 60 seconds after the last time settings reduction level was reduced and the target FPS is being achieved once again.
+        - In AutoTLOD with TLOD Base + and FPS Cap modes, the reseek process will be triggered at least 30 seconds after the last time settings reduction level was reduced and the target FPS is being achieved once again.
         - Displacement Maps will not restore to enabled until above 100 ft AGL, as it is known to cause texture corruption at low altitudes.
       - TLOD Min/Base and OLOD will be progressively reduced at the user-defined LOD step rate by up to 50%.
         - TLOD Top gets reduced by the same proportional amount that TLOD Base gets reduced for FPS Cap mode and Auto TLOD with TLOD Base + enabled mode.
@@ -531,6 +534,7 @@ Some Notes:
       - Lower values apply stricter spike rejection; higher values are more permissive and responsive.
     - When changing away from FPS average types 2 through 4, the default confirmation duration and sigma multiplier is restored, as applicable, such that detailed FPS logging shows the default behaviour of these FPS average types when they are not currently selected.
   - Virtual screen coordinates and window position logging on app startup.
+  - Verbose compatibility test results in log file.
 
 
 <br/><br/>
