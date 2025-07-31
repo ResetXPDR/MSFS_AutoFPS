@@ -40,14 +40,6 @@ Important:<br/>
 
 ## FAQ
 
-What is this new acronym NFR showing in the target FPS dropdown list and on the app status line? What was wrong with PC, the acronym it replaces?
-- This app was originally developed for MSFS 2020 in the days before any form of frame generation existed, hence the original term PC, taken from the MSFS 2020 graphics settings menu, was used to refer to non-VR graphics settings.
-- Frame Generation (FG) then came into existence, first as native nVidia FG, then FG mod, LSFG, MFG and finally FSR3, the latter two of the MSFS 2024 era.
-- MSFS 2024 followed and replaced the term PC with General when referring to non-VR graphics settings.
-- As a result, the term PC is no longer intuitive, especially for new app users perhaps only familiar with MSFS 2024 which does not use this term at all.
-- As such, the term NFR, meaning Native Frame Rate, will be used henceforth as it is the most accurate term to describe the MSFS graphics mode it represents.
-- To ease the transition to this new term, new tooltips are provided for both the target FPS drop down list and the app status line to define it.
-
 I am new to this app/MSFS, or I don't care for all this technical jargon. What is the simplest way to use this app to make my MSFS experience better?
 - Leave your relevant MSFS graphics settings set as you normally would without this app, 
 - Start the app before you load your flight,
@@ -59,39 +51,10 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Due to potential settings conflict, don't change any MSFS graphics settings that could be adjusted by AutoFPS while in a flight with AutoFPS already running.
 - If MSFS 2024 performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
 
-You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
-- The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
-- Additionally, there are now thousands of users of this app and I simply don't have the time to provide individual settings advice to everyone that asks.
-- As such, your best course of action is to start off with non-expert mode to see what the app actually does and when.
-- Once you are comfortable with how the app operates, enable expert settings and start reading the tooltip and readme on what each setting does.
-- When making changes, it is best to make small changes to only a few settings so that you can see the effect of them and adjust as desired.
-
-What does this VRAM+ feature for MSFS 2024 do? How do I use it?
-- MSFS 2024 is very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
-- VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and makes MSFS much more prone to CTD.
-- While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM are still regularly encountering VRAM overflow situations, even with modest settings.
-- VRAM+ mitigates these potential overflow events by detecting an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
-- Settings will automatically reduce, up to 50% for LODs and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
-- When VRAM usage reduces to an acceptable level, these setting will automatically increase again, potentially back to their default values if sufficient VRAM headroom now exists.
-- In order to use VRAM+ automatically, you will need to have VRAM+ enabled (default) and also run the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app as it is needed to provide current VRAM usage to the app.
-  - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
-  - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
-
-I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
-- By far the most common reason is users have enabled Expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
-- As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer to uninstall (remove option) and reinstall, which will recreate your config file.
-- Rerun the app and try Non-Expert mode with IFR flight type and Auto Target FPS checked.
-- If this doesn't resolve it, try enabling Expert options and reducing the FPS Sensitivity setting to 2, to allow smaller TLOD changes.
-- If still not resolved, try the FPS Tolerance mode, which was the automation method in the original release version that had larger TLOD changes but they occurred less often, with a setting of 5.
-
-My default MSFS graphics settings are messed up and each time I try to change them back they get messed up again. How do I fix this?
-- You are likely trying to change these default MSFS settings while the app is still running and you are in an active flight, where the app will override any such changes you try to make.
-- Either exit the app completely or be in the MSFS main menu (ie. NOT in a flight), then you can go to the MSFS settings screen and change your default MSFS settings to what you want and the app will restore these at the conclusion of a flight session or upon exiting.
-
 What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
   - App defaults to last-used mode on startup.
-  - Auto-switches to detected mode on flight load (excludes MFG/OFG).
+  - Auto-switches to detected mode on flight load (excludes MFG/OFG, which are manually selected and locked).
   - Target FPS dropdown allows editing inactive mode’s setting.
   - Dropdown background turns orange when target FPS differs from current mode.
   - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset.
@@ -142,6 +105,35 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Autodetection is not currently possible due to restricted access—user selection via dropdown initiates OFG mode.
   - Designed to maintain compatibility and control when native access to OptiFG configuration is unavailable.
   - Prioritized in calculated average FPS scaling immediately after VR, when locked to OFG.
+
+You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
+- The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
+- Additionally, there are now thousands of users of this app and I simply don't have the time to provide individual settings advice to everyone that asks.
+- As such, your best course of action is to start off with non-expert mode to see what the app actually does and when.
+- Once you are comfortable with how the app operates, enable expert settings and start reading the tooltip and readme on what each setting does.
+- When making changes, it is best to make small changes to only a few settings so that you can see the effect of them and adjust as desired.
+
+What does this VRAM+ feature for MSFS 2024 do? How do I use it?
+- MSFS 2024 is very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
+- VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and makes MSFS much more prone to CTD.
+- While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM are still regularly encountering VRAM overflow situations, even with modest settings.
+- VRAM+ mitigates these potential overflow events by detecting an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
+- Settings will automatically reduce, up to 50% for LODs and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
+- When VRAM usage reduces to an acceptable level, these setting will automatically increase again, potentially back to their default values if sufficient VRAM headroom now exists.
+- In order to use VRAM+ automatically, you will need to have VRAM+ enabled (default) and also run the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app as it is needed to provide current VRAM usage to the app.
+  - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
+  - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
+
+I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
+- By far the most common reason is users have enabled Expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
+- As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer to uninstall (remove option) and reinstall, which will recreate your config file.
+- Rerun the app and try Non-Expert mode with IFR flight type and Auto Target FPS checked.
+- If this doesn't resolve it, try enabling Expert options and reducing the FPS Sensitivity setting to 2, to allow smaller TLOD changes.
+- If still not resolved, try the FPS Tolerance mode, which was the automation method in the original release version that had larger TLOD changes but they occurred less often, with a setting of 5.
+
+My default MSFS graphics settings are messed up and each time I try to change them back they get messed up again. How do I fix this?
+- You are likely trying to change these default MSFS settings while the app is still running and you are in an active flight, where the app will override any such changes you try to make.
+- Either exit the app completely or be in the MSFS main menu (ie. NOT in a flight), then you can go to the MSFS settings screen and change your default MSFS settings to what you want and the app will restore these at the conclusion of a flight session or upon exiting.
 
 Why am I getting a dangerous/unsafe/virus/trojan/malware warning when trying to download or install?
 - This app is unsigned because I am a hobbyist and the cost of obtaining certification is prohibitive to me, so you may get a warning message of a potentially dangerous app when you download it in a web browser like Chrome or from your antivirus program, especially Kaspersky which is known to flag false positives with this installer and the app.
