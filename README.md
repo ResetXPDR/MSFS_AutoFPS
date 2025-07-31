@@ -22,7 +22,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
   - MSFS 2024 only 
     - Auto settings reduction option for MSFS 2024, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
     - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists.
-- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, OFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option for MSFS 2024, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
 - Auto installation of app updates (optional except for mandatory updates),
@@ -296,7 +296,7 @@ Some Notes:
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
-    - There is a setting for each graphics mode (NFR, FG, LSFG, MFG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles).
+    - There is a setting for each graphics mode (NFR, FG, LSFG, MFG, OFG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles).
       - On app startup, automatically defaults to the graphics mode in use when the app was last used.
       - Automatically switches to the currently detected graphics mode upon loading in to a flight session.
       - The user can change the target FPS for graphics modes other than what is currently active by using the drop down list of target FPS types in the app window.
