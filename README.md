@@ -89,7 +89,13 @@ My default MSFS graphics settings are messed up and each time I try to change th
 - Either exit the app completely or be in the MSFS main menu (ie. NOT in a flight), then you can go to the MSFS settings screen and change your default MSFS settings to what you want and the app will restore these at the conclusion of a flight session or upon exiting.
 
 What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
-- **NFR (Native Frame Rate)**
+- **How to use**
+  - App defaults to last-used mode on startup.
+  - Auto-switches to detected mode on flight load (excludes MFG/OFG).
+  - Target FPS dropdown allows editing inactive mode’s setting.
+  - Dropdown background turns orange when target FPS differs from current mode.
+  - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset.
+**NFR (Native Frame Rate)**
   - Default non-VR, non-FG graphics mode (formerly “PC”).
   - Automatically selected when MSFS graphics settings do not enable FG.
   - Autodetected by AutoFPS.
