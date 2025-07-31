@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.2
+# MSFS_AutoFPS v0.4.5.3
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -88,26 +88,54 @@ My default MSFS graphics settings are messed up and each time I try to change th
 - You are likely trying to change these default MSFS settings while the app is still running and you are in an active flight, where the app will override any such changes you try to make.
 - Either exit the app completely or be in the MSFS main menu (ie. NOT in a flight), then you can go to the MSFS settings screen and change your default MSFS settings to what you want and the app will restore these at the conclusion of a flight session or upon exiting.
 
-How does this app work for Frame Generation (FG) users?
-- The app does detect correct FG FPS when FG (native nVidia or FG mod) is enabled in MSFS, however FG is only active when MSFS is the focused window and becomes inactive when not, through your graphics driver not this app.
-- To see correct MSFS FG FPS, use the app's "On Top" option to overlay this app over MSFS and give MSFS the focus.
-- If MSFS FG is being incorrectly reported as enabled by the app, the likely reason is that either the FG mod had been installed and removed or you have disabled Hardware Accelerated Graphics Scheduling under Windows settings and the now the now greyed out MSFS FG setting may show that it is off but it is still set to on internally to MSFS. To fix, change the DLSSG line in your UserCfg.opt file to be DLSSG 0.
-- Lossless Scaling FG (LSFG), including the scaling multiplier used, is also detected and the correct LSFG multiplied FPS is displayed.
-  - Make sure your LSFG app is updated to the latest version that supports LSFG 3.0 (2.13.2 or later).
-  - Due to LSFG activation not currently being detectable, the app will consider LSFG to be active whenever it detects LS running, even if you are yet to activate it for MSFS. 
-  - The app will first try to use an LS profile with the specific name MSFS2020 or MSFS2024, depending on which MSFS version is currently in use, to obtain these settings.
-  - If such an MSFS2020 or MSFS2024 profile does not exist then the settings in the first profile found in the config file, usually named Default, will be used.
-  - When adaptive frame generation is detected, a base (ie. NFR) FPS will be used for the target FPS because the frame generation multiplier is variable and is not currently detectable.
-  - If you make changes to your LS settings after starting a flight, press AutoFPS's Reset button so that AutoFPS can redetect them correctly.
-- FSR3 FG is now supported for MSFS 2024 as of SU2.
-  - Although FSR3 FG can be implemented with an adaptive multiplier, MSFS currently implements it with a fixed 2X multiplier that is active regardless of whether MSFS has the focus or not.
-- Multi Frame Generation (MFG), available only for users with 5000 series nVidia GPUs, is unable to be auto detected by the app at this time due to the privileged access need to read this setting.
-  - In the interim, a manual MFG multiplier and target MFG FPS selection will be presented on the UI when a 5000 series nVidia GPU is detected.
-  - Match the app's MFG multiplier with what you have set for MFG with MSFS in nVidia settings.
-  - Set to MFG Off if not using MFG or using an alternative FG method.
-  - Feature can be removed by the user setting MfgModeMultEnabled to false in MSFS_AutoFPS.config in the app root directory.
-- Detection of all FG types is automatic within 5 seconds of making the change. 
-- Only one type of FG can be active at a time for the app to show FPS correctly. In particular, using native nVidia or the FG mod AND LSFG will cause incorrect FPS calculations in the app because they function differently when MSFS loses focus. Choose one or the other if you want to use them with this app.
+What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
+- **NFR (Native Frame Rate)**
+  - Default non-VR, non-FG graphics mode (formerly “PC”).
+  - Automatically selected when MSFS graphics settings do not enable FG.
+  - Autodetected by AutoFPS.
+  - No frame multiplication applied.
+- **VR**
+  - Activated within MSFS.
+  - Autodetected by AutoFPS.
+  - No notable limitations.
+- **nVidia FG (native or FG mod)**
+  - Activated via MSFS graphics settings or FG mod.
+  - Autodetected by AutoFPS but only active when MSFS is the focused window.
+  - FG becomes inactive when MSFS loses focus (driver-level behavior).
+  - Use app’s “On Top” option to ensure MSFS maintains focus.
+  - Incorrect FG detection may occur if:
+    - FG mod was removed.
+    - Hardware Accelerated Graphics Scheduling is disabled.
+    - FG appears off visually but is still internally active.
+    - To disable FG fully, set `DLSSG 0` in `UserCfg.opt`.
+- **Lossless Scaling FG (LSFG)**
+  - Activated through LSFG app (v2.13.2+ required).
+  - Auto detected when LS is running, regardless of actual FG activation.
+  - AutoFPS checks for profiles named `MSFS2020` or `MSFS2024`.
+    - Falls back to first config profile (usually `Default`) if none found.
+  - Adaptive FG not detectable—uses NFR for target FPS.
+  - After changing LS settings mid-flight, press Reset to redetect.
+  - Only one FG type should be active—mixing LSFG with native FG or FG mod causes incorrect FPS readings.
+- **FSR3 FG**
+  - Available in MSFS 2024 from SU2 onwards.
+  - Activated via MSFS graphics settings.
+  - Autodetected by AutoFPS.
+  - Uses fixed 2× multiplier.
+  - Remains active regardless of window focus.
+- **MFG (Multi Frame Generation)**
+  - No longer tied to 5000 series nVidia GPUs; now a **forced mode**, matching OptiFG behavior.
+  - Cannot be autodetected due to privileged access.
+  - Manual UI controls always appear, regardless of GPU:
+    - In-flight session dropdown enables manual multiplier selection.
+    - Match app’s multiplier with nVidia settings.
+    - Set to MFG Off if not used or using another FG method.
+  - Allows future-proofing for unsupported FG types via manual tuning.
+- **OFG (OptiScaler Frame Generation)**
+  - Activated by selecting **OFG** from the graphics mode dropdown in AutoFPS.
+  - Functions as a **forced mode**, remaining active across app restarts until manually changed to a different graphics mode.
+  - Autodetection is not currently possible due to restricted access—user selection via dropdown initiates OFG mode.
+  - Designed to maintain compatibility and control when native access to OptiFG configuration is unavailable.
+  - Prioritized in calculated average FPS scaling immediately after VR, when locked to OFG.
 
 Why am I getting a dangerous/unsafe/virus/trojan/malware warning when trying to download or install?
 - This app is unsigned because I am a hobbyist and the cost of obtaining certification is prohibitive to me, so you may get a warning message of a potentially dangerous app when you download it in a web browser like Chrome or from your antivirus program, especially Kaspersky which is known to flag false positives with this installer and the app.
