@@ -106,6 +106,12 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Designed to maintain compatibility and control when native access to OptiFG configuration is unavailable.
   - Prioritized in calculated average FPS scaling immediately after VR, when locked to OFG.
 
+How does AutoFPS compare to the in-built Dynamic Setting feature that MS included in MSFS 2024?
+- Dynamic Setting adjusts both TLOD and OLOD, the former initially then the latter if still significantly under target FPS. AutoFPS adjusts these settings independently, with OLOD changing inversely proportional to altitude by default, and can also change a lot more settings when auto settings reduction and VRAM+ are active.
+- Dynamic Setting only ever adjusts down to as low as 50% of your currently set TLOD and/or OLOD, whereas AutoFPS in non-expert mode uses the default values as a centre point for adjustments and in expert mode is configurable to whatever range you want, including above the max of 400 settable within the MSFS settings menu.
+- Dynamic Setting is much quicker than AutoFPS at responding to FPS reductions, due to it having internal access to MSFS performance metrics that AutoFPS does not, which also means it tends to overreact to short term stutters which are quite common now.
+- Dynamic Setting seems to work off a native frame rate target FPS rather than actual FPS when frame generation is in use, so you need to be mindful of this when using it with FG. ie. You can be achieving 150 FPS with DLSS FG with a target FPS of 100 and it will still reduce OLOD and TLOD to 50%.
+
 You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
 - The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
 - Additionally, there are now thousands of users of this app and I simply don't have the time to provide individual settings advice to everyone that asks.
