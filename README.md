@@ -349,7 +349,6 @@ Some Notes:
       - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
         - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
         - LOD Step - 5
-        - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
         - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
         - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
         - TLOD Base + - enabled
@@ -368,6 +367,7 @@ Some Notes:
       - Common to both automation methods:
         - VFR or IFR flight type - user selectable
         - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
+        - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
         - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
         - MSFS 2020 only
           - Decrease Cloud Quality
