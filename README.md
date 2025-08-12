@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.3
+# MSFS_AutoFPS v0.4.5.4
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -24,7 +24,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists.
 - Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, OFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
-- VRAM+ overflow protection option for MSFS 2024, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
+- VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
 - Auto installation of app updates (optional except for mandatory updates),
 - Auto disabling of Dynamic Settings in MSFS 2024 while this app is active, to prevent settings contention, and
 - Auto restoration of original MSFS settings changed by the app during a flight session, enhanced to withstand MSFS CTDs.<br><br>
@@ -49,7 +49,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
 - Due to potential settings conflict, don't change any MSFS graphics settings that could be adjusted by AutoFPS while in a flight with AutoFPS already running.
-- If MSFS 2024 performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
+- If performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
 
 What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
@@ -106,6 +106,12 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Designed to maintain compatibility and control when native access to OptiFG configuration is unavailable.
   - Prioritized in calculated average FPS scaling immediately after VR, when locked to OFG.
 
+How does AutoFPS compare to the in-built Dynamic Setting feature that MS included in MSFS 2024?
+- Dynamic Setting adjusts both TLOD and OLOD, the former initially then the latter if still significantly under target FPS. AutoFPS adjusts these settings independently, with OLOD changing inversely proportional to altitude by default, and can also change a lot more settings when auto settings reduction and VRAM+ are active.
+- Dynamic Setting only ever adjusts down to as low as 50% of your currently set TLOD and/or OLOD, whereas AutoFPS in non-expert mode uses the default values as a centre point for adjustments and in expert mode is configurable to whatever range you want, including above the max of 400 settable within the MSFS settings menu.
+- Dynamic Setting is much quicker than AutoFPS at responding to FPS reductions, due to it having internal access to MSFS performance metrics that AutoFPS does not, which also means it tends to overreact to short term stutters which are quite common now.
+- Dynamic Setting seems to work off a native frame rate target FPS rather than actual FPS when frame generation is in use, so you need to be mindful of this when using it with FG. ie. You can be achieving 150 FPS with DLSS FG with a target FPS of 100 and it will still reduce OLOD and TLOD to 50%. AutoFPS accommodates most mainstream FG types and allows an applicable target FPS to be set for each FG type.
+
 You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
 - The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
 - Additionally, there are now thousands of users of this app and I simply don't have the time to provide individual settings advice to everyone that asks.
@@ -113,12 +119,12 @@ You developed this app and must therefore know how to best configure it, so sure
 - Once you are comfortable with how the app operates, enable expert settings and start reading the tooltip and readme on what each setting does.
 - When making changes, it is best to make small changes to only a few settings so that you can see the effect of them and adjust as desired.
 
-What does this VRAM+ feature for MSFS 2024 do? How do I use it?
-- MSFS 2024 is very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
+What does this VRAM+ feature do? How do I use it?
+- MSFS 2024 and MSFS 2020 in DX12 mode are very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
 - VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and makes MSFS much more prone to CTD.
 - While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM are still regularly encountering VRAM overflow situations, even with modest settings.
 - VRAM+ mitigates these potential overflow events by detecting an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
-- Settings will automatically reduce, up to 50% for LODs and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
+- Settings will automatically reduce, up to 50% for LODs (no further for MSFS 2020) and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
 - When VRAM usage reduces to an acceptable level, these setting will automatically increase again, potentially back to their default values if sufficient VRAM headroom now exists.
 - In order to use VRAM+ automatically, you will need to have VRAM+ enabled (default) and also run the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app as it is needed to provide current VRAM usage to the app.
   - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
@@ -166,6 +172,13 @@ Some Notes:
     - Click on Apply and Ok to save the change
     - Then try to install it again
   - Try creating an exception for the installer in your AV program, or just disabled the AV program temporarily while running the installer
+  - If all else fails, the app can be manually installed as follows:
+    - Download the [Mobiflight Module](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and extract it to your Community folder (without MSFS running).
+    - Install [this](https://aka.ms/vs/17/release/vc_redist.x86.exe) and [this](https://aka.ms/vs/17/release/vc_redist.x64.exe) and go to the Micrsoft .NET 8.0 download page [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) and download and install the latest .NET Desktop Runtime X64 version.
+    - Create an %appdata%\MSFS_AutoFPS folder, then a sub folder called bin underneath that.
+    - Download [MSFS_AutoFPS.zip](https://github.com/ResetXPDR/MSFS_AutoFPS/blob/main/MSFS_AutoFPS.zip) and extract to the newly-created bin folder.
+    - Create a shortcut to MSFS_AutoFPS.exe and move it to a place of your choice eg. desktop.
+    - AutoFPS should now work when you click on the shortcut.
 - MSFS_AutoFPS and/or MSFS2020_AutoFPS must not be running before installing/updating/upgrading.
 - Do not run the Installer as Admin unless it will not install due to a permissions issue.
 - There is no need to uninstall MSFS2020_AutoFPS before upgrading to MSFS_AutoFPS. The installer uninstalls MSFS2020_AutoFPS if currently installed but preserves its MSFS 2020 config for use in this new app beforehand if desired or applicable.
@@ -276,13 +289,17 @@ Some Notes:
       - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
       - VRAMOverflowSettingsRecovery threshold, must be at least 5% less than VRAMOverflowReduceTLOD (ie. 93% by default) and will allow settings to progressively increase with favourable performance conditions until the feature disengages. 
     - VRAM+ setting:
-      - Non-Expert mode:
+      - MSFS 2020:
         - Checkbox only visible if GPU-Z is running
-        - Enabling uses the Max setting described for Expert mode.
-      - Expert mode:
-        - Off: disables the feature completely.
-        - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
-        - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
+        - Enabling uses the LODs-only setting, providing up to a 50% reduction.
+      - MSFS 2024:
+        - Non-Expert mode:
+          - Checkbox only visible if GPU-Z is running
+          - Enabling uses the Max setting described for Expert mode.
+        - Expert mode:
+          - Off: disables the feature completely.
+          - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
+          - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
     - If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
@@ -343,7 +360,6 @@ Some Notes:
       - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
         - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
         - LOD Step - 5
-        - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
         - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
         - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
         - TLOD Base + - enabled
@@ -362,7 +378,12 @@ Some Notes:
       - Common to both automation methods:
         - VFR or IFR flight type - user selectable
         - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
+        - Alt TLOD Top - VFR 3000 ft, IFR 5000 ft
         - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
+        - VRAM+ - enabled,
+          - Only functional if GPU-Z is running.
+          - Imposes different auto settings reduction settings, namely Floor: off and Recovery: Ground with 5% VRAM reduction achieved. 
+          - Can be disabled by unchecking VRAM+.
         - MSFS 2020 only
           - Decrease Cloud Quality
             - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
@@ -374,10 +395,6 @@ Some Notes:
             - IFR: Full reduction suite minus clouds (to minimise impact on user experience)
             - VFR: Flora (Trees, Plants, Grass), Ray Traced and Terrain Shadows and Displacement Mapping 
           - Auto Increase Clouds - enabled
-          - VRAM+ - enabled,
-            - Only functional if GPU-Z is running.
-            - Imposes different auto settings reduction settings, namely Floor: off and Recovery: Ground with 5% VRAM reduction achieved. 
-            - Can be disabled by switching to Expert mode, unchecking VRAM+, then switching back to Non-Expert mode.
     - Expert Mode (checked)
       - The UI expands to show additional MSFS settings to adjust.
       - If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. 
@@ -467,7 +484,7 @@ Some Notes:
     - When enabled, four user definable parameters relating to this feature will be revealed on the UI.
     - Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
     -  The app will set OLOD @ Base at or below the Alt OLOD Base (AGL), set the OLOD @ Top at or above Alt OLOD Top (AGL) and interpolate in between. Note that OLOD @ Base can be higher, lower or the same value as the OLOD @ Top, depending on whether you want OLOD to decrease, increase or stay the same respectively as you ascend.
-    -  In MSFS2024, integrates with auto settings reduction and VRAM+.
+    -  Integrates with auto settings reduction (MSFS 2024 only) and VRAM+.
   -  Hide OLOD settings - allows the user to collapse the Auto OLOD settings panel when not needed, to make the app window more compact.
   - MSFS 2020 only
     - Decrease Cloud Quality - When enabled, will reduce/restore cloud quality by one level if the activation condition is met.
@@ -522,7 +539,7 @@ Some Notes:
         - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 30 second settle timer of each session.
       - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
       - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
-      - User auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
+      - With MSFS 2024, user auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
       - VRAM LOD reductions occur at twice the rate of normal LOD reductions to more quickly address VRAM overflow. VRAM LOD recovery rate is half the normal LOD recovery rate to more gently recover from VRAM overflow.
       - VRAM protection will limit LOD reductions to 50% max, aligning it with normal settings reduction. 
       - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
