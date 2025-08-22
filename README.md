@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.4
+# MSFS_AutoFPS v0.4.5.5
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -252,6 +252,11 @@ Some Notes:
   - If the sim version is showing in red and is not the MSFS version you wish to configure before starting that MSFS version, click the 20>24 or 24>20 button, as applicable, and it will change to that.
 - Sim Values
   - Will not show valid values unless all three connections are green. n/a means not available right now.
+  - When MSFS is detected and **NOT** in a flight session:
+    - Default **TLOD**, **OLOD**, and **Cloud Quality** values refresh with changes made in the MSFS settings menu within one second of changing.
+    - **VR‑specific defaults** shown automatically when in VR mode or when VR is selected in the Target FPS dropdown.
+    - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
+  - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
   - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
@@ -278,6 +283,7 @@ Some Notes:
     - **+ Test** opts users into test version updates.
       - Test version users will have **+ Test** force enabled and greyed out.
       - **Mandatory Updates Only** will be unavailable until the app updates to a release version.
+      - Auto‑updates for test versions run a shorter process than release versions, as they assume all core components are already up to date.
     - App startup sequence ensures update check is completed before connecting to MSFS.
   - VRAM+ - detects an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
     - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**.
