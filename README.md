@@ -212,7 +212,7 @@ Some Notes:
   - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS WASM installation.
     - First, try deleting the MSFS WASM folder, located under the Microsoft Flight Simulator directory in either %appdata% or %localappdata% for Steam and MS Store install directories respectively, which will rebuild when you next run MSFS.
     - If that doesn't fix it, a full clean reinstall of MSFS will be required, which can be done in less than 15 minutes for MSFS 2024 but may take many hours for MSFS 2020.
-      - If reinstalling MSFS 2024, you need to do a **CLEAN** install, not just an uninstall/reinstall as dong the latter does not remove the likely-offending MSFS appdata folder and hence will not resolve the issue.
+      - If reinstalling MSFS 2024, you need to do a **CLEAN** install, not just an uninstall/reinstall as doing the latter does not remove the likely-offending MSFS appdata folder and hence will not resolve the issue.
         - Follow the **CLEAN** install instructions outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC) **EXPLICITLY**.
         - **Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the reinstallation is complete.**
         - All your settings, controller assignments, career progression and your pilot profile are retained.
