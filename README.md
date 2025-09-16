@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.5
+# MSFS_AutoFPS v0.4.5.6
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -21,12 +21,12 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
   - MSFS 2024 only 
     - Auto settings reduction option for MSFS 2024, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
-    - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists.
+    - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists,
+    - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert Mode).
 - Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, OFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
 - Auto installation of app updates (optional except for mandatory updates),
-- Auto disabling of Dynamic Settings in MSFS 2024 while this app is active, to prevent settings contention, and
 - Auto restoration of original MSFS settings changed by the app during a flight session, enhanced to withstand MSFS CTDs.<br><br>
 
 **Really, really important:**
@@ -109,8 +109,14 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
 How does AutoFPS compare to the in-built Dynamic Setting feature that MS included in MSFS 2024?
 - Dynamic Setting adjusts both TLOD and OLOD, the former initially then the latter if still significantly under target FPS. AutoFPS adjusts these settings independently, with OLOD changing inversely proportional to altitude by default, and can also change a lot more settings when auto settings reduction and VRAM+ are active.
 - Dynamic Setting only ever adjusts down to as low as 50% of your currently set TLOD and/or OLOD, whereas AutoFPS in non-expert mode uses the default values as a centre point for adjustments and in expert mode is configurable to whatever range you want, including above the max of 400 settable within the MSFS settings menu.
-- Dynamic Setting is much quicker than AutoFPS at responding to FPS reductions, due to it having internal access to MSFS performance metrics that AutoFPS does not, which also means it tends to overreact to short term stutters which are quite common now.
-- Dynamic Setting seems to work off a native frame rate target FPS rather than actual FPS when frame generation is in use, so you need to be mindful of this when using it with FG. ie. You can be achieving 150 FPS with DLSS FG with a target FPS of 100 and it will still reduce OLOD and TLOD to 50%. AutoFPS accommodates most mainstream FG types and allows an applicable target FPS to be set for each FG type.
+- Dynamic Settings is much quicker than AutoFPS at responding to FPS reductions, due to it having internal access to MSFS performance metrics that AutoFPS does not, which also means it tends to overreact to short term stutters which are quite common now.
+- Dynamic Setting uses a native frame rate target FPS rather than actual FPS when frame generation is in use, so you need to be mindful of this when using it with FG. ie. You can be achieving 150 FPS with DLSS FG with a target FPS of 100 and it will still reduce OLOD and TLOD to 50%. AutoFPS accommodates most mainstream FG types and allows an applicable target FPS to be set for each FG type.
+- Hybrid dynamic settings / AutoFPS automation is now available in Expert Mode and leverages the strengths of both MSFS dynamic settings and AutoFPS:
+  - MSFS’s built-in dynamic settings engine is highly responsive, using internal performance metrics not accessible externally. This allows it to adjust LODs more precisely and rapidly than AutoFPS alone.
+  - AutoFPS complements this by adjusting the base LOD values that MSFS dynamic settings operate within. It responds to longer-term performance trends, especially increasing LODs in favourable conditions — extending the usable range beyond the default 50–100% window imposed by MSFS dynamic settings.
+  - AutoFPS also manages a broader set of performance-critical graphics settings — including Cloud Quality and ten others — offering a more comprehensive performance management regime than dynamic LODs alone.
+  - Together, MSFS dynamic settings and AutoFPS now work in tandem to manage both performance and visual quality, each addressing different layers of the optimisation stack.
+  - See the Usage section for more details on how to optimally configure this feature.
 
 You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
 - The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
