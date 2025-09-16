@@ -9,7 +9,8 @@ Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
 - Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule,
 - Improved FPS smoothing (FPS+) to filter out brief performance spikes and dips, delivering a more resilient user experience,
-- A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type and in Expert mode is fully customisable with four additional profiles available.
+- A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type:
+  - Expert mode is fully customisable with four additional profiles available, any of which can be paired for VR/non-VR and Sim Rate auto flight type switching.
 - Auto target FPS option, which is useful if you don't know what target FPS to choose or if your flight types are so varied that a single target FPS value is not always appropriate,
 - A greatly simplified Non-Expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
 - An Expert mode Option, which allows user customisation of the following:
@@ -22,7 +23,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
   - MSFS 2024 only 
     - Auto settings reduction option for MSFS 2024, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
     - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists,
-    - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert Mode).
+    - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
 - Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, OFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
@@ -315,6 +316,17 @@ Some Notes:
           - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
           - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
     - If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
+  - Hybrid Dynamic Settings/AutoFPS-controlled Automation in Expert Mode with MSFS 2024:
+    - Uses MSFS dynamic settings, if enabled in MSFS, for auto-LOD reduction; otherwise it reverts to AutoFPS-controlled LOD reduction if active.
+    - A one-time message will appear when the app is first launched with MSFS 2024, explaining how to enable and disable the feature.
+    - Displays `DynSet` and the associated default MSFS target frame rate in the Sim Values panel’s Reduce status, with a descriptive tooltip, when in a flight session and not at a reduction level greater than LODs-only.
+    - TLOD and OLOD values will show with a `"D"` prefix and tooltip when `DynSet` is active — even if AutoFPS reduction is disabled — as MSFS dynamic settings remain active.
+    - An MSFS icon will also be shown additional to the AutoFPS icon in the Sim Values panel title when dynamic settings is enabled, to indicate hybrid automation is active.
+    - `DynSet` and the MSFS target frame rate can be changed at any time, including mid-flight, with changes reflected in the Reduce status display.
+    - DynSet enable/disable and increase/decrease buttons are available in test mode, activated by setting the TestMode key in the app's root folder common config file to "true", to allow instant changes to these settings without needing to open MSFS settings. 
+    - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
+    - Works best when using an FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS. 
+    - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to 10 FPS lower than the native frame rate equivalent of the AutoFPS target FPS for best results.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
@@ -363,6 +375,12 @@ Some Notes:
       - Profile names can be edited, including VFR and IFR:
         - Double clicking on the profile combo box text area toggles edit-ability, with non-editable being the initial state on startup.
         - Press Enter, press Tab or click on another control on the app UI for the changed text to be accepted.
+      - VR/Non-VR pairing for automatic flight type profile switching:
+        - Activates when entering or exiting VR based on matching profile names with and without " VR" suffix.
+        - A "↔", and a pair count if more than one pair, will be appended to VR/Non-VR paired profile names in the profile selection dropdown to indicate auto-switching pairing(s).
+        - A warning message will show when an edited profile name matches a VR/non-VR counterpart, indicating it will auto-switch between them; prompts user to rename if unintended.
+      - Sim Rate pairing for automatic flight type profile switching:
+        - Activates when the sim rate changes based on matching profile names with " xX" suffixes, where x is the new sim rate. eg. IFR 1X and IFR 4X.
     - Command line argument support for flight type profiles is as follows:
       - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in Expert mode.
       - -user1 to -user4 now open their corresponding user profiles, restricted to Expert mode.
