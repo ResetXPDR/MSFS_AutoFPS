@@ -117,7 +117,7 @@ How does AutoFPS compare to the in-built Dynamic Setting feature that MS include
   - AutoFPS complements this by adjusting the base LOD values that MSFS dynamic settings operate within. It responds to longer-term performance trends, especially increasing LODs in favourable conditions — extending the usable range beyond the default 50–100% window imposed by MSFS dynamic settings.
   - AutoFPS also manages a broader set of performance-critical graphics settings — including Cloud Quality and ten others — offering a more comprehensive performance management regime than dynamic LODs alone.
   - Together, MSFS dynamic settings and AutoFPS now work in tandem to manage both performance and visual quality, each addressing different layers of the optimisation stack.
-  - See the Usage section for more details on how to optimally configure this feature.
+  - See the Usage / Configuration section for details on how to optimally configure this feature.
 
 You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
 - The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
@@ -305,7 +305,7 @@ Some Notes:
       - VRAMOverflowSettingsRecovery threshold, must be at least 5% less than VRAMOverflowReduceTLOD (ie. 93% by default) and will allow settings to progressively increase with favourable performance conditions until the feature disengages. 
     - VRAM+ setting:
       - MSFS 2020:
-        - Checkbox only visible if GPU-Z is running
+        - Checkbox only visible if GPU-Z is running and moves from the General to the Expert Opens panel in Expert mode.
         - Enabling uses the LODs-only setting, providing up to a 50% reduction.
       - MSFS 2024:
         - Non-Expert mode:
@@ -316,12 +316,12 @@ Some Notes:
           - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
           - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
     - If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
-  - Hybrid Dynamic Settings/AutoFPS-controlled Automation in Expert Mode with MSFS 2024:
+  - Hybrid Dynamic Settings/AutoFPS-controlled Automation in Expert mode with MSFS 2024:
     - Uses MSFS dynamic settings, if enabled in MSFS, for auto-LOD reduction; otherwise it reverts to AutoFPS-controlled LOD reduction if active.
     - A one-time message will appear when the app is first launched with MSFS 2024, explaining how to enable and disable the feature.
     - Displays `DynSet` and the associated default MSFS target frame rate in the Sim Values panel’s Reduce status, with a descriptive tooltip, when in a flight session and not at a reduction level greater than LODs-only.
-    - TLOD and OLOD values will show with a `"D"` prefix and tooltip when `DynSet` is active — even if AutoFPS reduction is disabled — as MSFS dynamic settings remain active.
-    - An MSFS icon will also be shown additional to the AutoFPS icon in the Sim Values panel title when dynamic settings is enabled, to indicate hybrid automation is active.
+    - TLOD and OLOD labels will show with a `"D"` prefix and tooltip when `DynSet` is active — even if AutoFPS reduction is disabled — as MSFS dynamic settings remain active.
+    - An MSFS icon will also be shown before the AutoFPS icon in the Sim Values panel title when dynamic settings is enabled, to indicate hybrid automation is active.
     - `DynSet` and the MSFS target frame rate can be changed at any time, including mid-flight, with changes reflected in the Reduce status display.
     - DynSet enable/disable and increase/decrease buttons are available in test mode, activated by setting the TestMode key in the app's root folder common config file to "true", to allow instant changes to these settings without needing to open MSFS settings. 
     - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
@@ -548,8 +548,9 @@ Some Notes:
       - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
       - Activation and recovery are automatically paused during critical flight phases (takeoff, initial climb, final approach, landing).
       - Disabled by default for Expert mode. When enabled the default values of the applicable settings are the same as for Non-Expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
-        - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
+        - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce are normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
         - OLOD reductions are proportional to TLOD reductions.
+        - AutoFPS-controlled LOD reductions are replaced with MSFS dynamic settings control when enabled. Resulting reductions are internal to MSFS and not reflected in external LOD values.
         - Settings reduction activation cancels the TLOD Min/Base + seek process if active.
       - Automatically restores settings if the current FPS rises above the target FPS by the default tolerance or if the current FPS matches the target FPS and the TLOD has automatically increased by an acceptable margin.
         - Settings recovery will commence recovery immediately in any mode if the current FPS is above the target FPS by the FPS tolerance amount.
@@ -593,23 +594,6 @@ Some Notes:
   - Auto detailed FPS logging on outlier FPS events.
     - Logs for 1 second before (memorised) the first detected outlier FPS event and 10 seconds after the last outlier FPS event of an outlier sequence.
     - Can run concurrently with the existing detailed FPS logging which is manually enabled by the user.
-  - Additional FPS averaging modes and associated logging:
-    - **1 – Rolling Average**  - The extant averaging method, which is a simple average over recent frames. Smooth and consistent, but **can lag or dip noticeably** during sudden FPS drops. 
-    - **2 – Adaptive Exponential Moving Average (EMA) with Confirmation** - Applies exponential smoothing but only accepts major trend shifts after a consistent pattern, filtering brief spikes or dips.
-    - **3 – Sigma-Clipped Average** - Averages recent FPS values while filtering out statistical outliers. Ideal for reducing noise without flattening real changes.
-    - **4 – Confirmed Windowed Average**  - A rolling average that only updates large deviations if they are sustained, making it resistant to transient drops but slower to respond.
-    - Clicking the FPS label cycles through the different average types and also sub-settings applicable to the current type.
-    - The FPS label is shown in the in the format FPSX_Y: where:
-      - X is the FPS average type number for types 2 through 4.
-      - Y is the sub-mode, either confirmation duration in seconds for FPS average types 2 and 4 or sigma multiplier for type 3.
-    - FPS average types 2 and 4 support adjustable confirmation durations (2–4 seconds). The recommended value is 3.
-      - Higher values improve resilience to FPS spikes but delay responsiveness to sustained changes.
-      - Lower values respond quicker but may allow brief noise into the average.
-    - FPS average type 3 introduces a configurable sigma multiplier (1.00–2.00 in 0.25 increments). The default is 1.50.
-      - Lower values apply stricter spike rejection; higher values are more permissive and responsive.
-    - When changing away from FPS average types 2 through 4, the default confirmation duration and sigma multiplier is restored, as applicable, such that detailed FPS logging shows the default behaviour of these FPS average types when they are not currently selected.
   - Virtual screen coordinates and window position logging on app startup.
   - Verbose compatibility test results in log file.
-
-
 <br/><br/>
