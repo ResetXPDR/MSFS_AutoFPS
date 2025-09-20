@@ -1,7 +1,7 @@
-# MSFS_AutoFPS v0.4.5.5
+# MSFS_AutoFPS v0.4.5.6
 
 ## Notice
-My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if it is a great idea, technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
+My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
 
 ## Summary
 Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS.<br/><br/>
@@ -9,7 +9,8 @@ Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
 - Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule,
 - Improved FPS smoothing (FPS+) to filter out brief performance spikes and dips, delivering a more resilient user experience,
-- A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type and in Expert mode is fully customisable with four additional profiles available.
+- A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type:
+  - Expert mode is fully customisable with four additional profiles available, any of which can be paired for VR/non-VR and Sim Rate auto flight type switching.
 - Auto target FPS option, which is useful if you don't know what target FPS to choose or if your flight types are so varied that a single target FPS value is not always appropriate,
 - A greatly simplified Non-Expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
 - An Expert mode Option, which allows user customisation of the following:
@@ -21,12 +22,12 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
   - MSFS 2024 only 
     - Auto settings reduction option for MSFS 2024, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
-    - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists.
+    - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists,
+    - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
 - Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, OFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
 - Auto installation of app updates (optional except for mandatory updates),
-- Auto disabling of Dynamic Settings in MSFS 2024 while this app is active, to prevent settings contention, and
 - Auto restoration of original MSFS settings changed by the app during a flight session, enhanced to withstand MSFS CTDs.<br><br>
 
 **Really, really important:**
@@ -109,8 +110,14 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
 How does AutoFPS compare to the in-built Dynamic Setting feature that MS included in MSFS 2024?
 - Dynamic Setting adjusts both TLOD and OLOD, the former initially then the latter if still significantly under target FPS. AutoFPS adjusts these settings independently, with OLOD changing inversely proportional to altitude by default, and can also change a lot more settings when auto settings reduction and VRAM+ are active.
 - Dynamic Setting only ever adjusts down to as low as 50% of your currently set TLOD and/or OLOD, whereas AutoFPS in non-expert mode uses the default values as a centre point for adjustments and in expert mode is configurable to whatever range you want, including above the max of 400 settable within the MSFS settings menu.
-- Dynamic Setting is much quicker than AutoFPS at responding to FPS reductions, due to it having internal access to MSFS performance metrics that AutoFPS does not, which also means it tends to overreact to short term stutters which are quite common now.
-- Dynamic Setting seems to work off a native frame rate target FPS rather than actual FPS when frame generation is in use, so you need to be mindful of this when using it with FG. ie. You can be achieving 150 FPS with DLSS FG with a target FPS of 100 and it will still reduce OLOD and TLOD to 50%. AutoFPS accommodates most mainstream FG types and allows an applicable target FPS to be set for each FG type.
+- Dynamic Settings is much quicker than AutoFPS at responding to FPS reductions, due to it having internal access to MSFS performance metrics that AutoFPS does not, which also means it tends to overreact to short term stutters which are quite common now.
+- Dynamic Setting uses a native frame rate target FPS rather than actual FPS when frame generation is in use, so you need to be mindful of this when using it with FG. ie. You can be achieving 150 FPS with DLSS FG with a target FPS of 100 and it will still reduce OLOD and TLOD to 50%. AutoFPS accommodates most mainstream FG types and allows an applicable target FPS to be set for each FG type.
+- Hybrid dynamic settings / AutoFPS automation is now available in Expert Mode and leverages the strengths of both MSFS dynamic settings and AutoFPS:
+  - MSFS’s built-in dynamic settings engine is highly responsive, using internal performance metrics not accessible externally. This allows it to adjust LODs more precisely and rapidly than AutoFPS alone.
+  - AutoFPS complements this by adjusting the base LOD values that MSFS dynamic settings operate within. It responds to longer-term performance trends, especially increasing LODs in favourable conditions — extending the usable range beyond the default 50–100% window imposed by MSFS dynamic settings.
+  - AutoFPS also manages a broader set of performance-critical graphics settings — including Cloud Quality and ten others — offering a more comprehensive performance management regime than dynamic LODs alone.
+  - Together, MSFS dynamic settings and AutoFPS now work in tandem to manage both performance and visual quality, each addressing different layers of the optimisation stack.
+  - See the Usage / Configuration section for details on how to optimally configure this feature.
 
 You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
 - The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
@@ -212,9 +219,11 @@ Some Notes:
   - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS WASM installation.
     - First, try deleting the MSFS WASM folder, located under the Microsoft Flight Simulator directory in either %appdata% or %localappdata% for Steam and MS Store install directories respectively, which will rebuild when you next run MSFS.
     - If that doesn't fix it, a full clean reinstall of MSFS will be required, which can be done in less than 15 minutes for MSFS 2024 but may take many hours for MSFS 2020.
-      - If reinstalling MSFS 2024, you need to do a clean install, as outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC).
+      - If reinstalling MSFS 2024, you need to do a **CLEAN** install, not just an uninstall/reinstall as doing the latter does not remove the likely-offending MSFS appdata folder and hence will not resolve the issue.
+        - Follow the **CLEAN** install instructions outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC) **EXPLICITLY**.
         - **Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the reinstallation is complete.**
         - All your settings, controller assignments, career progression and your pilot profile are retained.
+        - If you chose not to restore your Community folder, you will need to install this app again to install the required mobiflight module there.
 - If you get an "Unable to attach MSFS - app disabled." message, the most likely causes are that MSFS is loading in very slowly and the attachment process is timing out, MSFS and this app are running at different permission privilege levels, or your anti-virus/malware app is blocking this app. To resolve, try the following:
   - Restart this app after MSFS has loaded in to the main menu.
   - Check that MSFS is not running as administrator.
@@ -296,7 +305,7 @@ Some Notes:
       - VRAMOverflowSettingsRecovery threshold, must be at least 5% less than VRAMOverflowReduceTLOD (ie. 93% by default) and will allow settings to progressively increase with favourable performance conditions until the feature disengages. 
     - VRAM+ setting:
       - MSFS 2020:
-        - Checkbox only visible if GPU-Z is running
+        - Checkbox only visible if GPU-Z is running and moves from the General to the Expert Opens panel in Expert mode.
         - Enabling uses the LODs-only setting, providing up to a 50% reduction.
       - MSFS 2024:
         - Non-Expert mode:
@@ -307,6 +316,17 @@ Some Notes:
           - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
           - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
     - If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
+  - Hybrid Dynamic Settings/AutoFPS-controlled Automation in Expert mode with MSFS 2024:
+    - Uses MSFS dynamic settings, if enabled in MSFS, for auto-LOD reduction; otherwise it reverts to AutoFPS-controlled LOD reduction if active.
+    - A one-time message will appear when the app is first launched with MSFS 2024, explaining how to enable and disable the feature.
+    - Displays `DynSet` and the associated default MSFS target frame rate in the Sim Values panel’s Reduce status, with a descriptive tooltip, when in a flight session and not at a reduction level greater than LODs-only.
+    - TLOD and OLOD labels will show with a `"D"` prefix and tooltip when `DynSet` is active — even if AutoFPS reduction is disabled — as MSFS dynamic settings remain active.
+    - An MSFS icon will also be shown before the AutoFPS icon in the Sim Values panel title when dynamic settings is enabled, to indicate hybrid automation is active.
+    - `DynSet` and the MSFS target frame rate can be changed at any time, including mid-flight, with changes reflected in the Reduce status display.
+    - DynSet enable/disable and increase/decrease buttons are available in test mode, activated by setting the TestMode key in the app's root folder common config file to "true", to allow instant changes to these settings without needing to open MSFS settings. 
+    - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
+    - Works best when using an FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS. 
+    - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to 10 FPS lower than the native frame rate equivalent of the AutoFPS target FPS for best results.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
@@ -355,6 +375,12 @@ Some Notes:
       - Profile names can be edited, including VFR and IFR:
         - Double clicking on the profile combo box text area toggles edit-ability, with non-editable being the initial state on startup.
         - Press Enter, press Tab or click on another control on the app UI for the changed text to be accepted.
+      - VR/Non-VR pairing for automatic flight type profile switching:
+        - Activates when entering or exiting VR based on matching profile names with and without " VR" suffix.
+        - A "↔", and a pair count if more than one pair, will be appended to VR/Non-VR paired profile names in the profile selection dropdown to indicate auto-switching pairing(s).
+        - A warning message will show when an edited profile name matches a VR/non-VR counterpart, indicating it will auto-switch between them; prompts user to rename if unintended.
+      - Sim Rate pairing for automatic flight type profile switching:
+        - Activates when the sim rate changes based on matching profile names with " xX" suffixes, where x is the new sim rate. eg. IFR 1X and IFR 4X.
     - Command line argument support for flight type profiles is as follows:
       - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in Expert mode.
       - -user1 to -user4 now open their corresponding user profiles, restricted to Expert mode.
@@ -522,8 +548,9 @@ Some Notes:
       - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
       - Activation and recovery are automatically paused during critical flight phases (takeoff, initial climb, final approach, landing).
       - Disabled by default for Expert mode. When enabled the default values of the applicable settings are the same as for Non-Expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
-        - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
+        - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce are normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
         - OLOD reductions are proportional to TLOD reductions.
+        - AutoFPS-controlled LOD reductions are replaced with MSFS dynamic settings control when enabled. Resulting reductions are internal to MSFS and not reflected in external LOD values.
         - Settings reduction activation cancels the TLOD Min/Base + seek process if active.
       - Automatically restores settings if the current FPS rises above the target FPS by the default tolerance or if the current FPS matches the target FPS and the TLOD has automatically increased by an acceptable margin.
         - Settings recovery will commence recovery immediately in any mode if the current FPS is above the target FPS by the FPS tolerance amount.
@@ -567,23 +594,6 @@ Some Notes:
   - Auto detailed FPS logging on outlier FPS events.
     - Logs for 1 second before (memorised) the first detected outlier FPS event and 10 seconds after the last outlier FPS event of an outlier sequence.
     - Can run concurrently with the existing detailed FPS logging which is manually enabled by the user.
-  - Additional FPS averaging modes and associated logging:
-    - **1 – Rolling Average**  - The extant averaging method, which is a simple average over recent frames. Smooth and consistent, but **can lag or dip noticeably** during sudden FPS drops. 
-    - **2 – Adaptive Exponential Moving Average (EMA) with Confirmation** - Applies exponential smoothing but only accepts major trend shifts after a consistent pattern, filtering brief spikes or dips.
-    - **3 – Sigma-Clipped Average** - Averages recent FPS values while filtering out statistical outliers. Ideal for reducing noise without flattening real changes.
-    - **4 – Confirmed Windowed Average**  - A rolling average that only updates large deviations if they are sustained, making it resistant to transient drops but slower to respond.
-    - Clicking the FPS label cycles through the different average types and also sub-settings applicable to the current type.
-    - The FPS label is shown in the in the format FPSX_Y: where:
-      - X is the FPS average type number for types 2 through 4.
-      - Y is the sub-mode, either confirmation duration in seconds for FPS average types 2 and 4 or sigma multiplier for type 3.
-    - FPS average types 2 and 4 support adjustable confirmation durations (2–4 seconds). The recommended value is 3.
-      - Higher values improve resilience to FPS spikes but delay responsiveness to sustained changes.
-      - Lower values respond quicker but may allow brief noise into the average.
-    - FPS average type 3 introduces a configurable sigma multiplier (1.00–2.00 in 0.25 increments). The default is 1.50.
-      - Lower values apply stricter spike rejection; higher values are more permissive and responsive.
-    - When changing away from FPS average types 2 through 4, the default confirmation duration and sigma multiplier is restored, as applicable, such that detailed FPS logging shows the default behaviour of these FPS average types when they are not currently selected.
   - Virtual screen coordinates and window position logging on app startup.
   - Verbose compatibility test results in log file.
-
-
 <br/><br/>
