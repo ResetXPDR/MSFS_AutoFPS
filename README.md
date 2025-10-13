@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.6
+# MSFS_AutoFPS v0.4.5.7
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -205,7 +205,7 @@ Some Notes:
 - The "Clean Install" option will recreate new configuration files without having to remove the app first.
 - The "Install Latest Redistributables" option will silently (other than UAC prompts) update your system with the latest Visual C++ Redistributable and .NET 8 runtime versions.
   - Mandatory for initial installations, optional for manual updates, and disabled for quick updates to avoid UAC prompts.
-- For Auto-Start either your FSUIPC7.ini or EXE.xml (MSFS) is modified. The Installer does not create a Backup.
+- For Auto-Start either your FSUIPC7.ini or EXE.xml (MSFS) for the applicable MSFS versions installed is/are modified. The Installer does not create a Backup.
 - If you wish to remove an Auto-Start option from a previous installation, rerun the installer and select Remove Auto-Start and the click Update.
 - The app may be blocked by Windows Security or your AV-Scanner, if so try to unblock or set an exception (for the whole Folder)
 - The Installation-Location is fixed to %appdata%\MSFS_AutoFPS (your Users AppData\Roaming Folder) and can't be changed.
@@ -235,7 +235,10 @@ Some Notes:
     - If that doesn't work, try exiting this app and MSFS completely, start this app then start MSFS.
   - There is an issue with permissions and you may need to run the app as Administrator. 
   - You may have changed MSFS settings in your UserCfg.opt file beyond what is possible to set in the MSFS settings menu. To rectify, go into MSFS settings at the main menu and reset to default (F12) the graphics settings for both PC in MSFS 2020 or General in MSFS 2024 and VR for either, then make all changes to MSFS within the MSFS settings menu.
-  - A new version of MSFS has come out that has a different memory map to what the app expects and the app can't auto adjust to the new memory location for MSFS settings. If so, I will likely be already aware of it and working on a solution, but if you may be one of the first to encounter it (eg. on an MSFS beta) then please raise an issue on github or contribute to an existing one if it has already been raised.
+  - A new version of MSFS may introduce a different memory map than expected, preventing the app from auto‑adjusting to the new settings location.
+    - In this case, the app will attempt to offer an auto‑update to the version most likely to be compatible. This may be a test build if no stable release is available.
+    - Release‑channel users temporarily moved to a test build for compatibility will revert to release‑only updates with the next formal version (manual opt‑in to test updates remains available).
+    - If no suitable auto‑update is found, or if the update does not achieve compatibility, I am likely already aware and working on a solution. However, if you may be among the first to encounter the issue (e.g. on an MSFS beta), please raise a new issue on GitHub or contribute to an existing one.
 - If you get an error message saying "XML Exception: Unexpected XML declaration" or "Exception: 'System.Xml.XMlException' during AutostartExe" when trying to install with the auto-start option for MSFS, it usually means your EXE.xml file has a corrupted data structure. To resolve, copy the content of your EXE.xml into MS Copilot and ask it to check and correct it for you. Paste the fixed structure back into your EXE.xml file, save it, then try reinstalling again.
 - To uninstall
   - Ensure you have completely exited the app (ie. it is not hiding still running in your SysTray),
@@ -325,7 +328,7 @@ Some Notes:
     - `DynSet` and the MSFS target frame rate can be changed at any time, including mid-flight, with changes reflected in the Reduce status display.
     - DynSet enable/disable and increase/decrease buttons are available in test mode, activated by setting the TestMode key in the app's root folder common config file to "true", to allow instant changes to these settings without needing to open MSFS settings. 
     - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
-    - Works best when using an FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS. 
+    - Works best when using MSFS-set FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS, and the FPS Cap automation mode in AutoFPS. 
     - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to 10 FPS lower than the native frame rate equivalent of the AutoFPS target FPS for best results.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
@@ -381,6 +384,15 @@ Some Notes:
         - A warning message will show when an edited profile name matches a VR/non-VR counterpart, indicating it will auto-switch between them; prompts user to rename if unintended.
       - Sim Rate pairing for automatic flight type profile switching:
         - Activates when the sim rate changes based on matching profile names with " xX" suffixes, where x is the new sim rate. eg. IFR 1X and IFR 4X.
+      - Delayed base TLOD reduction until landing gear-down:
+        - Enabled when "DelayLG" appears anywhere in a flight profile name.
+        - Activation requires the aircraft to first ascend above:
+          - **Calculated Alt TLOD Max** (in FPS Sensitivity and Tolerance modes), or
+          - **Alt TLOD Top** (in Auto TLOD and FPS Cap modes).
+        - Once active, a lock symbol 🔒 appears next to the TLOD range in the app status line.
+        - TLOD reduction below Max/Top is then delayed until gear-down, at which point TLOD drops to Min/Base as usual.
+        - If gear is lowered late, this may trigger a one-off, large TLOD drop, potentially causing a stutter as the graphics engine unloads.
+        - TLOD Min/Base+ will still reduce below Alt TLOD Max/Top as normal, but since this is additive to Max/Top, the reduction will be much smaller than usual.
     - Command line argument support for flight type profiles is as follows:
       - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in Expert mode.
       - -user1 to -user4 now open their corresponding user profiles, restricted to Expert mode.
