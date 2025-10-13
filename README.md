@@ -59,7 +59,7 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Target FPS dropdown allows editing inactive mode’s setting.
   - Dropdown background turns orange when target FPS differs from current mode.
   - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset.
-**NFR (Native Frame Rate)**
+- **NFR (Native Frame Rate)**
   - Default non-VR, non-FG graphics mode (formerly “PC”).
   - Automatically selected when MSFS graphics settings do not enable FG.
   - Autodetected by AutoFPS.
