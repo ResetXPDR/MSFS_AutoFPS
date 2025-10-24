@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.7
+# MSFS_AutoFPS v0.4.5.8
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -293,9 +293,10 @@ Some Notes:
     - **Show Updates** displays available updates and download links.
     - **Mandatory Updates Only** displays and installs only mandatory updates.
     - **+ Test** opts users into test version updates.
-      - Test version users will have **+ Test** force enabled and greyed out.
+      - Test version users who opt out of **+ Test** will be offered a one-time automatic rollback to the latest formal release.
       - **Mandatory Updates Only** will be unavailable until the app updates to a release version.
       - Auto‑updates for test versions run a shorter process than release versions, as they assume all core components are already up to date.
+    - **Compatibility Updates** may be auto-offered if the app fails its compatibility check and a matching update is available—potentially a test build if no stable version exists.
     - App startup sequence ensures update check is completed before connecting to MSFS.
   - VRAM+ - detects an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
     - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**.
