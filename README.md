@@ -485,7 +485,7 @@ box to advise this.
         - Config file settings allow adjustment of headroom amount and re‑seek behaviour.
       - The following guidelines should be observed to get the best result from this mode:
         - Set TLOD Base Min and TLOD Top Min values within your FPS cap for worst-case performance during your flight type profile. TLOD Extra may increase TLOD with better performance but won't drop below the set values.
-        - TLOD Base Extra is applied across the entire altitude schedule, potentially allowing very high TLOD Top Max a high multiplier if performance conditions are favorable, so be particularly conservative when setting TLOD Top Min.
+        - TLOD Base Extra is applied across the entire altitude schedule, potentially allowing very high TLOD Top Max at high multipliers if performance conditions are favourable, so be particularly conservative when setting TLOD Top Min.
         - When on the ground and stopped:
            - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
