@@ -449,7 +449,7 @@ Some Notes:
     - FPS Tolerance - larger changes less often.
       - Determines how much variance from your target FPS must occur before the app will adjust MSFS settings to achieve the target FPS and what nominal magnitude those changes will be.
       - The lower the setting, the more reactive the app will be, the more MSFS settings changes will occur and the changes will be smaller. (1% - 20% allowable)
-    - Auto TLOD - functions similar to Auto OLOD by using an altitude schedule and is the closest mode to how DynamicLOD_ResetEdition behaves.
+    - Auto TLOD – operates like Auto OLOD by using an altitude‑based schedule, and is the mode most closely aligned with DynamicLOD_ResetEdition behaviour.
       - TLOD will adjust based on an altitude band with a base and top level and with TLOD values defined for each of these altitudes.
       - The app will set TLOD Base at or below the Alt TLOD Base (AGL), set the TLOD Top at or above  (AGL) and interpolate in between.
       - The nominal LOD Step Size can be set to allow users experiencing stuttering issues to try different LOD step sizes to help resolve the issue. The default value is 5. (1 - 20 allowable)
