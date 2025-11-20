@@ -387,9 +387,7 @@ Some Notes:
         - Activates when the sim rate changes based on matching profile names with " xX" suffixes, where x is the new sim rate. eg. IFR 1X and IFR 4X.
       - Delayed base TLOD reduction until landing gear-down:
         - Enabled when "DelayLG" appears anywhere in a flight profile name.
-        - Activation requires the aircraft to first ascend above:
-          - **Calculated Alt TLOD Max** (in FPS Sensitivity and Tolerance modes), or
-          - **Alt TLOD Top** (in Auto TLOD and FPS Cap modes).
+        - Activation requires the aircraft to first ascend above Alt TLOD Top.
         - Once active, a lock symbol 🔒 appears next to the TLOD range in the app status line.
         - TLOD reduction below Max/Top is then delayed until gear-down, at which point TLOD drops to Min/Base as usual.
         - If gear is lowered late, this may trigger a one-off, large TLOD drop, potentially causing a stutter as the graphics engine unloads.
