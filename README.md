@@ -353,7 +353,7 @@ Some Notes:
       - Particularly useful for VR users who have previously had to be in VR and remove their headset to change this setting.
     - If using MSFS FG, the target FPS you set is your desired FG Active FPS, not the FG Inactive FPS you see when this app has the focus instead of MSFS. 
     - If using an FPS cap, or Vsync for the same purpose, it is strongly recommended you use the FPS Cap automation method, available in Expert mode, with an FPS target matching your FPS cap and works well in such instances.
-    - If using such an FPS cap with either FPS Sensitivity or Tolerance automation methods you will need to set your target FPS to be at least 5% lower than that cap to allow the automation logic to function correctly. This potentially introduces screen tearing, or breaks motion reprojection in VR, hence why Auto TLOD is preferred.
+    - If using such an FPS cap with either FPS Sensitivity or Tolerance automation methods you will need to set your target FPS to be at least 5% lower than that cap to allow the automation logic to function correctly. This potentially introduces screen tearing, or breaks motion reprojection in VR, hence why FPS Cap mode is preferred.
   - Auto Target FPS
     - When checked, a target FPS will automatically be calculated, following any initial FPS settling, when stationary on the ground or any time you are in the air.
     - Automatically recalulated if performance conditions are too low for the calculated target FPS, on the ground after arriving at a new destination, if you change graphics mode, press the Reset button or if you uncheck then check the option again for a quick recalibration.
@@ -449,44 +449,45 @@ Some Notes:
     - FPS Tolerance - larger changes less often.
       - Determines how much variance from your target FPS must occur before the app will adjust MSFS settings to achieve the target FPS and what nominal magnitude those changes will be.
       - The lower the setting, the more reactive the app will be, the more MSFS settings changes will occur and the changes will be smaller. (1% - 20% allowable)
-    - Auto TLOD - functions similar to Auto OLOD by using an altitude schedule.
+    - Auto TLOD - functions similar to Auto OLOD by using an altitude schedule and is the closest mode to how DynamicLOD_ResetEdition behaves.
       - TLOD will adjust based on an altitude band with a base and top level and with TLOD values defined for each of these altitudes.
       - The app will set TLOD Base at or below the Alt TLOD Base (AGL), set the TLOD Top at or above Alt TLOD Top (AGL) and interpolate in between.
       - The nominal LOD Step Size can be set to allow users experiencing stuttering issues to try different LOD step sizes to help resolve the issue. The default value is 5. (1 - 20 allowable)
       - This method completely ignores FPS hence all FPS-related settings are removed from the UI.
-      - TLOD Base Extra - additional TLOD with favourable performance conditions.
-        - When enabled, set the target FPS to your FPS cap if you use one, or slightly below your usual FPS if not, for the logic to function properly.
+box to advise this.
+    - FPS Cap - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
+      - TLOD Extra - additional TLOD with favourable performance conditions.
         - Applicable to FPS Cap mode in Expert mode and Non-Expert mode when an FPS cap is auto-detected.
-        - On the ground and below Alt TLOD Top:
-          - TLOD Base - checked, only available in FPS Cap mode, fixes total TLOD to TLOD Base.
-          - Otherwise, in all other applicable modes, allows total TLOD up to 2 times TLOD Base.
-        - Above Alt TLOD Top allows total TLOD up to 2 times TLOD Top.
-        - TLOD Base Extra seek process will automatically start:
+        - When enabled, set the target FPS to your FPS cap if you use one, or slightly below your usual FPS if not, for the logic to function properly.
+        - TLOD Base Extra
+          - When enabled, allows TLOD Extra **below** Alt TLOD Top.
+          - Multiplier configurable between 1.5 and 4 (default 2) and auto-limited such that Base Min + Extra <= Top Max, which includes Top Extra.
+        - TLOD Top Extra
+          - Force‑enabled to ensure TLOD/altitude logic functions correctly in this mode.
+          - Allows TLOD Extra **above** Alt TLOD Top.
+          - Multiplier configurable between 1.5 and 4 (default 2) and auto-limited such that Top Max is capped at SimMaxLOD (default 1000).
+        - TLOD Extra seek process will automatically start:
           - When commencing a flight, irrespective of aircraft position, and at the end when on the ground and stopped.
           - When Climbing through Alt TLOD Top.
-          - Periodically, every 5 minutes nominally above Alt TLOD Top, if not already at 2 times TLOD Top.
-        - The seek process can be restarted manually via the Reset button if flight conditions render the original TLOD Base invalid.
+          - Periodically, every minute above Alt TLOD Top, if not already at TLOD Top Max.
+        - The seek process can be restarted manually via the Reset button if changed flight conditions render the original TLOD Base invalid.
         - When seeking there will be:
-          - Large steps of the lesser of TLOD Base and 50 on the ground, prioritising timeliness of completion.
+          - Large steps of up to TLOD Base on the ground, prioritising timeliness of completion.
           - Small steps of the TLOD Step Size in the air, prioritising stutter minimisation.
-          - Intentional overshoot then reduction by a headroom amount to create headroom.
+          - Intentional overshoot then reduction by a headroom amount (default 25) to create headroom.
         - FPS cap breaches trigger an immediate reduction of the headroom amount, proportional to the magnitude of the FPS breach in non-seek occurrences.
         - Avoid quickly panning external views, especially during initial scenery loading, to prevent temporary FPS drops and unnecessary TLOD reductions.   
         - If FPS temporarily drops below the target during takeoff and TLOD decreases, it will progressively restore once conditions improve after passing Alt TLOD Top.
         - The calculated TLOD Base Extra will be applied as an offset that increases the entire TLOD altitude schedule by that amount.
         - If VRAM+ is active and VRAM limiting applies, TLOD Base Extra will be frozen or fully reset if the limitation is severe enough.
-        - Config file settings can be changed for headroom amount, re-seek enabled, re-seek interval (seconds), and TLOD Base multiplier limits for IFR and VFR.
-box to advise this.
-    - FPS Cap - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
-      - TLOD Base Extra and Mtns are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
-      - A TLOD Base Extra checkbox is provided in Expert mode which excludes TLOD Base Extra occurring below Alt TLOD Top when unchecked.
+        - Config file settings can be changed for headroom amount and re-seek enabled.
       - The following guidelines should be observed to get the best result from this mode:
-        - Set TLOD Base and TLOD Top values within your FPS cap for worst-case performance during your flight type profile. TLOD Base Extra may increase with better performance but won't drop below the set values.
-        - TLOD Base Extra is applied across the entire altitude schedule, potentially allowing a doubling of TLOD Top if performance conditions are favorable, so be particularly conservative when setting TLOD Top.
-        - On the ground and stopped with TLOD Base Extra checked:
+        - Set TLOD Base Min and TLOD Top Min values within your FPS cap for worst-case performance during your flight type profile. TLOD Extra may increase TLOD with better performance but won't drop below the set values.
+        - TLOD Base Extra is applied across the entire altitude schedule, potentially allowing very high TLOD Top Max a high multiplier if performance conditions are favorable, so be particularly conservative when setting TLOD Top Min.
+        - When on the ground and stopped:
            - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
-           - If stuttering persists, either uncheck TLOD Base - or use AutoTLOD for the lowest possible TLOD on the ground.
+           - If stuttering persists, either uncheck TLOD Base Extra, use a lower multiplier, or use AutoTLOD for the lowest possible TLOD on the ground.
   - LOS-C Line of Sight Correction:
     - Adjusts TLOD between Alt TLOD Base and Top such that the viewing distance grows quickly at lower altitudes but more slowly at higher altitudes.
     - Provides a more realistic experience of horizon expansion as altitude increases, rather than the linear increase when disabled, following a square root curve.
