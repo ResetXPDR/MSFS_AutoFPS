@@ -405,7 +405,6 @@ Some Notes:
         - LOD Step - 5
         - TLOD Base Min - VFR 50% of your current MSFS TLOD setting, IFR 25%
         - TLOD Top Min - VFR 150% of your current MSFS TLOD setting, IFR 100%
-        - Alt TLOD Top - VFR 2350 ft, IFR 3333 ft
         - TLOD Base Extra - enabled with an x2 multiplier
         - TLOD Top Extra - enabled with an x2 multiplier
         - Mtns - disabled
@@ -421,6 +420,7 @@ Some Notes:
         - Night÷2 - enabled
         - VFR or IFR flight type - user selectable
         - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
+        - Alt TLOD Top - internally calculated to achieve a maximum recommended descent rate of 1350 fpm for VFR and 2000 fpm for IFR.
         - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
         - VRAM+ - enabled,
           - Only functional if GPU-Z is running.
