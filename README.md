@@ -22,7 +22,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
   - MSFS 2024 only 
     - Auto settings reduction option, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
-    - Auto cloud increase option with TLOD Min/Base + enabled and sufficient performance margin exists,
+    - Auto cloud increase option with TLOD Base Extra enabled and sufficient performance margin exists,
     - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
 - Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, OFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
@@ -337,8 +337,8 @@ Some Notes:
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
       - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
-      - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Min + transitions and VR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
-      - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Min + has been activated and that a higher TLOD Min should be expected. Similarly, a + next to ATLOD or FPSCap indicates that TLOD Base Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
+      - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
+      - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Base Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
@@ -359,14 +359,14 @@ Some Notes:
     - Automatically recalulated if performance conditions are too low for the calculated target FPS, on the ground after arriving at a new destination, if you change graphics mode, press the Reset button or if you uncheck then check the option again for a quick recalibration.
     - With IFR, or any of the user profiles in Expert mode, it will range from 95% of your current average FPS on the ground to 85% at or above 3000 ft, the latter being lower to give head room for Max TLOD.
     - With VFR it will be 5% less than each of the IFR percentages respectively to better suit the greater performance expectation with VFR flights.
-    - Auto settings reduction and TLOD Min + will be automatically disabled, and the options greyed out if in Expert mode, as these features are mutually exclusive when Auto Target FPS is active.
+    - Auto settings reduction and TLOD Base Extra will be automatically disabled, and the options greyed out if in Expert mode, as these features are mutually exclusive when Auto Target FPS is active.
   - On Top
     - Allows the app to overlay your MSFS session if desired, with MSFS having the focus.
     - Mainly useful for adjusting settings and seeing the outcome over the top of your flight as it progresses.
     - Should also satisfy single monitor users utilising the FG capability of MSFS as they now see the true FG FPS the app is reading when MSFS has the focus.
   - Reset button
     - Resets TLOD, Clouds, Auto Target FPS and graphics mode detection to initial state.
-    - Useful to reinitialise and recommence the seek process for TLOD Min/Top + should conditions change significantly from what they were on initial start-up.
+    - Useful to reinitialise and recommence the seek process for TLOD Extra should conditions change significantly from what they were on initial start-up.
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
   - Flight type - VFR or IFR (any mode), and four additional user profiles (Expert mode)
     - Non-Expert mode:
@@ -393,7 +393,7 @@ Some Notes:
         - Once active, a lock symbol 🔒 appears next to the TLOD range in the app status line.
         - TLOD reduction below Max/Top is then delayed until gear-down, at which point TLOD drops to Min/Base as usual.
         - If gear is lowered late, this may trigger a one-off, large TLOD drop, potentially causing a stutter as the graphics engine unloads.
-        - TLOD Min/Base+ will still reduce below Alt TLOD Max/Top as normal, but since this is additive to Max/Top, the reduction will be much smaller than usual.
+        - TLOD Base Extra will still reduce below Alt TLOD Top Min/Max as normal, but since this is additive to Top Min/Max, the reduction will be much smaller than usual.
     - Command line argument support for flight type profiles is as follows:
       - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in Expert mode.
       - -user1 to -user4 now open their corresponding user profiles, restricted to Expert mode.
@@ -405,19 +405,18 @@ Some Notes:
       - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
         - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
         - LOD Step - 5
-        - TLOD Base - VFR 50% of your current MSFS TLOD setting, IFR 25%
-        - TLOD Top - VFR 150% of your current MSFS TLOD setting, IFR 100%
+        - TLOD Base Min - VFR 50% of your current MSFS TLOD setting, IFR 25%
+        - TLOD Top Min - VFR 150% of your current MSFS TLOD setting, IFR 100%
         - TLOD Base Extra - enabled
-        - TLOD Base - - disabled
+        - TLOD Top Extra - enabled
         - TLOD Top + - disabled
-        - TLOD Top - - enabled
       - Otherwise, FPS Sensitivity will be used with the following settings:
-        - Auto Target FPS - user selectable. Enabling automatically disables TLOD Min + due to automation control ambiguity
+        - Auto Target FPS - user selectable. Enabling automatically disables Extra due to automation control ambiguity
         - FPS Sensitivity - 5%
         - Avg Descent Rate - VFR 1000 fpm, IFR 2000 fpm
-        - TLOD Minimum - VFR 100% of your current MSFS TLOD setting, IFR 50%
-        - TLOD Maximum - VFR 300% of your current MSFS TLOD setting, IFR 200%
-        - TLOD Min + - enabled, unless Auto Target FPS is enabled then disabled
+        - TLOD Base Min - VFR 100% of your current MSFS TLOD setting, IFR 50%
+        - TLOD Top Max - VFR 300% of your current MSFS TLOD setting, IFR 200%
+        - TLOD Base Extra - enabled, unless Auto Target FPS is enabled then disabled
         - TLOD Max + - disabled
         - TLOD Max - - enabled
       - Common to both automation methods:
@@ -434,7 +433,7 @@ Some Notes:
             - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
             - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
             - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
-            - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Minimum and TLOD Maximum or + 50 over TLOD Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
+            - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Base Min and TLOD Top Max or + 50 over TLOD Base Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
         - MSFS 2024 only
           - Auto Settings Reduction - enabled with Max Levels: 2, Floor: Lowest, and Recovery: Ground. Reduction Settings Suite:
             - IFR: Full reduction suite minus clouds (to minimise impact on user experience)
@@ -497,21 +496,21 @@ Some Notes:
     - Adjusts TLOD between Alt TLOD Base and Top such that the viewing distance grows quickly at lower altitudes but more slowly at higher altitudes.
     - Provides a more realistic experience of horizon expansion as altitude increases, rather than the linear increase when disabled, following a square root curve.
     - Disabled by default, as the larger TLOD changes it makes at lower altitudes may cause FPS drops and stutters on some systems.
-  - TLOD Min - Sets the minimum TLOD the automation algorithm will use. (10 - TLOD Max-10 allowable)
-  - TLOD Min + - additional TLOD Min with favourable performance conditions.
+  - TLOD Base Min - Sets the minimum TLOD the automation algorithm will use at or below the Base altitude. (10 - TLOD Max-10 allowable)
+  - TLOD Base Extra - additional TLOD Base with favourable performance conditions.
     - Requires at least 15% FPS headroom above target FPS to work at all. If you use an FPS cap, set your target FPS to at least 15% below it, preferably more.
-    - When enabled, the TLOD Min + seek process will automatically start when commencing a flight, regardless of your aircraft's position, and at the conclusion of a flight when on the ground and stopped.
-    - This seeking process can be manually restarted by pressing the Reset button, should flight conditions change such that the original TLOD Min + is no longer valid.
-    - When seeking on the ground, TLOD Min + will progressively increase, in larger steps at first, until a higher TLOD Min with less than 15% FPS headroom is available or a maximum of nominally 2 times TLOD Min, changeable in the config file.
-    - On climb out, TLOD Min + will remain set until your aircraft passes the calculated altitude threshold for the app priority mode to transition from TLOD to FPS priority.
-    - While in FPS priority mode, TLOD Min + will calculate to be 50% (IFR or user profiles) or 25% (VFR) of the lower of either whatever TLOD you are currently getting or TLOD Max without TLOD Mtn Amt, but no lower than TLOD Min.
-    - On descent through the calculated TLOD priority mode transition altitude, TLOD Min + will lock until landed to give the app time to reduce TLOD to Min at a moderate rate.
-    - If at any time conditions deteriorate after TLOD Min + is set, there is an automatic 20% reduction of TLOD Min + in order to maintain target FPS. 
-    - Avoid rapidly changing views or panning your external view too quickly, especially initially as un-cached scenery loads in, as you will induce temporary FPS drops that may trigger an unnecessary TLOD Min + reduction.    
+    - When enabled, the TLOD Base Extra seek process will automatically start when commencing a flight, regardless of your aircraft's position, and at the conclusion of a flight when on the ground and stopped.
+    - This seeking process can be manually restarted by pressing the Reset button, should flight conditions change such that the original TLOD Base Extra is no longer valid.
+    - When seeking on the ground, TLOD Base Extra will progressively increase, in larger steps at first, until a higher TLOD Base Min with less than 15% FPS headroom is available or a maximum of nominally 2 times TLOD Base Min, changeable via multiplier selection.
+    - On climb out, TLOD Base Extra will remain set until your aircraft passes the calculated altitude threshold for the app priority mode to transition from TLOD to FPS priority.
+    - While in FPS priority mode, TLOD Base Extra will calculate to be 50% (IFR or user profiles) or 25% (VFR) of the lower of either whatever TLOD you are currently getting or TLOD Max without TLOD Mtn Amt, but no lower than TLOD Base Min.
+    - On descent through the calculated TLOD priority mode transition altitude, TLOD Base Extra will lock until landed to give the app time to reduce TLOD to Min at a moderate rate.
+    - If at any time conditions deteriorate after TLOD Base Extra is set, there is an automatic 20% reduction of TLOD Base Extra in order to maintain target FPS. 
+    - Avoid rapidly changing views or panning your external view too quickly, especially initially as un-cached scenery loads in, as you will induce temporary FPS drops that may trigger an unnecessary TLOD Base Extra reduction.    
     - Cannot be enabled at the same time as Auto Target FPS due to automation control ambiguity. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
-    - If VRAM+ is active and VRAM limiting is in effect, TLOD Min + seeking will be cancelled, and potentially completely reset if severe enough.
+    - If VRAM+ is active and VRAM limiting is in effect, TLOD Base Extra seeking will be cancelled, and potentially completely reset if severe enough.
   - TLOD Base Extra - Unchecking excludes TLOD Base Extra occurring below Alt TLOD Top in FPS Cap mode only.
-  - TLOD Max - Sets the maximum TLOD the automation algorithm will use. (TLOD Min+10 - 1000 allowable)
+  - TLOD Max - Sets the maximum TLOD the automation algorithm will use. (TLOD Base Min+10 - 1000 allowable)
   - TLOD Max + - additional TLOD Max in high elevation areas. 
     - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (100ft - 100000ft allowable) by the TLOD Mtn Amt amount (10 - 1000 allowable), progressively increasing by the TLOD step size per second until completely activated.
     - If terrain drops below Mtn Alt Min, TLOD Max + will remain fixed for 5 minutes then progressively reduce by the TLOD step size per second until completely deactivated.
@@ -519,12 +518,10 @@ Some Notes:
     - Halves TLOD Max/Top at night to reduce system workload by not drawing scenery out to distances that can't be seen in the dark anyway.
     - Works with all automation methods: FPS Sensitivity, FPS Tolerance and Auto TLOD.
     - Defaults to enabled in Non-Expert mode. Enabled in Expert mode by checking the - box to the right of the TLOD Max/Top textbox.
-    - When your flight transitions from day to night time, based on your location and the local time, TLOD Max/Top will progressively reduce to half its normal value, including the progressive removal of any TLOD Min/Base + and TLOD Max/Top + in use.
-    - When your flight transitions from night to day time, based on your location and the local time, TLOD Max/Top will first progressively increase to its normal value then, providing you are either stopped on the ground or are in the air above Alt TLOD Min/Base, will activate the seeking process if TLOD Min/Base + is enabled and reactivate TLOD Max/Top + if enabled.
+    - When your flight transitions from day to night time, based on your location and the local time, TLOD Max/Top will progressively reduce to half its normal value, including the progressive removal of any TLOD Base and Top Extra in use.
+    - When your flight transitions from night to day time, based on your location and the local time, TLOD Max/Top will first progressively increase to its normal value then, providing you are either stopped on the ground or are in the air above Alt TLOD Base Min, will activate the seeking process if TLOD Base Min Extra is enabled and reactivate TLOD Top + if enabled.
     - The status line will show either Day or Night when activated and Δ while transitioning between them.
-  - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Min. (100ft - 100000ft allowable)
-  - Avg Descent Rate- Used in combination with FPS sensitivity to determine the altitude band in which TLOD will be interpolated between TLOD Min at the Alt TLOD base starting point and the lower of TLOD Max and the maximum TLOD your system can achieve while achieving at least your desired FPS target at a calculated top altitude. (200fpm - 10000fpm allowable)
-    - This band ensures that, if you descend at your set Avg Descent Rate or less, that the app can decrement TLOD from TLOD Max to TLOD Min by the Alt TLOD Base without exceeding the LOD Step rate associated with the FPS sensitivity level you have set.
+  - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (100ft - 100000ft allowable)
   - Auto OLOD
     - When enabled, four user definable parameters relating to this feature will be revealed on the UI.
     - Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
@@ -540,11 +537,11 @@ Some Notes:
           - Reduction occurs only when FPS falls below target by at least the margin specified by the current TLOD automation method.
         - All flight type profiles will use the same cloud reduction method.
       - TLOD (FPS Sensitivity and FPS Tolerance TLOD Automation Methods)
-        - Decreases when TLOD has already auto reduced to TLOD Min and FPS is still below target FPS by more than the FPS tolerance.
-        - Cloud Recovery TLOD with optional + (resultant TLOD must fall within TLOD Min+5 and TLOD Max-5)
+        - Decreases when TLOD has already auto reduced to TLOD Base Min and FPS is still below target FPS by more than the FPS tolerance.
+        - Cloud Recovery TLOD with optional + (resultant TLOD must fall within TLOD Base Min+5 and TLOD Max-5)
           - The TLOD level required to cancel an active cloud quality reduction state and restore cloud quality back to its initial higher quality level.
-          - Ideally set to 50 TLOD or more above TLOD Min to provide a TLOD buffer to minimise the chance that cloud quality will constantly change down and up.
-          - When + is checked, Cloud Recovery TLOD becomes relative to TLOD Min instead of absolute.
+          - Ideally set to 50 TLOD or more above TLOD Base Min to provide a TLOD buffer to minimise the chance that cloud quality will constantly change down and up.
+          - When + is checked, Cloud Recovery TLOD becomes relative to TLOD Base Min instead of absolute.
       - GPU Load (All TLOD Automation Methods)
         - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running for this method to work. If GPU-Z is not running, the user will be alerted to start it in on the app status line in the General section.
         - Decreases when the GPU load, as measured by the GPU-Z companion app, is higher than the user-defined Decrease GPU Load percentage. (50% - 100% allowable)
@@ -564,13 +561,13 @@ Some Notes:
         - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce are normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
         - OLOD reductions are proportional to TLOD reductions.
         - AutoFPS-controlled LOD reductions are replaced with MSFS dynamic settings control when enabled. Resulting reductions are internal to MSFS and not reflected in external LOD values.
-        - Settings reduction activation cancels the TLOD Min/Base + seek process if active.
+        - Settings reduction activation cancels the TLOD Extra seek process if active.
       - Automatically restores settings if the current FPS rises above the target FPS by the default tolerance or if the current FPS matches the target FPS and the TLOD has automatically increased by an acceptable margin.
         - Settings recovery will commence recovery immediately in any mode if the current FPS is above the target FPS by the FPS tolerance amount.
         - In FPS Cap mode, the reseek process will be triggered at least 30 seconds after the last time settings reduction level was reduced and the target FPS is being achieved once again.
         - Displacement Maps will not restore to enabled until above 100 ft AGL, as it is known to cause texture corruption at low altitudes.
-      - TLOD Min/Base and OLOD will be progressively reduced at the user-defined LOD step rate by up to 50%.
-        - TLOD Top gets reduced by the same proportional amount that TLOD Base gets reduced for FPS Cap mode.
+      - TLOD Base Min and OLOD will be progressively reduced at the user-defined LOD step rate by up to 50%.
+        - TLOD Top Min gets reduced by the same proportional amount that TLOD Base gets reduced for FPS Cap mode.
       - Max Levels setting determines how many levels the settings other than LODs will be reduced by in subsequent reduction cycles. 
       - Floor setting determines the minimum setting quality level that settings will be reduced to, including off if an allowable state for a setting.
       - Recover setting determines at which altitude (ground, Alt TLOD Base or Alt TLOD Top / equivalent) settings reduction recovery can occur as enabling it at lower altitudes may not be acceptable for some users. The default is Alt TLOD Base, being the middle option.
@@ -593,7 +590,7 @@ Some Notes:
         - Each VRAM+ recovery will increase the recovery altitude setting by one, up to Alt TLOD Top, to reduce instances of VRAM+ cycling too often.
       - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
     - Auto Increase Clouds
-      - Auto increase cloud quality option with TLOD Min/Base + enabled.
+      - Auto increase cloud quality option with TLOD Base Extra enabled.
       - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process. 
       - Removed immediately if the FPS cap is breached.
 - TestMode - Advanced testing and logging features:
