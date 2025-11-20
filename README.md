@@ -338,7 +338,7 @@ Some Notes:
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
       - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
-      - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Base Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
+      - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
@@ -407,7 +407,7 @@ Some Notes:
         - TLOD Top Min - VFR 150% of your current MSFS TLOD setting, IFR 100%
         - TLOD Base Extra - enabled
         - TLOD Top Extra - enabled
-        - TLOD Top + - disabled
+        - Mtns - disabled
       - Otherwise, FPS Sensitivity will be used with the following settings:
         - Auto Target FPS - user selectable. Enabling automatically disables Extra due to automation control ambiguity
         - FPS Sensitivity - 5%
@@ -487,7 +487,7 @@ box to advise this.
            - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
            - If stuttering persists, either uncheck TLOD Base - or use AutoTLOD for the lowest possible TLOD on the ground.
-  - Line of Sight Correction ⌒:
+  - LOS-C Line of Sight Correction:
     - Adjusts TLOD between Alt TLOD Base and Top such that the viewing distance grows quickly at lower altitudes but more slowly at higher altitudes.
     - Provides a more realistic experience of horizon expansion as altitude increases, rather than the linear increase when disabled, following a square root curve.
     - Disabled by default, as the larger TLOD changes it makes at lower altitudes may cause FPS drops and stutters on some systems.
@@ -514,7 +514,7 @@ box to advise this.
     - Works with all automation methods: FPS Sensitivity, FPS Tolerance and Auto TLOD.
     - Defaults to enabled in Non-Expert mode. Enabled in Expert mode by checking the - box to the right of the TLOD Max/Top textbox.
     - When your flight transitions from day to night time, based on your location and the local time, TLOD Max/Top will progressively reduce to half its normal value, including the progressive removal of any TLOD Base and Top Extra in use.
-    - When your flight transitions from night to day time, based on your location and the local time, TLOD Max/Top will first progressively increase to its normal value then, providing you are either stopped on the ground or are in the air above Alt TLOD Base Min, will activate the seeking process if TLOD Base Min Extra is enabled and reactivate TLOD Top + if enabled.
+    - When your flight transitions from night to day time, based on your location and the local time, TLOD Max/Top will first progressively increase to its normal value then, providing you are either stopped on the ground or are in the air above Alt TLOD Base Min, will activate the seeking process if TLOD Base Min Extra is enabled and reactivate Mtns if enabled.
     - The status line will show either Day or Night when activated and Δ while transitioning between them.
   - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (100ft - 100000ft allowable)
   - Auto OLOD
