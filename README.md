@@ -495,7 +495,7 @@ box to advise this.
     - Provides a more realistic experience of horizon expansion as altitude increases, rather than the linear increase when disabled, following a square root curve.
     - Disabled by default, as the larger TLOD changes it makes at lower altitudes may cause FPS drops and stutters on some systems.
   - TLOD Base Min - Sets the minimum TLOD the automation algorithm will use at or below the Base altitude. (Range: 10 - TLOD Max-10)
-  - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100000 ft)
+  - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100,000 ft)
   - TLOD Base Extra – additional TLOD Base applied under favourable performance conditions.
     - When enabled, allows TLOD Extra below Alt TLOD Top.
     - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Max.
@@ -533,7 +533,7 @@ box to advise this.
       - Profiles with "VFR" in their name (case‑insensitive) automatically show VFR info.
       - Default fpm constants are stored in the associated MSFS version config file for easier adjustment.
   - Mtns - additional TLOD Max in high elevation areas for all modes except FPS Cap.
-    - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (Range: 100 ft - 100000 ft) by the TLOD Mtn Amt amount (Range: 10 - 1000), progressively increasing by the TLOD step size per second until completely activated.
+    - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (Range: 100 ft - 100,000 ft) by the TLOD Mtn Amt amount (Range: 10 - 1000), progressively increasing by the TLOD step size per second until completely activated.
     - If terrain drops below Mtn Alt Min, Mtns will remain fixed for 5 minutes then progressively reduce by the TLOD step size per second until completely deactivated.
   - Night÷2 - reduced TLOD Max at night
     - Halves TLOD Max/Top at night to reduce system workload by not drawing scenery out to distances that can't be seen in the dark anyway.
