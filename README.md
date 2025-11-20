@@ -405,22 +405,22 @@ Some Notes:
         - LOD Step - 5
         - TLOD Base Min - VFR 50% of your current MSFS TLOD setting, IFR 25%
         - TLOD Top Min - VFR 150% of your current MSFS TLOD setting, IFR 100%
+        - Alt TLOD Top - VFR 2350 ft, IFR 3333 ft
         - TLOD Base Extra - enabled with an x2 multiplier
         - TLOD Top Extra - enabled with an x2 multiplier
         - Mtns - disabled
       - Otherwise, FPS Sensitivity will be used with the following settings:
         - Auto Target FPS - user selectable. Enabling automatically disables Extra due to automation control ambiguity
         - FPS Sensitivity - 5%
-        - Avg Descent Rate - VFR 1000 fpm, IFR 2000 fpm
         - TLOD Base Min - VFR 100% of your current MSFS TLOD setting, IFR 50%
         - TLOD Top Max - VFR 300% of your current MSFS TLOD setting, IFR 200%
+        - Alt TLOD Top - VFR 1000 ft, IFR 2000 ft
         - TLOD Base Extra - enabled with an x2 multiplier, unless Auto Target FPS is enabled then disabled
         - Mtns - disabled
       - Common to both automation methods:
         - Night÷2 - enabled
         - VFR or IFR flight type - user selectable
         - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
-        -  - VFR 3000 ft, IFR 5000 ft
         - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
         - VRAM+ - enabled,
           - Only functional if GPU-Z is running.
