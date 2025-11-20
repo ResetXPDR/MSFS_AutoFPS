@@ -514,13 +514,13 @@ box to advise this.
 - TLOD Top
   - FPS Sensitivity and Tolerance modes:
     - TLOD Top Max – Maximum TLOD the automation algorithm may use. (Range: TLOD Base Min+10 to 1000)
-    - Alt TLOD Top – Altitude (AGL) at or above which TLOD may increase up to TLOD Top Max. (Range: 100 ft to 100,000 ft; must exceed Alt TLOD Base)
+    - Alt TLOD Top – Altitude (AGL) at or above which TLOD may increase up to TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
   - Auto TLOD mode:
     - TLOD Top Max – Fixed maximum TLOD the automation algorithm will use. (Range: TLOD Base Min+10 to 1000)
-    - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be fixed at TLOD Top Max. (Range: 100 ft to 100,000 ft; must exceed Alt TLOD Base)
+    - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be fixed at TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
   - FPS Cap mode:
     - TLOD Top Min – Minimum TLOD the automation algorithm will apply before any TLOD Top Extra. (Range: TLOD Base Min+10 to 1000)
-    - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be at least TLOD Top Min. (Range: 100 ft to 100,000 ft; must exceed Alt TLOD Base)
+    - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be at least TLOD Top Min. (Range: Alt TLOD Base+1 to 100,000 ft)
   - All modes:
     - Default Alt TLOD Top values are reduced in FPS Sensitivity and Tolerance modes to account for free‑ranging TLOD Max.
       - IFR: Base 1000 ft, Top (Sensitivity/Tolerance) 2000 ft, Top (Auto TLOD/FPS Cap) 3333 ft – aligns with recommended max 2000 fpm descent rate.
