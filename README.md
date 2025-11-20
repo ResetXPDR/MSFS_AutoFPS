@@ -511,27 +511,27 @@ box to advise this.
     - Avoid rapid view changes or fast panning, especially initially while scenery loads, as this may trigger unnecessary reductions.
     - Cannot be enabled simultaneously with Auto Target FPS; the most recent selection takes precedence, with a dialog shown.
     - If VRAM+ limiting is active, Base Extra seeking is cancelled and may reset completely if severe.
-- TLOD Top
-  - FPS Sensitivity and Tolerance modes:
-    - TLOD Top Max – Maximum TLOD the automation algorithm may use. (Range: TLOD Base Min+10 to 1000)
-    - Alt TLOD Top – Altitude (AGL) at or above which TLOD may increase up to TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
-  - Auto TLOD mode:
-    - TLOD Top Max – Fixed maximum TLOD the automation algorithm will use. (Range: TLOD Base Min+10 to 1000)
-    - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be fixed at TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
-  - FPS Cap mode:
-    - TLOD Top Min – Minimum TLOD the automation algorithm will apply before any TLOD Top Extra. (Range: TLOD Base Min+10 to 1000)
-    - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be at least TLOD Top Min. (Range: Alt TLOD Base+1 to 100,000 ft)
-  - All modes:
-    - Default Alt TLOD Top values are reduced in FPS Sensitivity and Tolerance modes to account for free‑ranging TLOD Max.
-      - IFR: Base 1000 ft, Top (Sensitivity/Tolerance) 2000 ft, Top (Auto TLOD/FPS Cap) 3333 ft – aligns with recommended max 2000 fpm descent rate.
-      - VFR: Base 100 ft, Top (Sensitivity/Tolerance) 1000 ft, Top (Auto TLOD/FPS Cap) 2350 ft – aligns with recommended max 1350 fpm descent rate.
-    - Default Alt TLOD Top values are now lower in FPS Sensitivity and Tolerance modes to account for free-ranging TLOD Max.
-      - IFR Base: 1000 ft, IFR Top (Sensitivity Tolerance): 2000 ft, IFR Top: 3333 ft for recommended max 2000 fpm descent rate.
-      - VFR Base: 100 ft, VFR Top (Sensitivity Tolerance): 1000 ft, VFR Top: 2350 ft for recommended max 1350 fpm descent rate.
-    - TLOD Top Min/Max Tooltip – Displays recommended maximum average descent rate for current settings.
-    - Alt TLOD Top Tooltip – Displays altitude to set for recommended IFR/VFR descent rates.
-      - Profiles with "VFR" in their name (case‑insensitive) automatically show VFR info.
-      - Default fpm constants are stored in the associated MSFS version config file for easier adjustment.
+  - TLOD Top
+    - FPS Sensitivity and Tolerance modes:
+      - TLOD Top Max – Maximum TLOD the automation algorithm may use. (Range: TLOD Base Min+10 to 1000)
+      - Alt TLOD Top – Altitude (AGL) at or above which TLOD may increase up to TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
+    - Auto TLOD mode:
+      - TLOD Top Max – Fixed maximum TLOD the automation algorithm will use. (Range: TLOD Base Min+10 to 1000)
+      - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be fixed at TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
+    - FPS Cap mode:
+      - TLOD Top Min – Minimum TLOD the automation algorithm will apply before any TLOD Top Extra. (Range: TLOD Base Min+10 to 1000)
+      - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be at least TLOD Top Min. (Range: Alt TLOD Base+1 to 100,000 ft)
+    - All modes:
+      - Default Alt TLOD Top values are reduced in FPS Sensitivity and Tolerance modes to account for free‑ranging TLOD Max.
+        - IFR: Base 1000 ft, Top (Sensitivity/Tolerance) 2000 ft, Top (Auto TLOD/FPS Cap) 3333 ft – aligns with recommended max 2000 fpm descent rate.
+        - VFR: Base 100 ft, Top (Sensitivity/Tolerance) 1000 ft, Top (Auto TLOD/FPS Cap) 2350 ft – aligns with recommended max 1350 fpm descent rate.
+      - Default Alt TLOD Top values are now lower in FPS Sensitivity and Tolerance modes to account for free-ranging TLOD Max.
+        - IFR Base: 1000 ft, IFR Top (Sensitivity Tolerance): 2000 ft, IFR Top: 3333 ft for recommended max 2000 fpm descent rate.
+        - VFR Base: 100 ft, VFR Top (Sensitivity Tolerance): 1000 ft, VFR Top: 2350 ft for recommended max 1350 fpm descent rate.
+      - TLOD Top Min/Max Tooltip – Displays recommended maximum average descent rate for current settings.
+      - Alt TLOD Top Tooltip – Displays altitude to set for recommended IFR/VFR descent rates.
+        - Profiles with "VFR" in their name (case‑insensitive) automatically show VFR info.
+        - Default fpm constants are stored in the associated MSFS version config file for easier adjustment.
   - Mtns - additional TLOD Max in high elevation areas for all modes except FPS Cap.
     - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (Range: 100 ft - 100,000 ft) by the TLOD Mtn Amt amount (Range: 10 - 1000), progressively increasing by the TLOD step size per second until completely activated.
     - If terrain drops below Mtn Alt Min, Mtns will remain fixed for 5 minutes then progressively reduce by the TLOD step size per second until completely deactivated.
