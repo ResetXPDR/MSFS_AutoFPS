@@ -415,8 +415,8 @@ Some Notes:
         - TLOD Base Min - VFR 100% of your current MSFS TLOD setting, IFR 50%
         - TLOD Top Max - VFR 300% of your current MSFS TLOD setting, IFR 200%
         - TLOD Base Extra - enabled, unless Auto Target FPS is enabled then disabled
-        - TLOD Max + - disabled
-        - TLOD Max - - enabled
+        - Mtns - disabled
+        - Night÷2 - enabled
       - Common to both automation methods:
         - VFR or IFR flight type - user selectable
         - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
@@ -474,14 +474,11 @@ Some Notes:
         - Avoid quickly panning external views, especially during initial scenery loading, to prevent temporary FPS drops and unnecessary TLOD reductions.   
         - If FPS temporarily drops below the target during takeoff and TLOD decreases, it will progressively restore once conditions improve after passing Alt TLOD Top.
         - The calculated TLOD Base Extra will be applied as an offset that increases the entire TLOD altitude schedule by that amount.
-        - TLOD Top + cannot be enabled simultaneously due to conflicting controls. The most recent selection will activate, disabling the other, with a dialog box notification.
         - If VRAM+ is active and VRAM limiting applies, TLOD Base Extra will be frozen or fully reset if the limitation is severe enough.
         - Config file settings can be changed for headroom amount, re-seek enabled, re-seek interval (seconds), and TLOD Base multiplier limits for IFR and VFR.
-      - TLOD Top + - additional TLOD Top in high elevation areas.
-        - Operates the same as TLOD Max + except that it cannot be enabled with TLOD Base Extra due to conflicting control over TLOD Top. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
-      - TLOD Top - reduced TLOD Top at night. Operates the same as TLOD Max -.
+box to advise this.
     - FPS Cap - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
-      - TLOD Base Extra and TLOD Top + are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
+      - TLOD Base Extra and Mtns are automatically enabled and disabled respectively, and their associated checkboxes are removed from the UI.
       - A TLOD Base Extra checkbox is provided in Expert mode which excludes TLOD Base Extra occurring below Alt TLOD Top when unchecked.
       - The following guidelines should be observed to get the best result from this mode:
         - Set TLOD Base and TLOD Top values within your FPS cap for worst-case performance during your flight type profile. TLOD Base Extra may increase with better performance but won't drop below the set values.
@@ -508,11 +505,11 @@ Some Notes:
     - Cannot be enabled at the same time as Auto Target FPS due to automation control ambiguity. Selecting both will result in the most recent selection being enabled and the other disabled, with a dialog box to advise this.
     - If VRAM+ is active and VRAM limiting is in effect, TLOD Base Extra seeking will be cancelled, and potentially completely reset if severe enough.
   - TLOD Base Extra - Unchecking excludes TLOD Base Extra occurring below Alt TLOD Top in FPS Cap mode only.
-  - TLOD Max - Sets the maximum TLOD the automation algorithm will use. (TLOD Base Min+10 - 1000 allowable)
-  - TLOD Max + - additional TLOD Max in high elevation areas. 
+  - TLOD Top Min - Sets the minimum TLOD the automation algorithm will use before and TLOD Top Extra. (TLOD Base Min+10 - 1000 allowable)
+  - Mtns - additional TLOD Max in high elevation areas for all modes except FPS Cap.
     - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (100ft - 100000ft allowable) by the TLOD Mtn Amt amount (10 - 1000 allowable), progressively increasing by the TLOD step size per second until completely activated.
-    - If terrain drops below Mtn Alt Min, TLOD Max + will remain fixed for 5 minutes then progressively reduce by the TLOD step size per second until completely deactivated.
-  - TLOD Max - - reduced TLOD Max at night
+    - If terrain drops below Mtn Alt Min, Mtns will remain fixed for 5 minutes then progressively reduce by the TLOD step size per second until completely deactivated.
+  - Night÷2 - reduced TLOD Max at night
     - Halves TLOD Max/Top at night to reduce system workload by not drawing scenery out to distances that can't be seen in the dark anyway.
     - Works with all automation methods: FPS Sensitivity, FPS Tolerance and Auto TLOD.
     - Defaults to enabled in Non-Expert mode. Enabled in Expert mode by checking the - box to the right of the TLOD Max/Top textbox.
