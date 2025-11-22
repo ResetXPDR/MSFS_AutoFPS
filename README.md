@@ -288,9 +288,9 @@ Some Notes:
   - Update Management
     - **Silent Updates** (default) installs updates automatically without prompts or release notes.
       - The installer window will still appear briefly during the update process, but no user interaction is required.
-      - A one‑time migration prompt is provided for existing Auto Updates users to switch to Silent Updates.
-      - Older versions of the app that don’t recognise Silent Updates will continue to treat this setting as Auto Updates, ensuring full backward compatibility.
-    - **Auto Updates** will auto-install updates.
+      - A one‑time migration prompt is provided for existing Prompted Updates users to switch to Silent Updates.
+      - Older versions of the app that don’t recognise Silent Updates will continue to treat this setting as Prompted Updates, ensuring full backward compatibility.
+    - **Prompted Updates** automatically install updates but seeks user confirmation for updates and displays release notes.
       - Mandatory updates will auto install regardless of user settings.
       - Optional updates will seek user confirmation and switch to **Show Updates** if declined.
       - Installer runs automatically, showing Release Notes in Notepad and auto-starting the new version.
@@ -299,7 +299,7 @@ Some Notes:
     - **+ Test** opts users into test version updates.
       - Test version users who opt out of **+ Test** will be offered a one-time automatic rollback to the latest formal release.
       - **Mandatory Updates Only** will be unavailable until the app updates to a release version.
-      - Auto‑updates for test versions run a shorter process than release versions, as they assume all core components are already up to date.
+      - Updates for test versions run a shorter process than release versions, as they assume all core components are already up to date.
     - **Compatibility Updates** may be auto-offered if the app fails its compatibility check and a matching update is available—potentially a test build if no stable version exists.
     - App startup sequence ensures update check is completed before connecting to MSFS.
   - VRAM+ - detects an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
