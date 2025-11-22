@@ -286,11 +286,11 @@ Some Notes:
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
 - General
   - Update Management
-    - **Silent Updates** (default) installs updates automatically without prompts or release notes.
+    - **Silent Updates** installs updates automatically without prompts or release notes.
       - The installer window will still appear briefly during the update process, but no user interaction is required.
       - A one‑time migration prompt is provided for existing Prompted Updates users to switch to Silent Updates.
       - Older versions of the app that don’t recognise Silent Updates will continue to treat this setting as Prompted Updates, ensuring full backward compatibility.
-    - **Prompted Updates** automatically install updates but seeks user confirmation for updates and displays release notes.
+    - **Prompted Updates** (default) automatically install updates but seeks user confirmation for updates and displays release notes.
       - Mandatory updates will auto install regardless of user settings.
       - Optional updates will seek user confirmation and switch to **Show Updates** if declined.
       - Installer runs automatically, showing Release Notes in Notepad and auto-starting the new version.
