@@ -290,6 +290,10 @@ Some Notes:
       - Mandatory updates will auto install regardless of user settings.
       - Optional updates will seek user confirmation and switch to **Show Updates** if declined.
       - Installer runs automatically, showing Release Notes in Notepad and auto-starting the new version.
+    - **Silent Updates** installs updates automatically without prompts or release notes.
+      - The installer window will still appear briefly during the update process, but no user interaction is required.
+      - A one‑time migration prompt is provided for Auto Updates users to switch to Silent Updates.
+      - Older versions of the app that don’t recognise Silent Updates will continue to treat this setting as Auto Updates, ensuring full backward compatibility.
     - **Show Updates** displays available updates and download links.
     - **Mandatory Updates Only** displays and installs only mandatory updates.
     - **+ Test** opts users into test version updates.
