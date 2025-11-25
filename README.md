@@ -335,7 +335,7 @@ Some Notes:
     - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
     - Works best when using MSFS-set FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS, and the FPS Cap automation mode in AutoFPS.
       - Since Dynamic Settings Target Frame Rate is only configurable in 5 FPS increments, choose the next lowest value if your FPS cap is not a direct multiple of 5 eg. with an FPS cap and target FPS of 36 (a common VR FPS cap for motion reprojection at 72Hz), choose a Dynamic Settings Target Frame Rate of 35.
-    - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to at least 10 FPS lower, rounded down to the nearest 5 FPS, than the native frame rate equivalent of the AutoFPS target FPS for best results.
+    - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to at least 10 FPS lower, rounded down to the next multiple of 5, than the native frame rate equivalent of the AutoFPS target FPS for best results.
   - Status Message - Displays key system messages, such as:
     - Before loading a flight - whether a newer version of the app is available to download and install,
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
