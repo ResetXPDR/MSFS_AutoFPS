@@ -630,5 +630,6 @@ box to advise this.
     - Logs for 1 second before (memorised) the first detected outlier FPS event and 10 seconds after the last outlier FPS event of an outlier sequence.
     - Can run concurrently with the existing detailed FPS logging which is manually enabled by the user.
   - Virtual screen coordinates and window position logging on app startup.
+  - Detailed logging of settings‑reduction and recovery events to aid troubleshooting and performance monitoring.
   - Verbose compatibility test results in log file.
 <br/><br/>
