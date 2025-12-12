@@ -220,8 +220,8 @@ Some Notes:
     - First, try deleting the MSFS WASM folder, located under the Microsoft Flight Simulator directory in either %appdata% or %localappdata% for Steam and MS Store install directories respectively, which will rebuild when you next run MSFS.
     - If that doesn't fix it, a full clean reinstall of MSFS will be required, which can be done in less than 15 minutes for MSFS 2024 but may take many hours for MSFS 2020.
       - If reinstalling MSFS 2024, you need to do a **CLEAN** install, not just an uninstall/reinstall as doing the latter does not remove the likely-offending MSFS appdata folder and hence will not resolve the issue.
+        - **Backup or relocate your Community folder before proceeding, and restore it after reinstallation is complete.**
         - Follow the **CLEAN** install instructions outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC) **EXPLICITLY**. Do NOT skip the step where you manually delete the MSFS install in your user folder.
-        - **Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the reinstallation is complete.**
         - All your settings, controller assignments, career progression and your pilot profile are retained.
         - If you chose not to restore your Community folder, you will need to install this app again to install the required mobiflight module there.
 - If you get an "Unable to attach MSFS - app disabled." message, the most likely causes are that MSFS is loading in very slowly and the attachment process is timing out, MSFS and this app are running at different permission privilege levels, or your anti-virus/malware app is blocking this app. To resolve, try the following:
@@ -265,8 +265,8 @@ Some Notes:
 - Sim Values
   - Will not show valid values unless all three connections are green. n/a means not available right now.
   - When MSFS is detected and **NOT** in a flight session:
-    - Default **TLOD**, **OLOD**, and **Cloud Quality** values refresh with changes made in the MSFS settings menu within one second of changing.
-    - **VR‑specific defaults** shown automatically when in VR mode or when VR is selected in the Target FPS dropdown.
+    - Default **TLOD**, **OLOD**, and **Cloud Quality** values are displayed and refresh within one second of changes made in the MSFS settings menu.
+    - **VR‑specific defaults** show automatically when in VR mode or when VR is selected in the Target FPS dropdown.
     - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
   - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
