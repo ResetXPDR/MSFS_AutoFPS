@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.11
+# MSFS_AutoFPS v0.4.5.12
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -220,8 +220,8 @@ Some Notes:
     - First, try deleting the MSFS WASM folder, located under the Microsoft Flight Simulator directory in either %appdata% or %localappdata% for Steam and MS Store install directories respectively, which will rebuild when you next run MSFS.
     - If that doesn't fix it, a full clean reinstall of MSFS will be required, which can be done in less than 15 minutes for MSFS 2024 but may take many hours for MSFS 2020.
       - If reinstalling MSFS 2024, you need to do a **CLEAN** install, not just an uninstall/reinstall as doing the latter does not remove the likely-offending MSFS appdata folder and hence will not resolve the issue.
+        - **Backup or relocate your Community folder before proceeding, and restore it after reinstallation is complete.**
         - Follow the **CLEAN** install instructions outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC) **EXPLICITLY**. Do NOT skip the step where you manually delete the MSFS install in your user folder.
-        - **Ensure you backup/relocate your Community folder BEFORE you do this, then put it back when the reinstallation is complete.**
         - All your settings, controller assignments, career progression and your pilot profile are retained.
         - If you chose not to restore your Community folder, you will need to install this app again to install the required mobiflight module there.
 - If you get an "Unable to attach MSFS - app disabled." message, the most likely causes are that MSFS is loading in very slowly and the attachment process is timing out, MSFS and this app are running at different permission privilege levels, or your anti-virus/malware app is blocking this app. To resolve, try the following:
@@ -265,8 +265,8 @@ Some Notes:
 - Sim Values
   - Will not show valid values unless all three connections are green. n/a means not available right now.
   - When MSFS is detected and **NOT** in a flight session:
-    - Default **TLOD**, **OLOD**, and **Cloud Quality** values refresh with changes made in the MSFS settings menu within one second of changing.
-    - **VR‑specific defaults** shown automatically when in VR mode or when VR is selected in the Target FPS dropdown.
+    - Default **TLOD**, **OLOD**, and **Cloud Quality** values are displayed and refresh within one second of changes made in the MSFS settings menu.
+    - **VR‑specific defaults** show automatically when in VR mode or when VR is selected in the Target FPS dropdown.
     - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
   - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
   - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
@@ -286,8 +286,8 @@ Some Notes:
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
 - General
   - Update Management
-    - **Silent Updates** installs updates automatically without prompts or release notes.
-      - The installer window will still appear briefly during the update process, but no user interaction is required.
+    - **Silent Updates** install updates automatically without prompts, except for compatibility updates and reversion from test versions, which are always prompted.
+      - The installer window appears briefly during the update process and release notes are shown afterwards, with no user interaction required.
       - A one‑time migration prompt is provided for existing Prompted Updates users to switch to Silent Updates.
       - Older versions of the app that don’t recognise Silent Updates will continue to treat this setting as Prompted Updates, ensuring full backward compatibility.
     - **Prompted Updates** (default) automatically install updates but seeks user confirmation for updates and displays release notes.
@@ -331,7 +331,7 @@ Some Notes:
     - TLOD and OLOD labels will show with a `"D"` prefix and tooltip when `DynSet` is active — even if AutoFPS reduction is disabled — as MSFS dynamic settings remain active.
     - An MSFS icon will also be shown before the AutoFPS icon in the Sim Values panel title when dynamic settings is enabled, to indicate hybrid automation is active.
     - `DynSet` and the MSFS target frame rate can be changed at any time, including mid-flight, with changes reflected in the Reduce status display.
-    - DynSet enable/disable and increase/decrease buttons are available in test mode, activated by setting the TestMode key in the app's root folder common config file to "true", to allow instant changes to these settings without needing to open MSFS settings. 
+    - DynSet enable/disable and increase/decrease buttons are available in Test Mode, activated by setting the TestMode and ShowDynSetButtonsInTestMode keys in the app's root folder common config file to "true", to allow instant changes to these settings without needing to open MSFS settings. 
     - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
     - Works best when using MSFS-set FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS, and the FPS Cap automation mode in AutoFPS.
     - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to at least 10 FPS lower than the native frame rate equivalent of the AutoFPS target FPS for best results.
