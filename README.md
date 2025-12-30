@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.5.12
+# MSFS_AutoFPS v0.4.6.0
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -171,6 +171,12 @@ The Installer will install the following Software:
 Basically: Just run the Installer to either install, update or uninstall the app.<br/>
 
 Some Notes:
+- Install Options:
+  - Desktop Icon: Create a desktop icon for the app.
+  - Close to Tray: App Closes to the System Tray.
+  - Reset Configs: Resets the app Common, MSFS 2020 and MSFS 2024 config files.
+  - Repair: Reinstalls core files, including latest Visual C++ Redistributable and .NET 8 runtime versions, and MobiFlight, keeping your app config intact.
+  - Auto Start Options: Remove, Retain, FSUIPC (via FSUIPC.ini) or MSFS (via EXE.xml).
 - If the installer did not download or is zero size, try redownloading again with a different browser and possibly with AV temporarily disabled if required. It should be about 1.5Mb in size. 
 - If the installer will not run at all:
   - Windows SmartScreen is potentially blocking it because the app is so new. The solution to try is:
@@ -202,18 +208,13 @@ Some Notes:
   - If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox.
   - In test versions, notification of all app updates will be enabled as a minimum by default, regardless of what you have previously chosen for update notification, in order to encourage maintainance of a current test baseline.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
-- The "Clean Install" option will recreate new configuration files without having to remove the app first.
-- The "Install Latest Redistributables" option will silently (other than UAC prompts) update your system with the latest Visual C++ Redistributable and .NET 8 runtime versions.
-  - Mandatory for initial installations, optional for manual updates, and disabled for quick updates to avoid UAC prompts.
-- For Auto-Start either your FSUIPC7.ini or EXE.xml (MSFS) for the applicable MSFS versions installed is/are modified. The Installer does not create a Backup.
-- If you wish to remove an Auto-Start option from a previous installation, rerun the installer and select Remove Auto-Start and the click Update.
 - The app may be blocked by Windows Security or your AV-Scanner, if so try to unblock or set an exception (for the whole Folder)
 - The Installation-Location is fixed to %appdata%\MSFS_AutoFPS (your Users AppData\Roaming Folder) and can't be changed.
   - Binary in %appdata%\MSFS_AutoFPS\bin
   - Logs in %appdata%\MSFS_AutoFPS\log
   - Config: %appdata%\MSFS_AutoFPS\MSFS_AutoFPS.config (common), MSFS2020_AutoFPS.config and MSFS2024_AutoFPS.config
 - If after installing and running the app your simconnect always stays red, your TLOD and OLOD values show as zero or you see "Critical Exception occurred: MSFS_AutoFPS - Unable to load DLL 'GpuzShMem.x64.dll' or one of its dependencies" in the log file:
-  - Try reinstalling the app with the "Install Latest Redistributable" options selected. If any of the redistributables fail to install during this process, try downloading and installing/repairing (as applicable):
+  - Try reinstalling the app with the Repair option selected. If any of the redistributables fail to install during this process, try downloading and installing/repairing (as applicable):
     - A Microsoft official version of “Microsoft Visual C++ 2015 - 2022 Redistributable”, which may be missing from your Windows installation. Try installing [this](https://aka.ms/vs/17/release/vc_redist.x86.exe) and [this](https://aka.ms/vs/17/release/vc_redist.x64.exe).
     - The NET desktop runtime from [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/8.0.15/windowsdesktop-runtime-8.0.15-win-x64.exe) if still available. Alternatively, go to the Micrsoft .NET 8.0 download page [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) and download and install the latest .NET Desktop Runtime X64 version.
   - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS WASM installation.
@@ -616,7 +617,8 @@ box to advise this.
       - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
     - Auto Increase Clouds
       - Auto increase cloud quality option with TLOD Base Extra enabled.
-      - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process. 
+      - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process.
+        - Enhanced activation/deactivation based on GPU load is available when the companion app GPU-Z is running.
       - Removed immediately if the FPS cap is breached.
 - TestMode - Advanced testing and logging features:
   - Additional logging and features are available when the **TestMode** key is set to "true" in the common config file in the app’s root directory.
