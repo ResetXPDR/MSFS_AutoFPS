@@ -201,6 +201,9 @@ Some Notes:
   - Rerun the installer for MSFS_AutoFPS and reinstall with whatever autostart option you desire. 
 - Mobiflight Module:
   - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
+  - If you see an ‘Unable to locate Community folder’ message after uninstalling MSFS, it’s caused by leftover MSFS userdata that the official uninstaller doesn’t remove.
+    - AutoFPS detects MSFS by checking for the remaining UserCfg.opt  file, so a partial uninstall can look like an active install—especially if a custom Community folder has been deleted.
+    - Removing the leftover MSFS userdata resolves the issue, and future silent updates will suppress this message while still logging it internally.
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
   - If the installer fails when checking/updating Mobiflight, despite the latest version being correctly installed in your MSFS Community folder, create a shortcut for the installer, add the command line option "-bypassmobiflight" to the target text box, then run the shortcut to be able to bypass this installation step.
