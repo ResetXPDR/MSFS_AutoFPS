@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.6.2
+# MSFS_AutoFPS v0.4.6.3
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -24,7 +24,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Auto settings reduction option, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
     - Auto cloud increase option with TLOD Base Extra enabled and sufficient performance margin exists,
     - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
-- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, OFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
 - Auto installation of app updates (optional except for mandatory updates),
@@ -55,11 +55,11 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
   - App defaults to last-used mode on startup.
-  - Auto-switches to detected mode on flight load (excludes MFG/OFG, which are manually selected and locked).
+  - Auto-switches to detected mode on flight load (excludes Man FG, which is manually selected and locked).
   - Target FPS dropdown allows editing inactive mode’s setting.
   - Dropdown background turns orange when target FPS differs from current mode.
   - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset.
-**NFR (Native Frame Rate)**
+- **NFR (Native Frame Rate)**
   - Default non-VR, non-FG graphics mode (formerly “PC”).
   - Automatically selected when MSFS graphics settings do not enable FG.
   - Autodetected by AutoFPS.
@@ -68,16 +68,12 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Activated within MSFS.
   - Autodetected by AutoFPS.
   - No notable limitations.
-- **nVidia FG (native or FG mod)**
+- **nVidia FG (native, FG mod or MFG)**
   - Activated via MSFS graphics settings or FG mod.
+  - MFG is now auto detected if DLSS FG 3X or greater set within MSFS settings.
   - Autodetected by AutoFPS but only active when MSFS is the focused window.
   - FG becomes inactive when MSFS loses focus (driver-level behavior).
   - Use app’s “On Top” option to ensure MSFS maintains focus.
-  - Incorrect FG detection may occur if:
-    - FG mod was removed.
-    - Hardware Accelerated Graphics Scheduling is disabled.
-    - FG appears off visually but is still internally active.
-    - To disable FG fully, set `DLSSG 0` in `UserCfg.opt`.
 - **Lossless Scaling FG (LSFG)**
   - Activated through LSFG app (v2.13.2+ required).
   - Auto detected when LS is running, regardless of actual FG activation.
@@ -87,25 +83,16 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - After changing LS settings mid-flight, press Reset to redetect.
   - Only one FG type should be active—mixing LSFG with native FG or FG mod causes incorrect FPS readings.
 - **FSR3 FG**
-  - Available in MSFS 2024 from SU2 onwards.
+  - Available in MSFS 2024.
   - Activated via MSFS graphics settings.
   - Autodetected by AutoFPS.
   - Uses fixed 2× multiplier.
   - Remains active regardless of window focus.
-- **MFG (Multi Frame Generation)**
-  - No longer tied to 5000 series nVidia GPUs; now a **forced mode**, matching OptiFG behavior.
-  - Cannot be autodetected due to privileged access.
-  - Manual UI controls always appear, regardless of GPU:
-    - In-flight session dropdown enables manual multiplier selection.
-    - Match app’s multiplier with nVidia settings.
-    - Set to MFG Off if not used or using another FG method.
-  - Allows future-proofing for unsupported FG types via manual tuning.
-- **OFG (OptiScaler Frame Generation)**
-  - Activated by selecting **OFG** from the graphics mode dropdown in AutoFPS.
+- **Man FG (Manual FG)**
+  - Allows future-proofing for externally set or unsupported FG types via manual tuning.
+  - Manual FG selection from 2X to 8X.
   - Functions as a **forced mode**, remaining active across app restarts until manually changed to a different graphics mode.
-  - Autodetection is not currently possible due to restricted access—user selection via dropdown initiates OFG mode.
-  - Designed to maintain compatibility and control when native access to OptiFG configuration is unavailable.
-  - Prioritized in calculated average FPS scaling immediately after VR, when locked to OFG.
+  - Select Auto to return to auto detection of all other modes.
 
 How does AutoFPS compare to the in-built Dynamic Setting feature that MS included in MSFS 2024?
 - Dynamic Setting adjusts both TLOD and OLOD, the former initially then the latter if still significantly under target FPS. AutoFPS adjusts these settings independently, with OLOD changing inversely proportional to altitude by default, and can also change a lot more settings when auto settings reduction and VRAM+ are active.
@@ -201,6 +188,9 @@ Some Notes:
   - Rerun the installer for MSFS_AutoFPS and reinstall with whatever autostart option you desire. 
 - Mobiflight Module:
   - If the installer can't locate your Community folder to install this module, perhaps because of a Custom MSFS install location, download the latest module version from [here](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and manually extract to your Community folder.
+  - If you see an ‘Unable to locate Community folder’ message after uninstalling MSFS, it’s caused by leftover MSFS userdata that the official uninstaller doesn’t remove.
+    - AutoFPS detects MSFS by checking for the remaining UserCfg.opt  file, so a partial uninstall can look like an active install—especially if a custom Community folder has been deleted.
+    - Removing the leftover MSFS userdata resolves the issue, and future silent updates will suppress this message while still logging it internally.
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
   - If the installer fails when checking/updating Mobiflight, despite the latest version being correctly installed in your MSFS Community folder, create a shortcut for the installer, add the command line option "-bypassmobiflight" to the target text box, then run the shortcut to be able to bypass this installation step.
@@ -349,9 +339,9 @@ Some Notes:
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
   - Target FPS - The most important setting in this app. (10 - 200 allowable)
     - Set it to what FPS you want the app to target while running, noting that this value should be at the mid to lower end of what your system is capable of otherwise the app will be unlikely to achieve it.
-    - There is a setting for each graphics mode (NFR, FG, LSFG, MFG, OFG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles).
+    - There is a setting for each graphics mode (NFR, FG, LSFG, Man FG, FSR3 and VR) and each flight type (VFR, IFR and, if Expert mode, 4 user profiles).
       - On app startup, automatically defaults to the graphics mode in use when the app was last used.
-      - Automatically switches to the currently detected graphics mode upon loading in to a flight session.
+      - Automatically switches to the currently detected graphics mode upon loading in to a flight session when not in Man FG.
       - The user can change the target FPS for graphics modes other than what is currently active by using the drop down list of target FPS types in the app window.
       - Target FPS type drop down list background will change to orange when the target FPS type is different to the current graphics mode to clearly indicate this difference to the user.
       - Changes to target FPS for a type different to the current graphics mode will be saved to the config file without reloading the UI as it does not affect any other displayed settings.
