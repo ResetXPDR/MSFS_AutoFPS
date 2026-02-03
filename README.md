@@ -52,7 +52,6 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Due to potential settings conflict, don't change any MSFS graphics settings that could be adjusted by AutoFPS while in a flight with AutoFPS already running.
 - If performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
 
-## Target FPS
 What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
   - App defaults to last-used mode on startup.
@@ -140,6 +139,13 @@ Why am I getting a dangerous/unsafe/virus/trojan/malware warning when trying to 
 - This app is unsigned because I am a hobbyist and the cost of obtaining certification is prohibitive to me, so you may get a warning message of a potentially dangerous app when you download it in a web browser like Chrome or from your antivirus program, especially Kaspersky which is known to flag false positives with this installer and the app.
 - You can either trust this download, based on feedback you can easily find on Avsim and Youtube, make an exception in your browser and/or antivirus program for the download then run a virus scan and malware scan before you install just be sure, or just not install and use this app.<br/><br/>
 
+## MSFS Clean Reinstallation Instructions
+- If reinstalling MSFS, you need to do a **CLEAN** install, not just an uninstall/reinstall as doing the latter does not remove the likely-offending MSFS appdata folder and hence will not resolve the issue.
+  - **Backup or relocate your Community folder before proceeding, and restore it after reinstallation is complete.**
+  - Follow the **CLEAN** install instructions outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC) **EXPLICITLY**. Do NOT skip the step where you manually delete the MSFS install in your user folder.
+  - All your settings, controller assignments, career progression and your pilot profile are retained.
+  - If you chose not to restore your Community folder, you will need to install this app again to install the required mobiflight module there.
+
 ## Requirements
 
 The Installer will install the following Software:
@@ -210,12 +216,7 @@ Some Notes:
     - The NET desktop runtime from [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/8.0.15/windowsdesktop-runtime-8.0.15-win-x64.exe) if still available. Alternatively, go to the Micrsoft .NET 8.0 download page [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) and download and install the latest .NET Desktop Runtime X64 version.
   - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS WASM installation.
     - First, try deleting the MSFS WASM folder, located under the Microsoft Flight Simulator directory in either %appdata% or %localappdata% for Steam and MS Store install directories respectively, which will rebuild when you next run MSFS. Rebooting is also recommended.
-    - If that doesn't fix it, a full clean reinstall of MSFS will be required, which can be done in less than 15 minutes for MSFS 2024 but may take many hours for MSFS 2020.
-      - If reinstalling MSFS 2024, you need to do a **CLEAN** install, not just an uninstall/reinstall as doing the latter does not remove the likely-offending MSFS appdata folder and hence will not resolve the issue.
-        - **Backup or relocate your Community folder before proceeding, and restore it after reinstallation is complete.**
-        - Follow the **CLEAN** install instructions outlined for your MSFS version [here](https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC) **EXPLICITLY**. Do NOT skip the step where you manually delete the MSFS install in your user folder.
-        - All your settings, controller assignments, career progression and your pilot profile are retained.
-        - If you chose not to restore your Community folder, you will need to install this app again to install the required mobiflight module there.
+    - If that doesn't fix it, a full clean reinstall of MSFS will be required, which can be done in less than 15 minutes for MSFS 2024 but may take many hours for MSFS 2020. See the FAQ entry here for instructions.
 - If you get an "Unable to attach MSFS - app disabled." message, the most likely causes are that MSFS is loading in very slowly and the attachment process is timing out, MSFS and this app are running at different permission privilege levels, or your anti-virus/malware app is blocking this app. To resolve, try the following:
   - Restart this app after MSFS has loaded in to the main menu.
   - Check that MSFS is not running as administrator.
