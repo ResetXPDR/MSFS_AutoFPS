@@ -52,6 +52,7 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Due to potential settings conflict, don't change any MSFS graphics settings that could be adjusted by AutoFPS while in a flight with AutoFPS already running.
 - If performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
 
+# Target FPS
 What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
   - App defaults to last-used mode on startup.
