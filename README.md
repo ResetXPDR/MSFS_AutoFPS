@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.6.4
+# MSFS_AutoFPS v0.4.6.5
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -25,8 +25,10 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Auto cloud increase option with TLOD Base Extra enabled and sufficient performance margin exists,
     - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
 - Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Auto future MSFS version compatibility, provided MSFS memory changes are minor,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
+- Optional MSFS Performance Optimiser which selects the best CPU core affinity, process priority, and available power plan for MSFS.
 - Auto installation of app updates (optional except for mandatory updates),
 - Auto restoration of original MSFS settings changed by the app during a flight session, enhanced to withstand MSFS CTDs.<br><br>
 
@@ -232,7 +234,7 @@ Some Notes:
   - There is an issue with permissions and you may need to run the app as Administrator. 
   - You may have changed MSFS settings in your UserCfg.opt file beyond what is possible to set in the MSFS settings menu. To rectify, go into MSFS settings at the main menu and reset to default (F12) the graphics settings for both PC in MSFS 2020 or General in MSFS 2024 and VR for either, then make all changes to MSFS within the MSFS settings menu.
   - A new version of MSFS may introduce a different memory map than expected, preventing the app from auto‑adjusting to the new settings location.
-    - In this case, the app will attempt to offer an auto‑update to the version most likely to be compatible. This may be a test build if no stable release is available.
+    - In this case, the app will auto-install an explicitly compatible update in the first instance if one is available, otherwise it will attempt to offer an auto‑update to the version most likely to be compatible. This may be a test build if no stable release is available.
     - Release‑channel users temporarily moved to a test build for compatibility will revert to release‑only updates with the next formal version (manual opt‑in to test updates remains available).
     - If no suitable auto‑update is found, or if the update does not achieve compatibility, I am likely already aware and working on a solution. However, if you may be among the first to encounter the issue (e.g. on an MSFS beta), please raise a new issue on GitHub or contribute to an existing one.
 - If you get an error message saying "XML Exception: Unexpected XML declaration" or "Exception: 'System.Xml.XMlException' during AutostartExe" when trying to install with the auto-start option for MSFS, it usually means your EXE.xml file has a corrupted data structure. To resolve, copy the content of your EXE.xml into MS Copilot and ask it to check and correct it for you. Paste the fixed structure back into your EXE.xml file, save it, then try reinstalling again.
@@ -282,7 +284,7 @@ Some Notes:
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
 - General
   - Update Management
-    - **Silent Updates** install updates automatically without prompts, except for compatibility updates and reversion from test versions, which are always prompted.
+    - **Silent Updates** install updates automatically without prompts, except for non-explicit compatibility updates and reversion from test versions, which are always prompted.
       - The installer window appears briefly during the update process and release notes are shown afterwards, with no user interaction required.
       - A one‑time migration prompt is provided for existing Prompted Updates users to switch to Silent Updates.
       - Older versions of the app that don’t recognise Silent Updates will continue to treat this setting as Prompted Updates, ensuring full backward compatibility.
@@ -296,7 +298,7 @@ Some Notes:
       - Test version users who opt out of **+ Test** will be offered a one-time automatic rollback to the latest formal release.
       - **Mandatory Updates Only** will be unavailable until the app updates to a release version.
       - Updates for test versions run a shorter process than release versions, as they assume all core components are already up to date.
-    - **Compatibility Updates** may be auto-offered if the app fails its compatibility check and a matching update is available—potentially a test build if no stable version exists.
+    - **Compatibility Updates** may be auto-installed if the app fails its compatibility check and a matching update is available, which may potentially be a test build if no stable version exists.
     - App startup sequence ensures update check is completed before connecting to MSFS.
   - VRAM+ - detects an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
     - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**.
