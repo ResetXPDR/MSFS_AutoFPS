@@ -627,7 +627,7 @@ box to advise this.
       - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process.
         - Enhanced activation/deactivation based on GPU load is available when the companion app GPU-Z is running.
       - Removed immediately if the FPS cap is breached.
-- TestMode - Advanced testing and logging features:
+- Test Mode - Advanced testing and logging features:
   - Additional logging and features are available when the **TestMode** key is set to "true" in the common config file in the app’s root directory.
   - Detailed FPS logging:
     - Activated by clicking the FPS value during flight sessions.
