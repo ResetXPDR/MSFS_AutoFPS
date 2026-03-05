@@ -260,15 +260,21 @@ Some Notes:
   - Red values indicate not connected, green is connected or royal blue for the Sim Version if the MSFS Performance Optimiser is enabled.
   - Automatically identifies which MSFS version is in use as either MSFS2020 or MSFS2024 and the version number. 
   - If the sim version is showing in red and is not the MSFS version you wish to configure before starting that MSFS version, click the 20>24 or 24>20 button, as applicable, and it will change to that.
-  - When the MSFS Performance Optimiser is enabled via the "+" checkbox to the left of the Sim Version label:
+  - MSFS Performance Optimiser - enabled via the "+" checkbox to the left of the Sim Version label:
     - The Sim Values panel reflects optimiser‑controlled states such as CPU affinity, process priority, and power‑plan selection, updating immediately when these values are applied or restored.
-    - Designed to change states only when they have not already been modified by other tools (e.g., VR Auto Optimiser, Process Lasso), ensuring no conflict with external managers.
-    - The **Sim Version text changes to royal blue** to indicate the optimiser is active and controlling MSFS.
-    - Provides four user‑configurable options in the common config file in the app's root directory:
-      - AffinityPhysicalCoreThreshold – sets the logical‑CPU cutoff for physical‑core affinity; default is 6, and set to 32 to effectively disable.
-      - AMDUseFirstCCDOnly – enables first‑CCD‑only affinity on dual‑CCD AMD CPUs; default is enabled.
-      - MSFSProcessPriority – selects the MSFS process priority; Normal, AboveNormal and High are the only allowable choices; default is High.
-      - PowerPlanEnabled – toggles automatic power‑plan switching; default is enabled.
+    - Designed to change states only when they are at their default levels and have not already been modified by other tools (e.g., VR Auto Optimiser, Process Lasso), ensuring no conflict with external managers.
+    - The Sim Version text changes to royal blue to indicate the optimiser is active and controlling MSFS.
+    - Can be fine‑tuned with four user‑configurable options in the common config file in the app’s root directory.
+    - CPU Affinity:
+      - Uses a universal physical‑core rule based on SMT that gives consistent behaviour across AMD, Intel hybrid, and SMT‑off systems.
+      - The `AffinityPhysicalCoreThreshold` key, defaulting to 6, controls the SMT‑core threshold at which physical‑core‑only affinity is applied.
+      - The `AMDUseFirstCCDOnly` key, defaulting to true, activates first‑CCD affinity mode on dual‑CCD AMD CPUs. The tooltip appends "CCD+" to the physical‑core affinity line when this mode is active.
+    - MSFS Process Priority:
+      - Only changes priority when MSFS is currently running at the default Normal level, switching it to High when available and leaving any user‑set AboveNormal or RealTime priority untouched.
+      - The `MSFSProcessPriority` key, defaulting to High, controls the target MSFS process priority (Normal / AboveNormal / High). RealTime is intentionally excluded because using it would require AutoFPS itself to run elevated.
+    - Windows Power Plan:
+      - Only overrides the power plan when starting from the default Balanced plan, choosing Ultimate Performance or High Performance depending on availability.
+      - The `PowerPlanEnabled` key, defaulting to true, explicitly enables or disables automatic power‑plan switching.
     - The optimiser tooltip dynamically rebuilds on load to show the active configuration, including the selected power plan, physical‑core affinity threshold, and MSFS process priority.
 - Sim Values
   - Will not show valid values unless all three connections are green, or royal blue for the Sim Version if the MSFS Performance Optimiser is enabled. n/a means not available right now.
