@@ -268,7 +268,7 @@ Some Notes:
     - CPU Affinity:
       - Uses a universal physical‑core rule based on SMT that gives consistent behaviour across AMD, Intel hybrid, and SMT‑off systems.
       - On Intel hybrid CPUs, this means MSFS runs on the P‑cores only, since E‑cores don’t support SMT and aren’t counted as physical cores in this rule.
-      - The `AffinityPhysicalCoreThreshold` key, defaulting to 6, controls the SMT‑core threshold at which physical‑core‑only affinity is applied.
+      - The `AffinityPhysicalCoreThreshold` key, defaulting to 6, controls the SMT‑core threshold at which physical‑core‑only affinity is applied; setting this value to 32 effectively disables the feature on most CPUs.
       - The `AMDUseFirstCCDOnly` key, defaulting to true, activates first‑CCD affinity mode on dual‑CCD AMD CPUs. The tooltip appends "CCD+" to the physical‑core affinity line when this mode is active.
     - MSFS Process Priority:
       - Only changes priority when MSFS is currently running at the default Normal level, switching it to High when available and leaving any user‑set AboveNormal or RealTime priority untouched.
