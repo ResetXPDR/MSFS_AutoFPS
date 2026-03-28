@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.6.6
+# MSFS_AutoFPS v0.4.6.7
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -251,11 +251,13 @@ Some Notes:
   - Can be started anytime, but preferably just after MSFS has loaded in to the main menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes. 
   - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions. Exit by clicking on the app window's close button and providing user confirmation when prompted.
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exits when MSFS closes.
-  - The app window's minimised/maximised state will be remembered between sessions and will be restored on the next startup.
-  - The apps window's position will be remembered between sessions, except movements to it made while in VR due to window restoration issues. If there are issues with the window not displaying correctly on start-up, as can happen when auto-starting the app through MSFS or FSUIPC, either don't use auto-start, restart the app within 15 seconds of last closing it to auto reset the window position, or manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
-  - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the Expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app. 
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
   - Do NOT change MSFS graphics settings manually while in a flight with this app running as it will conflict with what the app is managing and they will automatically restore to what they originally were when you exit your flight. If you wish to change the defaults for these MSFS settings, you must do so either without this app running or, if it is, only while you are in the MSFS main menu (ie not in a flight).
+- App Window
+  - Position and minimised/maximised state will be remembered between sessions, except movements to it made while in VR due to window restoration issues.
+    - Manually permanently disable this feature in the config file by setting the RememberWindowPos line to be false.
+  - Will automatically reset to default position (50,50) if the app is restarted within 15 seconds of last closing, except if disabled by settting the AllowWindowPosReset key to false in the common config file.
+  - The user can progressively hide parts of the UI when the app window is double clicked anywhere that is not a control. The first double click will hide the Expert settings section (if applicable), the second will hide the general settings section and a third double click will restore all hidden settings sections. The last state in use will be restored when next starting the app.
 - Connection Status
   - Red values indicate not connected, green is connected or royal blue for the Sim Version if the MSFS Performance Optimiser is enabled.
   - Automatically identifies which MSFS version is in use as either MSFS2020 or MSFS2024 and the version number. 
@@ -264,19 +266,24 @@ Some Notes:
     - The Sim Values panel reflects optimiser‑controlled states such as CPU affinity, process priority, and power‑plan selection, updating immediately when these values are applied or restored.
     - Designed to change states only when they are at their default levels and have not already been modified by other tools (e.g., VR Auto Optimiser, Process Lasso), ensuring no conflict with external managers.
     - The Sim Version text changes to royal blue to indicate the optimiser is active and controlling MSFS.
+    - Provides UI controls for Physical Cores, MSFS process priority, and Best Windows Power Plan, shown  in Expert Mode when hovering over the optimiser checkbox or MSFS label.
     - Can be fine‑tuned with four user‑configurable options in the common config file in the app’s root directory.
     - CPU Affinity:
       - Uses a universal physical‑core rule based on SMT that gives consistent behaviour across AMD, Intel hybrid, and SMT‑off systems.
-      - On Intel hybrid CPUs, this means MSFS runs on the P‑cores only, since E‑cores don’t support SMT and aren’t counted as physical cores in this rule.
+      - On Intel hybrid CPUs, MSFS runs on the P‑cores only, since E‑cores don’t support SMT and aren’t counted as physical cores in this rule.
       - The `AffinityPhysicalCoreThreshold` key, defaulting to 6, controls the SMT‑core threshold at which physical‑core‑only affinity is applied; setting this value to 32 effectively disables the feature on most CPUs.
       - The `AMDUseFirstCCDOnly` key, defaulting to true, activates first‑CCD affinity mode on dual‑CCD AMD CPUs. The tooltip appends "CCD+" to the physical‑core affinity line when this mode is active.
+      - When enabled, sets CPU affinity to physical cores only, excluding SMT threads, and provides warnings or CCD‑specific options where applicable.
     - MSFS Process Priority:
-      - Only changes priority when MSFS is currently running at the default Normal level, switching it to High when available and leaving any user‑set AboveNormal or RealTime priority untouched.
+      - Changes priority only when MSFS is running at the default Normal level, switching it to High when available and leaving any user‑set AboveNormal or RealTime priority untouched.
       - The `MSFSProcessPriority` key, defaulting to High, controls the target MSFS process priority (Normal / AboveNormal / High). RealTime is intentionally excluded because using it would require AutoFPS itself to run elevated.
+      - Priority level is selectable via a dropdown UI control.
     - Windows Power Plan:
-      - Only overrides the power plan when starting from the default Balanced plan, choosing Ultimate Performance or High Performance depending on availability.
+      - Overrides the power plan only when starting from the default Balanced plan, choosing Ultimate Performance or High Performance depending on availability.
       - The `PowerPlanEnabled` key, defaulting to true, explicitly enables or disables automatic power‑plan switching.
-    - The optimiser tooltip dynamically rebuilds on load to show the active configuration, including the selected power plan, physical‑core affinity threshold, and MSFS process priority.
+      - Power‑plan selection is available as a UI toggle.
+    - Applies delayed second writes for both CPU affinity and process priority to ensure settings reliably stick on systems that ignore the initial set.
+    - The optimiser tooltip dynamically rebuilds on load to show the active configuration, including the selected power plan, physical‑core affinity threshold, MSFS process priority, and the current UI‑controlled states.
 - Sim Values
   - Will not show valid values unless all three connections are green, or royal blue for the Sim Version if the MSFS Performance Optimiser is enabled. n/a means not available right now.
   - When MSFS is detected and **NOT** in a flight session:
