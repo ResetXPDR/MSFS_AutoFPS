@@ -649,10 +649,7 @@ box to advise this.
     - Logs the raw FPS and average FPS to one decimal place every second.
     - FPS value is displayed in two alternating purple shades when logging FPS details.
     - Clicking the FPS display while logging is active will cancel the current logging event.
-  - Auto detailed FPS logging on outlier FPS events:
-    - Logs for 1 second before (memorised) the first detected outlier FPS event and 10 seconds after the last outlier FPS event of an outlier sequence.
-    - Can run concurrently with the existing detailed FPS logging which is manually enabled by the user.
-  - Performance monitoring in Test Mode:
+  - Performance monitoring and logging:
     - Shown as an extra line on the app status line during flight sessions.
       - Total CPU – overall system CPU usage across all logical processors.
       - Dominant Core – instantaneous load of the core selected by 10‑second averaging, including its core number.
