@@ -649,9 +649,30 @@ box to advise this.
     - Logs the raw FPS and average FPS to one decimal place every second.
     - FPS value is displayed in two alternating purple shades when logging FPS details.
     - Clicking the FPS display while logging is active will cancel the current logging event.
-  - Auto detailed FPS logging on outlier FPS events.
+  - Auto detailed FPS logging on outlier FPS events:
     - Logs for 1 second before (memorised) the first detected outlier FPS event and 10 seconds after the last outlier FPS event of an outlier sequence.
     - Can run concurrently with the existing detailed FPS logging which is manually enabled by the user.
+  - Performance monitoring in Test Mode:
+    - Shown as an extra line on the app status line during flight sessions.
+      - Total CPU – overall system CPU usage across all logical processors.
+      - Dominant Core – instantaneous load of the core selected by 10‑second averaging, including its core number.
+      - TopXAvg – instantaneous load of the busiest X (configurable) cores.
+      - MSFS CPU – MSFS CPU usage based on the applied affinity mask, showing core count when set.
+    - Extra debug logging in FPS Cap mode to provide clearer context when performance limits are hit.
+      - Ignores the first performance data sample, which is often an outlier due to startup conditions.
+      - Triggers: FPS‑cap breaches, recovery, and TLOD extra initial ground‑seek and initial in‑air re‑seek events (reset when the app is reset).
+      - Uses EWMA smoothing for Dominant, Max and MSFS CPU metrics, logging both raw and smoothed values to stabilise scheduler jitter and show clearer CPU‑pressure trends.
+      - Logged fields: FPS, ΔFPS, AGL, TLOD, Total CPU, Dominant Core, TopXAvg, MSFS CPU, GPU and VRAM. Where two values are logged, the first is raw and the second is EWMA‑smoothed.
+    - Configurable parameters in the common config file:
+      - perfLogTopCoreCount – X in TopXAvg, default 2.
+      - PerfLogBufferSize – number of pre‑breach and post‑recovery samples, default 15.
+      - PerfLoggingAlways – default false; logs performance data every second during flight when enabled (logs grow rapidly).
+      - EwmaAlpha – EWMA smoothing coefficient, default 0.1.
+      - MonitorMode – default false; disables all AutoFPS automation for baseline MSFS performance monitoring.
+        - Hides the Expert settings panel.
+        - Excludes irrelevant log lines.
+        - Does not back up or restore UserCfg.opt.
+        - Shows Monitor Mode or MON in the title bar and forces Test Mode to enable CPU monitoring and performance logging.
   - Virtual screen coordinates and window position logging on app startup.
   - Detailed settings initialisation, reduction and recovery event logging, to aid troubleshooting and performance monitoring.
   - Verbose compatibility test results in log file.
