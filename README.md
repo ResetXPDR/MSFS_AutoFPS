@@ -297,10 +297,9 @@ Some Notes:
   - FPS+ - shows the average FPS, filtered for spikes and dips, for the current graphics mode.
     - Smooths out any transient FPS spikes or dips experienced - such as those caused by sudden changes in view, panning, scenery loading or other transient events - so that undesired automated MSFS setting changes are minimised.
     - FPS values within 15% (FPS Sensitivity and Tolerance automation modes) or 10% (AutoTLOD and FPS Cap automation modes) of the current average are averaged over a 5 second rolling window of FPS values
-      - When **TestMode** is enabled in the common config file, the percentage deviation can be changed by modifying the **fpsDeviationPercent** key in the MSFS version config file.
     - FPS values outside of this range are considered outliers and are not included in the average until a sustained change over 3 seconds in the same direction is detected.
     - The average will recover more quickly if the very recent trend is detected to have minimal variance.
-    - Default averaging period is 5 seconds and can be changed in the config file for each MSFS version by changing the **fpsAverageSeconds** key.
+    - Averaging period is 5 seconds.
   - FPS source icon - RTSS (RivaTuner Statistics Server) or MSFS.
     - **[RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)** is a well-established tool for FPS monitoring, widely used in the gaming community and fully compatible with MSFS.
     - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running.
