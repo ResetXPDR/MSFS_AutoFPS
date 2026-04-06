@@ -663,18 +663,19 @@ box to advise this.
       - Ignores the first performance data sample, which is often an outlier due to startup conditions.
       - Triggers: FPS‑cap breaches, recovery, and TLOD extra initial ground‑seek and initial in‑air re‑seek events (reset when the app is reset).
       - Uses EWMA smoothing for Dominant, Max and MSFS CPU metrics, logging both raw and smoothed values to stabilise scheduler jitter and show clearer CPU‑pressure trends.
-      - Logged fields: FPS, ΔFPS, AGL, TLOD, Total CPU, Dominant Core, TopXAvg, MSFS CPU, GPU and VRAM. Where two values are logged, the first is raw and the second is EWMA‑smoothed.
-    - Configurable parameters in the common config file:
-      - perfLogTopCoreCount – X in TopXAvg, default 2.
-      - PerfLogBufferSize – number of pre‑breach and post‑recovery samples, default 15.
-      - PerfLoggingAlways – default false; logs performance data every second during flight when enabled (logs grow rapidly).
-      - EwmaAlpha – EWMA smoothing coefficient, default 0.1.
-      - MonitorMode – default false; disables all AutoFPS automation for baseline MSFS performance monitoring.
-        - Hides the Expert settings panel.
-        - Excludes irrelevant log lines.
-        - Does not back up or restore UserCfg.opt.
-        - Shows Monitor Mode or MON in the title bar and forces Test Mode to enable CPU monitoring and performance logging.
-  - Virtual screen coordinates and window position logging on app startup.
+      - Logged fields: FPS, ΔFPS, TLOD, AGL, Total CPU, Dominant Core, MSFS CPU, TopXAvg, GPU and VRAM (when detected). Where two values are logged, the first is raw and the second is EWMA‑smoothed.
+      - Configurable parameters in the common config file:
+        - perfLogTopCoreCount – X in TopXAvg, default 2.
+        - PerfLogBufferSize – number of pre‑breach and post‑recovery samples, default 15.
+        - PerfLoggingAlways – default false; logs performance data every second during flight when enabled (logs grow rapidly).
+        - EwmaAlpha – EWMA smoothing coefficient, default 0.1.
+        - MonitorMode – default false; disables all AutoFPS automation for baseline MSFS performance monitoring.
+          - Forces Test Mode and PerfLoggingAlways to enable CPU monitoring and performance logging.
+          - Hides the Expert settings panel.
+          - Excludes irrelevant log lines.
+          - Does not back up or restore UserCfg.opt.
+          - Shows Monitor Mode in the title bar.
+- Virtual screen coordinates and window position logging on app startup.
   - Detailed settings initialisation, reduction and recovery event logging, to aid troubleshooting and performance monitoring.
   - Verbose compatibility test results in log file.
 <br/><br/>
