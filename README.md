@@ -485,7 +485,7 @@ box to advise this.
       - TLOD Extra – additional TLOD applied under favourable performance conditions.
         - Applicable to FPS Cap mode in Expert mode, and to Non‑Expert mode when an FPS cap is auto‑detected.
         - When enabled, set target FPS equal to your FPS cap if using one, or slightly below your usual FPS if not, for correct logic.
-        - TLOD Base Extra
+        - TLOD Base Extra in FPS Cap mode
           - When enabled, allows TLOD Extra below Alt TLOD Top.
           - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Min + Top Extra.
           - Multiplier tooltip shows TLOD Min including Extra total.
@@ -497,7 +497,7 @@ box to advise this.
         - TLOD Extra seek process starts automatically:
           - At flight commencement (regardless of aircraft position) and again when landed and stopped.
           - On climb through Alt TLOD Top.
-          - Periodically, every minute above Alt TLOD Top, if not already at TLOD Top Max.
+          - Periodically, every 30 seconds above Alt TLOD Top, if not already at TLOD Top Max and provided the FPS cap is consistently being met.
         - Seek can be restarted manually via Reset if flight conditions change and invalidate the original TLOD Base.
         - When seeking:
           - Large steps (up to TLOD Base) on the ground, prioritising timeliness.
@@ -522,8 +522,8 @@ box to advise this.
     - Disabled by default, as the larger TLOD changes it makes at lower altitudes may cause FPS drops and stutters on some systems.
   - TLOD Base Min - Sets the minimum TLOD the automation algorithm will use at or below the Base altitude. (Range: 10 - TLOD Max-10)
   - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100,000 ft)
-  - TLOD Base Extra – additional TLOD Base applied under favourable performance conditions.
-    - When enabled, allows TLOD Extra below Alt TLOD Top.
+  - TLOD Base Extra in FPS Sensitivity or Tolerance modes
+    - When enabled, allows TLOD Extra below Alt TLOD Top under favourable performance conditions.
     - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Max.
     - Multiplier tooltip shows TLOD Min including Extra total.
     - Requires ≥15% FPS headroom above target FPS. If using an FPS cap, set target FPS at least 15% below the cap (preferably more).
@@ -537,6 +537,11 @@ box to advise this.
     - Avoid rapid view changes or fast panning, especially initially while scenery loads, as this may trigger unnecessary reductions.
     - Cannot be enabled simultaneously with Auto Target FPS; the most recent selection takes precedence, with a dialog shown.
     - If VRAM+ limiting is active, Base Extra seeking is cancelled and may reset completely if severe.
+  - Start Max option for TLOD Extra
+    - Available for all automation modes supporting TLOD Extra, defaulting to disabled.
+    - When enabled, starts with maximum TLOD Extra instead of beginning at minimum and ramping upward.
+    - Replaces the initial 30-second FPS timer with a normal settle event, reducing startup settle time at the cost of potentially incomplete initial stabilisation.
+    - Due to the aggressive nature of this feature, initial performance may be sub-optimal and the final achievable TLOD Extra may be lower than when the feature is disabled.
   - TLOD Top
     - FPS Sensitivity and Tolerance modes:
       - TLOD Top Max – Maximum TLOD the automation algorithm may use. (Range: TLOD Base Min+10 to 1000)
