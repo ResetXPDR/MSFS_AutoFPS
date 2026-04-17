@@ -126,10 +126,11 @@ What does this VRAM+ feature do? How do I use it?
   - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
   - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
 
-I am getting major stuttering, freezes or CTDs in MSFS using this app. What can I do to stop them?
+I am getting major stuttering (visual or sound), freezes or CTDs in MSFS using this app. What can I do to stop them?
 - By far the most common reason is users have enabled Expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
-- As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer to uninstall (remove option) and reinstall, which will recreate your config file.
+- As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer and selecting the Reset Configs options, which will recreate your config files.
 - Rerun the app and try Non-Expert mode with IFR flight type and Auto Target FPS checked.
+- If you have enabled the MSFS Performance Optimiser, which can cause stutters on some systems (especially with sound), try disabling it.
 - If this doesn't resolve it, try enabling Expert options and reducing the FPS Sensitivity setting to 2, to allow smaller TLOD changes.
 - If still not resolved, try the FPS Tolerance mode, which was the automation method in the original release version that had larger TLOD changes but they occurred less often, with a setting of 5.
 
