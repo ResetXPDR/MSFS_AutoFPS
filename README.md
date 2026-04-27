@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.4.6.8
+# MSFS_AutoFPS v0.5.0.0
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -267,7 +267,7 @@ Some Notes:
     - The Sim Values panel reflects optimiser‑controlled states such as CPU affinity, process priority, and power‑plan selection, updating immediately when these values are applied or restored.
     - Designed to change states only when they are at their default levels and have not already been modified by other tools (e.g., VR Auto Optimiser, Process Lasso), ensuring no conflict with external managers.
     - The Sim Version text changes to royal blue to indicate the optimiser is active and controlling MSFS.
-    - Provides UI controls for Physical Cores, MSFS process priority, and Best Windows Power Plan, shown  in Expert Mode when hovering over the optimiser checkbox or MSFS label.
+    - Provides UI controls for Physical Cores, MSFS process priority, and Best Windows Power Plan, shown in Expert Mode when hovering over the optimiser checkbox or MSFS label.
     - Can be fine‑tuned with four user‑configurable options in the common config file in the app’s root directory.
     - CPU Affinity:
       - Uses a universal physical‑core rule based on SMT that gives consistent behaviour across AMD, Intel hybrid, and SMT‑off systems.
@@ -292,7 +292,7 @@ Some Notes:
     - **VR‑specific defaults** show automatically when in VR mode or when VR is selected in the Target FPS dropdown.
     - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
   - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
-  - Green means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange means TLOD or OLOD is auto adjusting, black is shown otherwise.
+  - Green generally means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange for TLOD or OLOD means it is auto adjusting , black is shown otherwise.
   - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
   - FPS+ - shows the average FPS, filtered for spikes and dips, for the current graphics mode.
@@ -318,11 +318,12 @@ Some Notes:
       - Installer runs automatically, showing Release Notes in Notepad and auto-starting the new version.
     - **Show Updates** displays available updates and download links.
     - **Mandatory Updates Only** displays and installs only mandatory updates.
-    - **+ Test** opts users into test version updates.
-      - Test version users who opt out of **+ Test** will be offered a one-time automatic rollback to the latest formal release.
-      - **Mandatory Updates Only** will be unavailable until the app updates to a release version.
-      - Updates for test versions run a shorter process than release versions, as they assume all core components are already up to date.
-    - **Compatibility Updates** may be auto-installed if the app fails its compatibility check and a matching update is available, which may potentially be a test build if no stable version exists.
+    - **Update Channel** sets the minimum maturity level for updates (Release, RC+, Test+, Exp+), replacing the previous binary test‑update model.
+      - The Update Channel dropdown only appears in non‑expert mode when set to a test channel (RC+, Test+, or Exp+); Release‑channel users must enable Expert Options to view or change it.
+      - Test‑channel users who return to **Release** will be offered a one-time automatic rollback to the latest formal release.
+      - **Mandatory Updates Only** remains unavailable while on any test channel.
+      - Test‑channel updates run a shorter process than release updates, assuming all core components are already current.
+    - **Compatibility Updates** may be auto‑installed if the app fails its compatibility check and a matching update is available, which may be a test build if no stable version exists.
     - App startup sequence ensures update check is completed before connecting to MSFS.
   - VRAM+ - detects an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
     - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**.
@@ -333,18 +334,13 @@ Some Notes:
       - VRAMOverflowHoldTLOD threshold, defaults to >= 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
       - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
       - VRAMOverflowSettingsRecovery threshold, must be at least 5% less than VRAMOverflowReduceTLOD (ie. 93% by default) and will allow settings to progressively increase with favourable performance conditions until the feature disengages. 
-    - VRAM+ setting:
+    - VRAM+ option - only available to change in Expert mode, defaults to enabled:
       - MSFS 2020:
-        - Checkbox only visible if GPU-Z is running and moves from the General to the Expert Opens panel in Expert mode.
         - Enabling uses the LODs-only setting, providing up to a 50% reduction.
       - MSFS 2024:
-        - Non-Expert mode:
-          - Checkbox only visible if GPU-Z is running
-          - Enabling uses the Max setting described for Expert mode.
-        - Expert mode:
-          - Off: disables the feature completely.
-          - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
-          - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
+        - Off: disables the feature completely.
+        - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
+        - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
     - If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
   - Hybrid Dynamic Settings/AutoFPS-controlled Automation in Expert mode with MSFS 2024:
     - Uses MSFS dynamic settings, if enabled in MSFS, for auto-LOD reduction; otherwise it reverts to AutoFPS-controlled LOD reduction if active.
