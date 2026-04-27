@@ -334,7 +334,7 @@ Some Notes:
       - VRAMOverflowHoldTLOD threshold, defaults to >= 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
       - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
       - VRAMOverflowSettingsRecovery threshold, must be at least 5% less than VRAMOverflowReduceTLOD (ie. 93% by default) and will allow settings to progressively increase with favourable performance conditions until the feature disengages. 
-    - VRAM+ option - only available to change in Expert mode, defaults to enabled:
+    - VRAM+ option - only available to change in Expert mode, and defaults to enabled:
       - MSFS 2020:
         - Enabling uses the LODs-only setting, providing up to a 50% reduction.
       - MSFS 2024:
@@ -434,33 +434,24 @@ Some Notes:
   - Use Expert Options
     - Non-Expert Mode (unchecked and default)
       - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability.
-      - The app will first attempt to automatically detect if an FPS cap is use by checking to see if the FPS matches the target FPS over a 10 second period at the end of the initial 30 second settling period.
-      - If an FPS cap is detected, the FPS Cap TLOD automation method will be used with the following settings:
-        - Auto Target FPS - disabled and hidden as a user-specified FPS cap is in use
-        - LOD Step - 5
-        - TLOD Base Min - VFR 50% of your current MSFS TLOD setting, IFR 25%
-        - TLOD Top Min - VFR 150% of your current MSFS TLOD setting, IFR 100%
-        - TLOD Base Extra - enabled with an x2 multiplier
-        - TLOD Top Extra - enabled with an x2 multiplier
-        - Mtns - disabled
-      - Otherwise, FPS Sensitivity will be used with the following settings:
-        - Auto Target FPS - user selectable. Enabling automatically disables Extra due to automation control ambiguity
+      - The following settings will be used:
+        - Target FPS option, graphics mode and value - user selectable. Enabling Auto automatically disables Extra due to automation control ambiguity
+        - VFR or IFR flight type - user selectable
+        - TLOD Automation Method - FPS Sensitivity
         - FPS Sensitivity - 5%
         - TLOD Base Min - VFR 100% of your current MSFS TLOD setting, IFR 50%
+        - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
         - TLOD Top Max - VFR 300% of your current MSFS TLOD setting, IFR 200%
         - Alt TLOD Top - VFR 1000 ft, IFR 2000 ft
-        - TLOD Base Extra - enabled with an x2 multiplier, unless Auto Target FPS is enabled then disabled
-        - Mtns - disabled
-      - Common to both automation methods:
-        - Night÷2 - enabled
-        - VFR or IFR flight type - user selectable
-        - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
         - Alt TLOD Top - internally calculated to achieve a maximum recommended descent rate of 1350 fpm for VFR and 2000 fpm for IFR.
+        - TLOD Base Extra - enabled with an x4 multiplier, unless Auto Target FPS is enabled then disabled
+        - Mtns - disabled
+        - Night÷2 - enabled
         - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
         - VRAM+ - enabled,
           - Only functional if GPU-Z is running.
           - Imposes different auto settings reduction settings, namely Floor: off and Recovery: Ground with 5% VRAM reduction achieved. 
-          - Can be disabled by unchecking VRAM+.
+          - Can be disabled by temporarily checking Expert Options, selecting Off in the VRAM+ dropdown control, then unchecking Expert Options.
         - MSFS 2020 only
           - Decrease Cloud Quality
             - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
@@ -476,12 +467,12 @@ Some Notes:
       - The UI expands to show additional MSFS settings to adjust.
       - If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. 
 - Expert Settings
-  - Auto Method - FPS Sensitivity generally gives the best results for most users and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD-like experience. Use FPS Cap if you use an FPS cap on your system.
+- Auto Method – FPS Sensitivity generally gives the best results for most users, including with Fixed FPS, and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD‑like experience. FPS Cap and FPS Tolerance are both legacy modes; FPS Cap was previously recommended when using a system‑level FPS cap, but FPS Sensitivity with Fixed FPS is now preferred.
     - FPS Sensitivity - smaller changes more often.
       - Determines how sensitive the app will be to the variance between your current and target FPS.
       - Also determines the largest TLOD step size you will see, being double the FPS sensitivity number.
       - The lower the setting the smaller the changes will be, which is useful if you are experiencing stuttering with the default value of 5. Vice versa for higher settings. (1 - 20 allowable)
-    - FPS Tolerance - larger changes less often.
+    - FPS Tolerance (legacy) - larger changes less often.
       - Determines how much variance from your target FPS must occur before the app will adjust MSFS settings to achieve the target FPS and what nominal magnitude those changes will be.
       - The lower the setting, the more reactive the app will be, the more MSFS settings changes will occur and the changes will be smaller. (1% - 20% allowable)
     - Auto TLOD – operates like Auto OLOD by using an altitude‑based schedule, and is the mode most closely aligned with DynamicLOD_ResetEdition behaviour.
@@ -490,7 +481,7 @@ Some Notes:
       - The nominal LOD Step Size can be set to allow users experiencing stuttering issues to try different LOD step sizes to help resolve the issue. The default value is 5. (1 - 20 allowable)
       - This method completely ignores FPS hence all FPS-related settings are removed from the UI.
 box to advise this.
-    - FPS Cap - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
+    - FPS Cap (legacy) - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
       - TLOD Extra – additional TLOD applied under favourable performance conditions.
         - Applicable to FPS Cap mode in Expert mode, and to Non‑Expert mode when an FPS cap is auto‑detected.
         - When enabled, set target FPS equal to your FPS cap if using one, or slightly below your usual FPS if not, for correct logic.
@@ -525,12 +516,8 @@ box to advise this.
            - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
            - If stuttering persists, either uncheck TLOD Base Extra, use a lower multiplier, or use AutoTLOD for the lowest possible TLOD on the ground.
-  - LOS-C Line of Sight Correction:
-    - Adjusts TLOD between Alt TLOD Base and Top such that the viewing distance grows quickly at lower altitudes but more slowly at higher altitudes.
-    - Provides a more realistic experience of horizon expansion as altitude increases, rather than the linear increase when disabled, following a square root curve.
-    - Disabled by default, as the larger TLOD changes it makes at lower altitudes may cause FPS drops and stutters on some systems.
   - TLOD Base Min - Sets the minimum TLOD the automation algorithm will use at or below the Base altitude. (Range: 10 - TLOD Max-10)
-  - Alt TLOD Base - Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100,000 ft)
+  - Alt TLOD Base – Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100,000 ft; N/A in Free TLOD mode)
   - TLOD Base Extra in FPS Sensitivity or Tolerance modes
     - When enabled, allows TLOD Extra below Alt TLOD Top under favourable performance conditions.
     - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Max.
@@ -554,14 +541,14 @@ box to advise this.
   - TLOD Top
     - FPS Sensitivity and Tolerance modes:
       - TLOD Top Max – Maximum TLOD the automation algorithm may use. (Range: TLOD Base Min+10 to 1000)
-      - Alt TLOD Top – Altitude (AGL) at or above which TLOD may increase up to TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
+      - Alt TLOD Top – Altitude (AGL) at or above which TLOD may increase up to TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft; N/A in Free TLOD mode)
     - Auto TLOD mode:
       - TLOD Top Max – Fixed maximum TLOD the automation algorithm will use. (Range: TLOD Base Min+10 to 1000)
       - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be fixed at TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
     - FPS Cap mode:
       - TLOD Top Min – Minimum TLOD the automation algorithm will apply before any TLOD Top Extra. (Range: TLOD Base Min+10 to 1000)
       - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be at least TLOD Top Min. (Range: Alt TLOD Base+1 to 100,000 ft)
-    - All modes:
+    - All modes, except when Free TLOD is enabled:
       - Default Alt TLOD Top values are reduced in FPS Sensitivity and Tolerance modes to account for free‑ranging TLOD Max.
         - IFR: Base 1000 ft, Top (Sensitivity/Tolerance) 2000 ft, Top (Auto TLOD/FPS Cap) 3333 ft – aligns with recommended max 2000 fpm descent rate.
         - VFR: Base 100 ft, Top (Sensitivity/Tolerance) 1000 ft, Top (Auto TLOD/FPS Cap) 2350 ft – aligns with recommended max 1350 fpm descent rate.
