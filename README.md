@@ -518,21 +518,28 @@ box to advise this.
            - If stuttering persists, either uncheck TLOD Base Extra, use a lower multiplier, or use AutoTLOD for the lowest possible TLOD on the ground.
   - TLOD Base Min - Sets the minimum TLOD the automation algorithm will use at or below the Base altitude. (Range: 10 - TLOD Max-10)
   - Alt TLOD Base – Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100,000 ft; N/A in Free TLOD mode)
-  - TLOD Base Extra in FPS Sensitivity or Tolerance modes
-    - When enabled, allows TLOD Extra below Alt TLOD Top under favourable performance conditions.
-    - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Max.
-    - Multiplier tooltip shows TLOD Min including Extra total.
-    - Requires ≥15% FPS headroom above target FPS. If using an FPS cap, set target FPS at least 15% below the cap (preferably more).
-    - Seek process starts automatically at flight commencement and again when landed and stopped.
-    - Seek can be manually restarted with Reset if flight conditions change.
-    - On the ground, Base Extra increases progressively (larger steps initially) until a higher TLOD Base Min with <15% FPS headroom is reached, up to the maximum allowable.
-    - On climb‑out, Base Extra remains set until crossing the altitude threshold where priority mode transitions from TLOD to FPS.
-    - In FPS priority mode, Base Extra calculates as 50% (IFR/user profiles) or 25% (VFR) of the lower of current TLOD or TLOD Max (without TLOD Mtn Amt), but never below TLOD Base Min.
-    - On descent through the transition altitude, Base Extra locks until landing to allow moderate reduction to Min.
-    - If conditions deteriorate after Base Extra is set, it auto‑reduces by 20% to maintain target FPS.
-    - Avoid rapid view changes or fast panning, especially initially while scenery loads, as this may trigger unnecessary reductions.
-    - Cannot be enabled simultaneously with Auto Target FPS; the most recent selection takes precedence, with a dialog shown.
-    - If VRAM+ limiting is active, Base Extra seeking is cancelled and may reset completely if severe.
+  - TLOD Base Extra option in FPS Sensitivity or Tolerance modes in Manual or Fixed Target FPS:
+    - Fixed:
+      - No TLOD Base Extra will be used.
+      - Forced for Auto Target FPS due to mutual exclusivity of any other setting with this mode.
+    - Extra:
+      - Allows TLOD Extra below Alt TLOD Top under favourable performance conditions.
+      - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Max.
+      - Multiplier tooltip shows TLOD Min including Extra total.
+      - Requires ≥15% FPS headroom above target FPS. If using an FPS cap, set target FPS at least 15% below the cap (preferably more).
+      - Seek process starts automatically at flight commencement and again when landed and stopped.
+      - Seek can be manually restarted with Reset if flight conditions change.
+      - On the ground, Base Extra increases progressively (larger steps initially) until a higher TLOD Base Min with <15% FPS headroom is reached, up to the maximum allowable.
+      - On climb‑out, Base Extra remains set until crossing the altitude threshold where priority mode transitions from TLOD to FPS.
+      - In FPS priority mode, Base Extra calculates as 50% (IFR/user profiles) or 25% (VFR) of the lower of current TLOD or TLOD Max (without TLOD Mtn Amt), but never below TLOD Base Min.
+      - On descent through the transition altitude, Base Extra locks until landing to allow moderate reduction to Min.
+      - If conditions deteriorate after Base Extra is set, it auto‑reduces by 20% to maintain target FPS.
+      - Avoid rapid view changes or fast panning, especially initially while scenery loads, as this may trigger unnecessary reductions.
+      - Cannot be enabled simultaneously with Auto Target FPS; the most recent selection takes precedence, with a dialog shown.
+      - If VRAM+ limiting is active, Base Extra seeking is cancelled and may reset completely if severe.
+    - Free:
+      - Free‑ranging TLOD option, allowing TLOD to range between TLOD Base Min and TLOD Top Max at any altitude and any time, based on current performance conditions.
+      - Can result in stutters around complex scenery or in complex aircraft, especially near or at complex airports, hence is only recommended for VFR and non‑complex scenery or aircraft situations.
   - Start Max option for TLOD Extra
     - Available for all automation modes supporting TLOD Extra, defaulting to disabled.
     - When enabled, starts with maximum TLOD Extra instead of beginning at minimum and ramping upward.
