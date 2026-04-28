@@ -292,7 +292,7 @@ Some Notes:
     - **VR‑specific defaults** show automatically when in VR mode or when VR is selected in the Target FPS dropdown.
     - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
   - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
-  - Green generally means the sim value is at or better than target value being sought, red means at lowest level or worse than target value being sought, orange for TLOD or OLOD means it is auto adjusting , black is shown otherwise.
+  - Green means the sim value meets or exceeds the target. Red means it is at its minimum or below target. Orange with arrows for TLOD or OLOD means the value is auto‑adjusting. Orange for FPS and TLOD means adjustment is limited because FG is inactive. Black is shown otherwise.
   - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
   - FPS+ - shows the average FPS, filtered for spikes and dips, for the current graphics mode.
@@ -371,11 +371,13 @@ Some Notes:
         - Automates proportionally above and below the user‑set value: smaller, more frequent adjustments in FPS Sensitivity mode; larger, less frequent adjustments in FPS Tolerance mode.
         - Requires FPS headroom above the target. If FPS rarely exceeds the target, TLOD increases may be slow or may not occur.
         - If using a fixed FPS (FPS stabilising with minimal variation) or Vsync for the same purpose, it is strongly recommended to use the Fixed option in Expert mode, setting the Fixed Target FPS to match your cap.
+          - A user warning system triggers only when a 5‑times‑proven detected system Fixed FPS, Target FPS option and Target FPS value would block TLOD automation.
+          - When triggered, the Target FPS option and/or Target FPS value controls show an orange background for 30 seconds and display a dynamic tooltip warning with recommendation(s) to resolve the detected Fixed FPS / Target FPS / Target FPS option mismatch.
         - If using an FPS cap as a ceiling rather than a fixed FPS, the target FPS must be set at least 5% below the cap for automation to function correctly. This may introduce tearing or break VR motion reprojection, which is why the Fixed option is preferred.
       - Auto
         - Automatically calculates a target FPS after initial FPS settling, when stationary on the ground or any time you are in the air.
         - Recalculates automatically if performance becomes too low for the current target, after arriving at a new destination, when changing graphics mode, pressing Reset, or toggling the option off/on for a quick recalibration.
-        - Detects a Fixed FPS condition (FPS stabilising with minimal variation). When detected, it sets the target FPS to that value, switches to Fixed FPS automation, and continues monitoring to ensure the classification remains valid.
+        - Detects a fixed FPS condition (FPS stabilising with minimal variation). When detected, it sets the target FPS to that value, switches to Fixed FPS automation, and continues monitoring to ensure the classification remains valid.
         - Otherwise, with IFR or any Expert‑mode user profile, the target ranges from 95% of current average FPS on the ground to 85% at or above 3000 ft, providing headroom for Max TLOD.
         - With VFR, each percentage is reduced by 5% to better suit higher performance expectations.
         - Auto settings reduction and TLOD Base Extra are automatically disabled (and greyed out) in Expert mode, as they are mutually exclusive with Auto Target FPS.
@@ -386,6 +388,7 @@ Some Notes:
         - Recovers at twice the normal increase rate when below the last stable TLOD peak, improving responsiveness within previously safe ranges while avoiding overshoot above them.
         - Uses fixed timing guards (5 s since last decrease, 10 s since last increase) to minimise oscillation.
         - Halves maximum TLOD reduction in non‑cockpit camera states to account for larger transient FPS drops typical of these views.
+        - A one‑off per‑profile migration prompt converts existing FPS Cap settings to the recommended Sensitivity + Fixed Target FPS mode while preserving equivalent tuning.
     - Target FPS graphics mode
       - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR3, VR) and each flight type (VFR, IFR, and four user profiles in Expert mode).
       - On startup, the app defaults to the graphics mode last used.
