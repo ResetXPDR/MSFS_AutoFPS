@@ -48,11 +48,20 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Start the app before you load your flight,
 - Leave Use Expert Settings unchecked,
 - Pick what type of flight you are doing via the drop down list ie. either VFR (GA aircraft) or IFR (airliners),
-- If using an FPS cap, enter that as your target FPS otherwise enter a target FPS your system can usually easily achieve or click on auto target FPS for the app to pick it for you,
+- For Target FPS, select Manual and a value your system can usually achieve, Auto for the app to pick it for you, or Fixed with a matching value if you are using a fixed FPS (as defined below),
 - Click back on MSFS and wait until any FPS settle or TLOD seek events have finished (60 seconds max), then
 - Go fly!
 - Due to potential settings conflict, don't change any MSFS graphics settings that could be adjusted by AutoFPS while in a flight with AutoFPS already running.
 - If performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
+
+What is a Fixed FPS vs an NTE FPS in reference to this app?
+- A **Fixed FPS** is when your FPS is truly locked to one value with almost no variation (e.g., 72‑72‑72‑72‑72 across the detection windows).
+  - In this case, use **Fixed Target FPS** and set it to match your lock.
+  - The app will warn you if your settings don’t match a detected fixed FPS.
+- An **NTE FPS** (“Not‑To‑Exceed FPS”) is when you have an FPS cap but your FPS still varies too much to be considered fixed.
+  - In this case, do **not** use Fixed Target FPS.
+  - Use **Manual Target FPS** and set the target slightly below the cap for stable TLOD behaviour.
+- The app only classifies FPS as “Fixed” after five stable checks; one‑off dips are ignored.
 
 What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
