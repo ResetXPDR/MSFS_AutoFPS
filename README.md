@@ -349,7 +349,7 @@ Some Notes:
     - TLOD and OLOD labels will show with a `"D"` prefix and tooltip when `DynSet` is active — even if AutoFPS reduction is disabled — as MSFS dynamic settings remain active.
     - An MSFS icon will also be shown before the AutoFPS icon in the Sim Values panel title when dynamic settings is enabled, to indicate hybrid automation is active.
     - `DynSet` and the MSFS target frame rate can be changed at any time, including mid-flight, with changes reflected in the Reduce status display.
-    - DynSet enable/disable and increase/decrease buttons are available in Test Mode, activated by setting the TestMode and ShowDynSetButtonsInTestMode keys in the app's root folder common config file to "true", to allow instant changes to these settings without needing to open MSFS settings. 
+    - DynSet enable/disable and increase/decrease buttons are available when Log+ is enabled to allow instant changes to these settings without needing to open MSFS settings. 
     - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
     - Works best when using MSFS-set FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS, and the FPS Cap automation mode in AutoFPS.
     - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to at least 10 FPS lower than the native frame rate equivalent of the AutoFPS target FPS for best results.
@@ -648,8 +648,8 @@ box to advise this.
       - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process.
         - Enhanced activation/deactivation based on GPU load is available when the companion app GPU-Z is running.
       - Removed immediately if the FPS cap is breached.
-- Test Mode - Advanced testing and logging features:
-  - Additional logging and features are available when the **TestMode** key is set to "true" in the common config file in the app’s root directory.
+- Log+ Mode - Advanced testing and logging features:
+  - Additional logging and features are available when the **Log+** option is checking in Expert mode.
   - Detailed FPS logging:
     - Activated by clicking the FPS value during flight sessions.
     - Default log period is 30 seconds, changeable with the **logFPSDetailsCountMax** key in MSFS_AutoFPS.config in the app root directory.
@@ -662,18 +662,17 @@ box to advise this.
       - Dominant Core – instantaneous load of the core selected by 10‑second averaging, including its core number.
       - TopXAvg – instantaneous load of the busiest X (configurable) cores.
       - MSFS CPU – MSFS CPU usage based on the applied affinity mask, showing core count when set.
-    - Extra debug logging in FPS Cap mode to provide clearer context when performance limits are hit.
+    - Extra debug logging to provide clearer context when performance limits are hit.
+      - Logs performance data every second during flight when enabled (logs grow rapidly).
       - Ignores the first performance data sample, which is often an outlier due to startup conditions.
-      - Triggers: FPS‑cap breaches, recovery, and TLOD extra initial ground‑seek and initial in‑air re‑seek events (reset when the app is reset).
       - Uses EWMA smoothing for Dominant, Max and MSFS CPU metrics, logging both raw and smoothed values to stabilise scheduler jitter and show clearer CPU‑pressure trends.
       - Logged fields: FPS, ΔFPS, TLOD, AGL, Total CPU, Dominant Core, MSFS CPU, TopXAvg, GPU and VRAM (when detected). Where two values are logged, the first is raw and the second is EWMA‑smoothed.
       - Configurable parameters in the common config file:
         - perfLogTopCoreCount – X in TopXAvg, default 2.
         - PerfLogBufferSize – number of pre‑breach and post‑recovery samples, default 15.
-        - PerfLoggingAlways – default false; logs performance data every second during flight when enabled (logs grow rapidly).
+        - PerfLoggingAlways – always enabled, regardless of what it is set to in the config file.
         - EwmaAlpha – EWMA smoothing coefficient, default 0.1.
         - MonitorMode – default false; disables all AutoFPS automation for baseline MSFS performance monitoring.
-          - Forces Test Mode and PerfLoggingAlways to enable CPU monitoring and performance logging.
           - Hides the Expert settings panel.
           - Excludes irrelevant log lines.
           - Does not back up or restore UserCfg.opt.
