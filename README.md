@@ -264,6 +264,7 @@ Some Notes:
   - Automatically identifies which MSFS version is in use as either MSFS2020 or MSFS2024 and the version number. 
   - If the sim version is showing in red and is not the MSFS version you wish to configure before starting that MSFS version, click the 20>24 or 24>20 button, as applicable, and it will change to that.
   - MSFS Performance Optimiser - enabled via the "+" checkbox to the left of the Sim Version label:
+    - When first enabled, a one‑off warning dialog advises users of potential performance, stuttering, audio, or unexpected MSFS behaviour when using this feature.
     - The Sim Values panel reflects optimiser‑controlled states such as CPU affinity, process priority, and power‑plan selection, updating immediately when these values are applied or restored.
     - Designed to change states only when they are at their default levels and have not already been modified by other tools (e.g., VR Auto Optimiser, Process Lasso), ensuring no conflict with external managers.
     - The Sim Version text changes to royal blue to indicate the optimiser is active and controlling MSFS.
@@ -334,7 +335,7 @@ Some Notes:
       - VRAMOverflowHoldTLOD threshold, defaults to >= 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
       - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
       - VRAMOverflowSettingsRecovery threshold, must be at least 5% less than VRAMOverflowReduceTLOD (ie. 93% by default) and will allow settings to progressively increase with favourable performance conditions until the feature disengages. 
-    - VRAM+ option - only available to change in Expert mode, and defaults to enabled:
+    - VRAM+ option - only available to change in Expert mode, and defaults to enabled for either mode:
       - MSFS 2020:
         - Enabling uses the LODs-only setting, providing up to a 50% reduction.
       - MSFS 2024:
@@ -659,13 +660,15 @@ box to advise this.
     - Logs the raw FPS and average FPS to one decimal place every second.
     - FPS value is displayed in two alternating purple shades when logging FPS details.
     - Clicking the FPS display while logging is active will cancel the current logging event.
+  - Camera state logging:
+    - Logs all MSFS camera state changes to help diagnose issues related to camera state changes.
   - Performance monitoring and logging:
     - Shown as an extra line on the app status line during flight sessions.
       - Total CPU – overall system CPU usage across all logical processors.
       - Dominant Core – instantaneous load of the core selected by 10‑second averaging, including its core number.
       - TopXAvg – instantaneous load of the busiest X (configurable) cores.
       - MSFS CPU – MSFS CPU usage based on the applied affinity mask, showing core count when set.
-    - Extra debug logging to provide clearer context when performance limits are hit.
+    - Extra performance data logging to provide clearer context when performance limits are hit.
       - Logs performance data every second during flight when enabled (logs grow rapidly).
       - Ignores the first performance data sample, which is often an outlier due to startup conditions.
       - Uses EWMA smoothing for Dominant, Max and MSFS CPU metrics, logging both raw and smoothed values to stabilise scheduler jitter and show clearer CPU‑pressure trends.
