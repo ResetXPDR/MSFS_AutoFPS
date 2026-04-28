@@ -650,7 +650,7 @@ box to advise this.
       - Auto increase cloud quality option with TLOD Base Extra enabled.
       - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process.
         - Enhanced activation/deactivation based on GPU load is available when the companion app GPU-Z is running.
-      - Removed immediately if the FPS cap is breached.
+      - Removed when performance conditions have degraded sufficiently since activation.
 - Log+ Mode - Advanced testing and logging features:
   - Additional logging and features are available when the **Log+** option is checking in Expert mode.
   - Detailed FPS logging:
