@@ -452,12 +452,12 @@ Some Notes:
         - VFR or IFR flight type - user selectable
         - TLOD Automation Method - FPS Sensitivity
         - FPS Sensitivity - 5%
-        - TLOD Base Min - VFR 100% of your current MSFS TLOD setting, IFR 50%
+        - TLOD Base Min - VFR 50% of your current MSFS TLOD setting, IFR 25%, double this if using Auto Target FPS
+        - TLOD Base Extra - enabled with an x4 multiplier, unless Auto Target FPS is enabled then disabled
         - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
         - TLOD Top Max - VFR 300% of your current MSFS TLOD setting, IFR 200%
         - Alt TLOD Top - VFR 1000 ft, IFR 2000 ft
         - Alt TLOD Top - internally calculated to achieve a maximum recommended descent rate of 1350 fpm for VFR and 2000 fpm for IFR.
-        - TLOD Base Extra - enabled with an x4 multiplier, unless Auto Target FPS is enabled then disabled
         - Mtns - disabled
         - Night÷2 - enabled
         - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
