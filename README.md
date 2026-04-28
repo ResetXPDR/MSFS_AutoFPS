@@ -380,14 +380,14 @@ Some Notes:
       - Manual
         - Automates proportionally above and below the user‑set value: smaller, more frequent adjustments in FPS Sensitivity mode; larger, less frequent adjustments in FPS Tolerance mode.
         - Requires FPS headroom above the target. If FPS rarely exceeds the target, TLOD increases may be slow or may not occur.
-        - If using a fixed FPS (FPS stabilising with minimal variation) or Vsync for the same purpose, it is strongly recommended to use the Fixed option in Expert mode, setting the Fixed Target FPS to match your cap.
-          - A user warning system triggers only when a 5‑times‑proven detected system Fixed FPS, Target FPS option and Target FPS value would block TLOD automation.
-          - When triggered, the Target FPS option and/or Target FPS value controls show an orange background for 30 seconds and display a dynamic tooltip warning with recommendation(s) to resolve the detected Fixed FPS / Target FPS / Target FPS option mismatch.
-        - If using an FPS cap as a ceiling rather than a fixed FPS, the target FPS must be set at least 5% below the cap for automation to function correctly. This may introduce tearing or break VR motion reprojection, which is why the Fixed option is preferred.
+        - If you are using a true fixed FPS (FPS holding the same value with minimal variation) or VSync for the same purpose, it is strongly recommended to use the Fixed option in Expert mode and set the Fixed Target FPS to match your lock.
+          - A user warning system triggers only when a 5‑times‑proven detected fixed FPS, Target FPS option and Target FPS value would block TLOD automation.
+          - When triggered, the Target FPS option and/or Target FPS value controls show an orange background for 30 seconds and display a dynamic tooltip with recommendation(s) to resolve the detected fixed FPS / Target FPS / Target FPS option mismatch.
+        - If you are using an NTE FPS (an FPS cap acting as a ceiling rather than a true fixed FPS), the Target FPS must be set at least 5% below the cap for automation to function correctly. This may introduce tearing or break VR motion reprojection, which is why the Fixed option is preferred when a true fixed FPS is actually present.
       - Auto
         - Automatically calculates a target FPS after initial FPS settling, when stationary on the ground or any time you are in the air.
         - Recalculates automatically if performance becomes too low for the current target, after arriving at a new destination, when changing graphics mode, pressing Reset, or toggling the option off/on for a quick recalibration.
-        - Detects a fixed FPS condition (FPS stabilising with minimal variation). When detected, it sets the target FPS to that value, switches to Fixed FPS automation, and continues monitoring to ensure the classification remains valid.
+        - Detects a fixed FPS condition (FPS stabilised with minimal variation). When detected, it sets the target FPS to that value, switches to Fixed FPS automation, and continues monitoring to ensure the classification remains valid.
         - Otherwise, with IFR or any Expert‑mode user profile, the target ranges from 95% of current average FPS on the ground to 85% at or above 3000 ft, providing headroom for Max TLOD.
         - With VFR, each percentage is reduced by 5% to better suit higher performance expectations.
         - Auto settings reduction and TLOD Base Extra are automatically disabled (and greyed out) in Expert mode, as they are mutually exclusive with Auto Target FPS.
@@ -480,7 +480,7 @@ Some Notes:
       - The UI expands to show additional MSFS settings to adjust.
       - If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you do not use these expert options and you should uncheck this option. 
 - Expert Settings
-- Auto Method – FPS Sensitivity generally gives the best results for most users, including with Fixed FPS, and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD‑like experience. FPS Cap and FPS Tolerance are both legacy modes; FPS Cap was previously recommended when using a system‑level FPS cap, but FPS Sensitivity with Fixed FPS is now preferred.
+  - Auto Method – FPS Sensitivity generally gives the best results for most users, including when using a true fixed FPS, and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD‑like experience. FPS Cap and FPS Tolerance are both legacy modes; FPS Cap was previously recommended when using a true fixed FPS, but FPS Sensitivity is now the preferred option.
     - FPS Sensitivity - smaller changes more often.
       - Determines how sensitive the app will be to the variance between your current and target FPS.
       - Also determines the largest TLOD step size you will see, being double the FPS sensitivity number.
@@ -494,10 +494,10 @@ Some Notes:
       - The nominal LOD Step Size can be set to allow users experiencing stuttering issues to try different LOD step sizes to help resolve the issue. The default value is 5. (1 - 20 allowable)
       - This method completely ignores FPS hence all FPS-related settings are removed from the UI.
 box to advise this.
-    - FPS Cap (legacy) - a specific configuration of Auto TLOD optimised for when a system FPS cap is in use.
+    - FPS Cap (legacy) - a specific configuration of Auto TLOD optimised for when a true fixed FPS is in use.
       - TLOD Extra – additional TLOD applied under favourable performance conditions.
         - Applicable to FPS Cap mode in Expert mode, and to Non‑Expert mode when an FPS cap is auto‑detected.
-        - When enabled, set target FPS equal to your FPS cap if using one, or slightly below your usual FPS if not, for correct logic.
+        - When enabled, set target FPS equal to your fixed FPS if using one, or slightly below your usual FPS if not, for correct logic.
         - TLOD Base Extra in FPS Cap mode
           - When enabled, allows TLOD Extra below Alt TLOD Top.
           - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Min + Top Extra.
@@ -510,20 +510,20 @@ box to advise this.
         - TLOD Extra seek process starts automatically:
           - At flight commencement (regardless of aircraft position) and again when landed and stopped.
           - On climb through Alt TLOD Top.
-          - Periodically, every 30 seconds above Alt TLOD Top, if not already at TLOD Top Max and provided the FPS cap is consistently being met.
+          - Periodically, every 30 seconds above Alt TLOD Top, if not already at TLOD Top Max and provided the fixed FPS is consistently being met.
         - Seek can be restarted manually via Reset if flight conditions change and invalidate the original TLOD Base.
         - When seeking:
           - Large steps (up to TLOD Base) on the ground, prioritising timeliness.
           - Small steps (TLOD Step Size) in the air, prioritising stutter minimisation.
           - Intentional overshoot then reduction by headroom amount (default 25) to create margin.
-        - FPS cap breaches trigger immediate headroom reduction proportional to the magnitude of the breach (non‑seek occurrences).
+        - Fixed FPS breaches trigger immediate headroom reduction proportional to the magnitude of the breach (non‑seek occurrences).
         - Avoid rapid external view panning, especially during initial scenery loading, to prevent temporary FPS drops and unnecessary reductions.
         - If FPS drops below target during takeoff and TLOD decreases, it will progressively restore once conditions improve after passing Alt TLOD Top.
         - Calculated TLOD Base Extra is applied as an offset, increasing the entire TLOD altitude schedule by that amount.
         - If VRAM+ limiting is active, Base Extra is frozen or fully reset if the limitation is severe.
         - Config file settings allow adjustment of headroom amount and re‑seek behaviour.
       - The following guidelines should be observed to get the best result from this mode:
-        - Set TLOD Base Min and TLOD Top Min values within your FPS cap for worst-case performance during your flight type profile. TLOD Extra may increase TLOD with better performance but won't drop below the set values.
+        - Set TLOD Base Min and TLOD Top Min values within your fixed FPS for worst-case performance during your flight type profile. TLOD Extra may increase TLOD with better performance but won't drop below the set values.
         - TLOD Base Extra is applied across the entire altitude schedule, potentially allowing very high TLOD Top Max at high multipliers if performance conditions are favourable, so be particularly conservative when setting TLOD Top Min.
         - When on the ground and stopped:
            - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
@@ -539,7 +539,7 @@ box to advise this.
       - Allows TLOD Extra below Alt TLOD Top under favourable performance conditions.
       - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Max.
       - Multiplier tooltip shows TLOD Min including Extra total.
-      - Requires ≥15% FPS headroom above target FPS. If using an FPS cap, set target FPS at least 15% below the cap (preferably more).
+      - Requires ≥15% FPS headroom above target FPS. If using an NTE FPS cap, set target FPS at least 15% below the cap (preferably more).
       - Seek process starts automatically at flight commencement and again when landed and stopped.
       - Seek can be manually restarted with Reset if flight conditions change.
       - On the ground, Base Extra increases progressively (larger steps initially) until a higher TLOD Base Min with <15% FPS headroom is reached, up to the maximum allowable.
