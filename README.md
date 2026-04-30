@@ -305,12 +305,16 @@ Some Notes:
   - Green means the sim value meets or exceeds the target. Red means it is at its minimum or below target. Orange with arrows for TLOD or OLOD means the value is auto‑adjusting. Orange for FPS and TLOD means adjustment is limited because FG is inactive. Black is shown otherwise.
   - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
-  - FPS+ - shows the average FPS, filtered for spikes and dips, for the current graphics mode.
-    - Smooths out any transient FPS spikes or dips experienced - such as those caused by sudden changes in view, panning, scenery loading or other transient events - so that undesired automated MSFS setting changes are minimised.
-    - FPS values within 15% (FPS Sensitivity and Tolerance automation modes) or 10% (AutoTLOD and FPS Cap automation modes) of the current average are averaged over a 5 second rolling window of FPS values
-    - FPS values outside of this range are considered outliers and are not included in the average until a sustained change over 3 seconds in the same direction is detected.
-    - The average will recover more quickly if the very recent trend is detected to have minimal variance.
-    - Averaging period is 5 seconds.
+  - FPS display
+    - FPS (raw) - shows the unfiltered raw FPS when a Fixed FPS is set or automatically detected.
+      - Used for both on-screen reporting ("FPS") and all performance-management logic in fixed-FPS conditions.
+      - Raw FPS is shown because the fixed FPS value is the most relevant for automation and performance decisions.
+    - FPS+ (averaged) - shows the average FPS, filtered for spikes and dips, for the current graphics mode.
+      - Smooths out any transient FPS spikes or dips experienced - such as those caused by sudden changes in view, panning, scenery loading or other transient events - so that undesired automated MSFS setting changes are minimised.
+      - FPS values within 15% (FPS Sensitivity and Tolerance automation modes) or 10% (AutoTLOD and FPS Cap automation modes) of the current average are averaged over a 5 second rolling window of FPS values.
+      - FPS values outside of this range are considered outliers and are not included in the average until a sustained change over 3 seconds in the same direction is detected.
+      - The average will recover more quickly if the very recent trend is detected to have minimal variance.
+      - Averaging period is 5 seconds.
   - FPS source icon - RTSS (RivaTuner Statistics Server) or MSFS.
     - **[RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)** is a well-established tool for FPS monitoring, widely used in the gaming community and fully compatible with MSFS.
     - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running.
