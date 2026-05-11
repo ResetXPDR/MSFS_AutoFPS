@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.0.0
+# MSFS_AutoFPS v0.5.0.1
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -373,7 +373,7 @@ Some Notes:
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
-      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtn+, app priority mode and/or TLOD range as applicable.
+      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
@@ -477,7 +477,7 @@ Some Notes:
             - TLOD activation activation method uses a Cloud Recovery TLOD 2/5 between TLOD Base Min and TLOD Top Max or + 50 over TLOD Base Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
         - MSFS 2024 only
           - Auto Settings Reduction - enabled with Max Levels: 2, Floor: Lowest, and Recovery: Ground. Reduction Settings Suite:
-            - IFR: Full reduction suite minus clouds (to minimise impact on user experience)
+            - IFR: Full reduction suite minus clouds (to minimise impact on user experience). OLOD may reduce by up to 50%, but TLOD will not reduce below TLOD Base Min when not using Auto Target FPS, as it is already very low for this flight‑type profile.
             - VFR: Flora (Trees, Plants, Grass), Ray Traced and Terrain Shadows and Displacement Mapping 
           - Auto Increase Clouds - enabled
     - Expert Mode (checked)
@@ -583,7 +583,7 @@ box to advise this.
     - Halves TLOD Max/Top at night to reduce system workload by not drawing scenery out to distances that can't be seen in the dark anyway.
     - Works with all automation methods: FPS Sensitivity, FPS Tolerance and Auto TLOD.
     - Defaults to enabled in Non-Expert mode. Enabled in Expert mode by checking the - box to the right of the TLOD Max/Top textbox.
-    - When your flight transitions from day to night time, based on your location and the local time, TLOD Max/Top will progressively reduce to half its normal value, including the progressive removal of any TLOD Base and Top Extra in use.
+    - When your flight transitions from day to night time, based on your location and the local time, TLOD Max/Top will progressively reduce to half its normal value, including the progressive removal of any TLOD Base and Top Extra in use in FPS Cap mode only.
     - When your flight transitions from night to day time, based on your location and the local time, TLOD Max/Top will first progressively increase to its normal value then, providing you are either stopped on the ground or are in the air above Alt TLOD Base Min, will activate the seeking process if TLOD Base Min Extra is enabled and reactivate Mtns if enabled.
     - The status line will show either Day or Night when activated and Δ while transitioning between them.
   - Auto OLOD
@@ -614,14 +614,15 @@ box to advise this.
           - Ideally set to at least 15% lower than the Decrease GPU Load percentage to provide a GPU load buffer to minimise the chance that cloud quality will constantly change down and up.
   - MSFS 2024 only
     - Automatic Settings Reduction
-      - Optional and activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
+      - Enabled for Non-Expert mode and disabled by default for Expert mode. 
+      - Activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
       - Only applicable to MSFS 2024, as existing MSFS 2020 functionality is considered acceptable and MSFS 2024 tends to experience VRAM overflow, where such setting reductions are intended to help alleviate, much more frequently.
       - Not applicable to AutoTLOD mode as it has no TLOD or FPS recovery mechanisms. 
       - Default settings will be saved on flight session commencement and restored on completion.
       - Settings reduction will only function and show when in a flight session and the secondary compatibility test passed.
       - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
       - Activation and recovery are automatically paused during critical flight phases (takeoff, initial climb, final approach, landing).
-      - Disabled by default for Expert mode. When enabled the default values of the applicable settings are the same as for Non-Expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
+      - When enabled the default values of the applicable settings are the same as for Non-Expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
         - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce are normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
         - OLOD reductions are proportional to TLOD reductions.
         - AutoFPS-controlled LOD reductions are replaced with MSFS dynamic settings control when enabled. Resulting reductions are internal to MSFS and not reflected in external LOD values.
@@ -630,8 +631,8 @@ box to advise this.
         - Settings recovery will commence recovery immediately in any mode if the current FPS is above the target FPS by the FPS tolerance amount.
         - In FPS Cap mode, the reseek process will be triggered at least 30 seconds after the last time settings reduction level was reduced and the target FPS is being achieved once again.
         - Displacement Maps will not restore to enabled until above 100 ft AGL, as it is known to cause texture corruption at low altitudes.
-      - TLOD Base Min and OLOD will be progressively reduced at the user-defined LOD step rate by up to 50%.
-        - TLOD Top Min gets reduced by the same proportional amount that TLOD Base gets reduced for FPS Cap mode.
+      - TLOD Top Max and OLOD will be progressively reduced at the user-defined LOD step rate by up to 50%.
+        - TLOD Base Min gets reduced by the same proportional amount that TLOD Top gets reduced for FPS Cap mode.
       - Max Levels setting determines how many levels the settings other than LODs will be reduced by in subsequent reduction cycles. 
       - Floor setting determines the minimum setting quality level that settings will be reduced to, including off if an allowable state for a setting.
       - Recover setting determines at which altitude (ground, Alt TLOD Base or  / equivalent) settings reduction recovery can occur as enabling it at lower altitudes may not be acceptable for some users. The default is Alt TLOD Base, being the middle option.
