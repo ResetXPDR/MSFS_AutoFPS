@@ -216,8 +216,8 @@ Some Notes:
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
   - If the installer fails when checking/updating Mobiflight, despite the latest version being correctly installed in your MSFS Community folder, create a shortcut for the installer, add the command line option "-bypassmobiflight" to the target text box, then run the shortcut to be able to bypass this installation step.
-- The app will automatically check for updates on startup by default and will notify you accordingly on the app status line.
-  - If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox.
+- The app will automatically check for updates on startup and will notify you accordingly on the app status line.
+  - If you wish to only be notified of mandatory updates, select the Mandatory Updates options.
   - In test versions, notification of all app updates will be enabled as a minimum by default, regardless of what you have previously chosen for update notification, in order to encourage maintainance of a current test baseline.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
 - The app may be blocked by Windows Security or your AV-Scanner, if so try to unblock or set an exception (for the whole Folder)
