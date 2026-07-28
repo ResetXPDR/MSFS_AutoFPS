@@ -10,7 +10,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
 - Automatic TLOD adjustment to either achieve and maintain a target FPS or to an altitude schedule,
 - Improved FPS smoothing (FPS+) to filter out brief performance spikes and dips, delivering a more resilient user experience,
 - A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type:
-  - Expert mode is fully customisable with four additional profiles available, any of which can be paired for VR/non-VR and Sim Rate auto flight type switching.
+  - Expert mode is fully customisable with six additional profiles available, any of which can be paired for VR/non-VR and Sim Rate auto flight type switching.
 - Auto target FPS option, which is useful if you don't know what target FPS to choose or if your flight types are so varied that a single target FPS value is not always appropriate,
 - A greatly simplified Non-Expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
 - An Expert mode Option, which allows user customisation of the following:
