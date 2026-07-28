@@ -28,6 +28,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
 - Auto future MSFS version compatibility, provided MSFS memory changes are minor,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
+- Periodic spike detection/protection and alternative FPS source options, when running the [RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/) companion app.
 - Optional MSFS Performance Optimiser which selects the best CPU core affinity, process priority, and available power plan for MSFS.
 - Auto installation of app updates (optional except for mandatory updates),
 - Auto restoration of original MSFS settings changed by the app during a flight session, enhanced to withstand MSFS CTDs.<br><br>
