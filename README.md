@@ -304,7 +304,7 @@ Some Notes:
     - **VR‑specific defaults** show automatically when in VR mode or when VR is selected in the Target FPS dropdown.
     - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
   - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
-  - Green means the sim value meets or exceeds the target. Red means it is at its minimum or below target. Orange with arrows for TLOD or OLOD means the value is auto‑adjusting. Orange for FPS and TLOD means adjustment is limited because FG is inactive. Black is shown otherwise.
+  - Green means the sim value meets or exceeds the target. Red means it is at its minimum or below target. Orange with arrows for TLOD or OLOD means the value is auto‑adjusting. Orange for FPS and TLOD means adjustment is limited because FG is inactive and TLOD increases are disabled. Black is shown otherwise.
   - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
   - FPS display
@@ -324,6 +324,7 @@ Some Notes:
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
 - General
   - Update Management
+    - Visible whenever not in a flight session.
     - **Silent Updates** install updates automatically without prompts, except for non-explicit compatibility updates and reversion from test versions, which are always prompted.
       - The installer window appears briefly during the update process and release notes are shown afterwards, with no user interaction required.
       - A one‑time migration prompt is provided for existing Prompted Updates users to switch to Silent Updates.
@@ -538,6 +539,16 @@ box to advise this.
            - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
            - If stuttering persists, either uncheck TLOD Base Extra, use a lower multiplier, or use AutoTLOD for the lowest possible TLOD on the ground.
+  - Periodic Spike Detection/Protection:
+    - Detection is auto enabled in Expert mode, requiring detection of the shared RTSS frame time buffer to activate.
+    - Detects periodic MSFS frame time spikes (4+ fresh spikes of same 0.3-1.8s cadence), which can occur with high TLOD and photogrammetry conditions and can cause stutters.
+    - Protection checkbox, enabled by default, is shown only in Expert mode and when RTSS is detected as running; otherwise the controls are removed entirely.
+    - Automatic TLOD reduction when protection is enabled and periodic frame time spikes are detected, helping reduce stutters in affected areas.
+    - Automatic TLOD restoration when periodic frame time spikes are no longer detected, using a time‑delayed, continuously‑scaled recovery model driven by distance travelled, altitude above ground, and vertical trend for smooth, scenery‑aware restoration without abrupt jumps.
+    - Lightning symbols show with the FPS reading and TLOD range in the status line when periodic frame time spikes are detected and when resultant TLOD reduction is active respectively.
+    - A "SpikeThresholdMultiplier" common config file option, defaulting to 2.0, determines the multiple of the frame time median at which a spike will be counted.
+    - Log entries show spike detection and protection settings, spike TLOD reduction amount when greater than zero, and when associated TLOD reduction and recovery commence.
+    - Additional diagnostic logging occurs when Log+ is enabled.
   - TLOD Base Min - Sets the minimum TLOD the automation algorithm will use at or below the Base altitude. (Range: 10 - TLOD Max-10)
   - Alt TLOD Base – Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100,000 ft; N/A in Free TLOD mode)
   - TLOD Base Extra option in FPS Sensitivity or Tolerance modes in Manual or Fixed Target FPS:
@@ -653,12 +664,14 @@ box to advise this.
       - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
       - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
       - With MSFS 2024, user auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
-      - VRAM LOD reductions occur at twice the rate of normal LOD reductions to more quickly address VRAM overflow. VRAM LOD recovery rate is half the normal LOD recovery rate to more gently recover from VRAM overflow.
+      - VRAM LOD reductions occur proportionally based on how far VRAM usage exceeds the reduce threshold until TLOD Min is reached, after which reductions occur at twice the normal rate to more quickly address VRAM overflow.
+      - VRAM LOD recovery rate is half the normal LOD recovery rate to more gently recover from VRAM overflow.
       - VRAM protection will limit LOD reductions to 50% max, aligning it with normal settings reduction. 
       - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
       - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use below the VRAM reduce threshold being required before recovery is allowed.
         - Each VRAM+ recovery will increase the recovery altitude setting by one, up to , to reduce instances of VRAM+ cycling too often.
       - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
+      - The app status line will also append HLD or RED to VRAM+ to indicate VRAM+ hold and reduction events respectively.
     - Auto Increase Clouds
       - Auto increase cloud quality option with TLOD Base Extra enabled.
       - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process.
@@ -677,7 +690,7 @@ box to advise this.
   - Performance monitoring and logging:
     - Shown as an extra line on the app status line during flight sessions.
       - Total CPU – overall system CPU usage across all logical processors.
-      - Dominant Core – instantaneous load of the core selected by 10‑second averaging, including its core number.
+      - Dominant Core – instantaneous load of the core selected by 10‑second averaging.
       - TopXAvg – instantaneous load of the busiest X (configurable) cores.
       - MSFS CPU – MSFS CPU usage based on the applied affinity mask, showing core count when set.
     - Extra performance data logging to provide clearer context when performance limits are hit.
