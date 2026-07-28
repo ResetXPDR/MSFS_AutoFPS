@@ -7,7 +7,7 @@ My future development efforts on this app are mainly limited to maintenance, res
 Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS.<br/><br/>
 
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
-- Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule,
+- Automatic TLOD adjustment to either achieve and maintain a target FPS or to an altitude schedule,
 - Improved FPS smoothing (FPS+) to filter out brief performance spikes and dips, delivering a more resilient user experience,
 - A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type:
   - Expert mode is fully customisable with four additional profiles available, any of which can be paired for VR/non-VR and Sim Rate auto flight type switching.
