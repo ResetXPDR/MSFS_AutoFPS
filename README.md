@@ -408,7 +408,7 @@ Some Notes:
         - Halves maximum TLOD reduction in non‑cockpit camera states to account for larger transient FPS drops typical of these views.
         - A one‑off per‑profile migration prompt converts existing FPS Cap settings to the recommended Sensitivity + Fixed Target FPS mode while preserving equivalent tuning.
     - Target FPS graphics mode
-      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR, VR) and each flight type (VFR, IFR, and four user profiles in Expert mode).
+      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR, VR) and each flight type (VFR, IFR, and six user profiles in Expert mode).
       - On startup, the app defaults to the graphics mode last used.
       - Automatically switches to the detected graphics mode when loading into a flight session (except in Man FG).
       - Users can adjust Target FPS for non‑active graphics modes using the drop‑down list.
@@ -424,7 +424,7 @@ Some Notes:
     - Resets TLOD, Clouds, Auto Target FPS and graphics mode detection to initial state.
     - Useful to reinitialise and recommence the seek process for TLOD Extra should conditions change significantly from what they were on initial start-up.
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
-  - Flight type - VFR or IFR (any mode), and four additional user profiles (Expert mode)
+  - Flight type - VFR or IFR (any mode), and six additional user profiles (Expert mode)
     - Non-Expert mode:
       - VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR.
       - Accounts for the greater performance expectation that GA flights in rural areas will have.
