@@ -261,7 +261,7 @@ Some Notes:
 
 - General
   - Can be started anytime, but preferably just after MSFS has loaded in to the main menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes.
-  - If you wish to have the app exit at the conclusion of a flight session, change "ExitAppAfterFlightSession" in the common config file in app's root directory to true.
+  - If you wish to have the app exit at the conclusion of a flight session, change ExitAppAfterFlightSession in the common config file to true.
   - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions. Exit by clicking on the app window's close button and providing user confirmation when prompted.
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exits when MSFS closes.
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
@@ -281,7 +281,7 @@ Some Notes:
     - Designed to change states only when they are at their default levels and have not already been modified by other tools (e.g., VR Auto Optimiser, Process Lasso), ensuring no conflict with external managers.
     - The Sim Version text changes to royal blue to indicate the optimiser is active and controlling MSFS.
     - Provides UI controls for Physical Cores, MSFS process priority, and Best Windows Power Plan, shown in Expert Mode when hovering over the optimiser checkbox or MSFS label.
-    - Can be fine‑tuned with four user‑configurable options in the common config file in the app’s root directory.
+    - Can be fine‑tuned with four user‑configurable options in the common config file.
     - CPU Affinity:
       - Uses a universal physical‑core rule based on SMT that gives consistent behaviour across AMD, Intel hybrid, and SMT‑off systems.
       - On Intel hybrid CPUs, MSFS runs on the P‑cores only, since E‑cores don’t support SMT and aren’t counted as physical cores in this rule.
