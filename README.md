@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.1.0
+# MSFS_AutoFPS v0.5.2.0
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -7,10 +7,10 @@ My future development efforts on this app are mainly limited to maintenance, res
 Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS.<br/><br/>
 
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
-- Automatic TLOD adjustment when in the air to either achieve and maintain a target FPS or to an altitude schedule,
+- Automatic TLOD adjustment to either achieve and maintain a target FPS or to an altitude schedule,
 - Improved FPS smoothing (FPS+) to filter out brief performance spikes and dips, delivering a more resilient user experience,
 - A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type:
-  - Expert mode is fully customisable with four additional profiles available, any of which can be paired for VR/non-VR and Sim Rate auto flight type switching.
+  - Expert mode is fully customisable with six additional profiles available, any of which can be paired for VR/non-VR and Sim Rate auto flight type switching.
 - Auto target FPS option, which is useful if you don't know what target FPS to choose or if your flight types are so varied that a single target FPS value is not always appropriate,
 - A greatly simplified Non-Expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
 - An Expert mode Option, which allows user customisation of the following:
@@ -24,10 +24,11 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Auto settings reduction option, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
     - Auto cloud increase option with TLOD Base Extra enabled and sufficient performance margin exists,
     - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
-- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, FG mod, FSR or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto future MSFS version compatibility, provided MSFS memory changes are minor,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
+- Periodic spike detection/protection and alternative FPS source options, when running the [RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/) companion app.
 - Optional MSFS Performance Optimiser which selects the best CPU core affinity, process priority, and available power plan for MSFS.
 - Auto installation of app updates (optional except for mandatory updates),
 - Auto restoration of original MSFS settings changed by the app during a flight session, enhanced to withstand MSFS CTDs.<br><br>
@@ -70,6 +71,7 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Target FPS dropdown allows editing inactive mode’s setting.
   - Dropdown background turns orange when target FPS differs from current mode.
   - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset.
+  - Dynamic/adaptive FG of any type should be configured under Man FG.
 - **NFR (Native Frame Rate)**
   - Default non-VR, non-FG graphics mode (formerly “PC”).
   - Automatically selected when MSFS graphics settings do not enable FG.
@@ -93,8 +95,8 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Adaptive FG not detectable—uses NFR for target FPS.
   - After changing LS settings mid-flight, press Reset to redetect.
   - Only one FG type should be active—mixing LSFG with native FG or FG mod causes incorrect FPS readings.
-- **FSR3 FG**
-  - Available in MSFS 2024.
+- **FSR FG**
+  - Available in MSFS 2024, which supports FSR 3 and 4.
   - Activated via MSFS graphics settings.
   - Autodetected by AutoFPS.
   - Uses fixed 2× multiplier.
@@ -102,6 +104,7 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
 - **Man FG (Manual FG)**
   - Allows future-proofing for externally set or unsupported FG types via manual tuning.
   - Manual FG selection from 2X to 8X.
+  - Use DynFG for dynamic/adaptive FG setups, whereby the user sets Target FPS using the NFR (1×) value, and the app displays FPS as NFR because DynFG’s dynamic behaviour prevents reliable detection of its actual FG multiplier at any specific point in time.
   - Functions as a **forced mode**, remaining active across app restarts until manually changed to a different graphics mode.
   - Select Auto to return to auto detection of all other modes.
 
@@ -216,8 +219,8 @@ Some Notes:
   - If the MobiFlight Module is not installed or outdated, MSFS also has to be stopped.
   - If you have duplicate MobiFlight Modules installed, in either your official or community folders, the app may display 0 value Sim Values and otherwise not function. Remove the duplicate versions, rerun the app installer and it should now work.
   - If the installer fails when checking/updating Mobiflight, despite the latest version being correctly installed in your MSFS Community folder, create a shortcut for the installer, add the command line option "-bypassmobiflight" to the target text box, then run the shortcut to be able to bypass this installation step.
-- The app will automatically check for updates on startup by default and will notify you accordingly on the app status line.
-  - If you wish to only be notified of mandatory updates, uncheck the Check For Updates checkbox.
+- The app will automatically check for updates on startup and will notify you accordingly on the app status line.
+  - If you wish to only be notified of mandatory updates, select the Mandatory Updates options.
   - In test versions, notification of all app updates will be enabled as a minimum by default, regardless of what you have previously chosen for update notification, in order to encourage maintainance of a current test baseline.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
 - The app may be blocked by Windows Security or your AV-Scanner, if so try to unblock or set an exception (for the whole Folder)
@@ -258,7 +261,8 @@ Some Notes:
 ## Usage / Configuration
 
 - General
-  - Can be started anytime, but preferably just after MSFS has loaded in to the main menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes. 
+  - Can be started anytime, but preferably just after MSFS has loaded in to the main menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes.
+  - If you wish to have the app exit at the conclusion of a flight session, change ExitAppAfterFlightSession in the common config file to true.
   - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions. Exit by clicking on the app window's close button and providing user confirmation when prompted.
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exits when MSFS closes.
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
@@ -278,7 +282,7 @@ Some Notes:
     - Designed to change states only when they are at their default levels and have not already been modified by other tools (e.g., VR Auto Optimiser, Process Lasso), ensuring no conflict with external managers.
     - The Sim Version text changes to royal blue to indicate the optimiser is active and controlling MSFS.
     - Provides UI controls for Physical Cores, MSFS process priority, and Best Windows Power Plan, shown in Expert Mode when hovering over the optimiser checkbox or MSFS label.
-    - Can be fine‑tuned with four user‑configurable options in the common config file in the app’s root directory.
+    - Can be fine‑tuned with four user‑configurable options in the common config file.
     - CPU Affinity:
       - Uses a universal physical‑core rule based on SMT that gives consistent behaviour across AMD, Intel hybrid, and SMT‑off systems.
       - On Intel hybrid CPUs, MSFS runs on the P‑cores only, since E‑cores don’t support SMT and aren’t counted as physical cores in this rule.
@@ -302,7 +306,7 @@ Some Notes:
     - **VR‑specific defaults** show automatically when in VR mode or when VR is selected in the Target FPS dropdown.
     - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
   - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
-  - Green means the sim value meets or exceeds the target. Red means it is at its minimum or below target. Orange with arrows for TLOD or OLOD means the value is auto‑adjusting. Orange for FPS and TLOD means adjustment is limited because FG is inactive. Black is shown otherwise.
+  - Green means the sim value meets or exceeds the target. Red means it is at its minimum or below target. Orange with arrows for TLOD or OLOD means the value is auto‑adjusting. Orange for FPS and TLOD means adjustment is limited because FG is inactive and TLOD increases are disabled. Black is shown otherwise.
   - Other symbols may be shown when applicable, such as value locked 🔒, increasing ▲ and decreasing ▼, upper limit ⊤ and lower limit ⊥.
   - Additional reduction settings values can be made visible when auto reduction or VRAM+ is active at Level 1 or greater by the user mousing over the Reduce value.
   - FPS display
@@ -322,6 +326,7 @@ Some Notes:
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
 - General
   - Update Management
+    - Visible whenever not in a flight session.
     - **Silent Updates** install updates automatically without prompts, except for non-explicit compatibility updates and reversion from test versions, which are always prompted.
       - The installer window appears briefly during the update process and release notes are shown afterwards, with no user interaction required.
       - A one‑time migration prompt is provided for existing Prompted Updates users to switch to Silent Updates.
@@ -373,7 +378,7 @@ Some Notes:
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
-      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
+      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
@@ -394,7 +399,7 @@ Some Notes:
         - Detects a fixed FPS condition (FPS stabilised with minimal variation). When detected, it sets the target FPS to that value, switches to Fixed FPS automation, and continues monitoring to ensure the classification remains valid.
         - Otherwise, with IFR or any Expert‑mode user profile, the target ranges from 95% of current average FPS on the ground to 85% at or above 3000 ft, providing headroom for Max TLOD.
         - With VFR, each percentage is reduced by 5% to better suit higher performance expectations.
-        - Auto settings reduction and TLOD Base Extra are automatically disabled (and greyed out) in Expert mode, as they are mutually exclusive with Auto Target FPS.
+        - Auto settings reduction and TLOD Base Extra and Free are mutually exclusive with Auto Target FPS, hence are not selectable. Fixed TLOD must be used.
       - Fixed
         - Maintains a fixed FPS more responsively and achieves higher average TLOD than FPS Cap mode, and enables the FreeTLOD option.
         - Gently raises TLOD when FPS is close to or at the Fixed Target FPS, and applies proportionally larger reductions when FPS drops, maintaining the fixed FPS with maximum possible TLOD.
@@ -404,7 +409,7 @@ Some Notes:
         - Halves maximum TLOD reduction in non‑cockpit camera states to account for larger transient FPS drops typical of these views.
         - A one‑off per‑profile migration prompt converts existing FPS Cap settings to the recommended Sensitivity + Fixed Target FPS mode while preserving equivalent tuning.
     - Target FPS graphics mode
-      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR3, VR) and each flight type (VFR, IFR, and four user profiles in Expert mode).
+      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR, VR) and each flight type (VFR, IFR, and six user profiles in Expert mode).
       - On startup, the app defaults to the graphics mode last used.
       - Automatically switches to the detected graphics mode when loading into a flight session (except in Man FG).
       - Users can adjust Target FPS for non‑active graphics modes using the drop‑down list.
@@ -420,14 +425,17 @@ Some Notes:
     - Resets TLOD, Clouds, Auto Target FPS and graphics mode detection to initial state.
     - Useful to reinitialise and recommence the seek process for TLOD Extra should conditions change significantly from what they were on initial start-up.
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
-  - Flight type - VFR or IFR (any mode), and four additional user profiles (Expert mode)
+  - Flight type - VFR or IFR (any mode), and six additional user profiles (Expert mode)
     - Non-Expert mode:
       - VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR.
       - Accounts for the greater performance expectation that GA flights in rural areas will have.
     - Expert mode:
+      - Extends Non-Expert mode IFR and VFR profiles by adding 6 user profiles by default.
+        - Can be altered to provide between 4 and 12 total profiles by editing the ProfileCount key in the common config file.
       - Defaults to similar settings differences as Non-Expert mode for VFR and IFR.
-      - user1 through user4 profiles are initially based on the IFR profile.
+      - User profiles are initially based on the IFR profile.
       - Settings are fully customisable and saved to/restored from the respective profile.
+      - Profiles can be reset to default by clicking the Reset button after MSFS has been detected while not in a flight session.
       - Profile names can be edited, including VFR and IFR:
         - Double clicking on the profile combo box text area toggles edit-ability, with non-editable being the initial state on startup.
         - Press Enter, press Tab or click on another control on the app UI for the changed text to be accepted.
@@ -446,7 +454,7 @@ Some Notes:
         - TLOD Base Extra will still reduce below  Min/Max as normal, but since this is additive to Top Min/Max, the reduction will be much smaller than usual.
     - Command line argument support for flight type profiles is as follows:
       - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in Expert mode.
-      - -user1 to -user4 now open their corresponding user profiles, restricted to Expert mode.
+      - -user1 to -user6 now open their corresponding user profiles, restricted to Expert mode.
       - -profile "`<profile name>`" loads the specified profile in Expert mode, requiring an exact match.
   - Use Expert Options
     - Non-Expert Mode (unchecked and default)
@@ -533,6 +541,16 @@ box to advise this.
            - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
            - If stuttering persists, either uncheck TLOD Base Extra, use a lower multiplier, or use AutoTLOD for the lowest possible TLOD on the ground.
+  - Periodic Spike Detection/Protection:
+    - Detection is auto enabled in Expert mode, requiring detection of the shared RTSS frame time buffer to activate.
+    - Detects periodic MSFS frame time spikes (4+ fresh spikes of same 0.3-1.8s cadence), which can occur with high TLOD and photogrammetry conditions and can cause stutters.
+    - Protection checkbox, enabled by default, is shown only in Expert mode and when RTSS is detected as running; otherwise the controls are removed entirely.
+    - Automatic TLOD reduction when protection is enabled and periodic frame time spikes are detected, helping reduce stutters in affected areas.
+    - Automatic TLOD restoration when periodic frame time spikes are no longer detected, using a time‑delayed, continuously‑scaled recovery model driven by distance travelled, altitude above ground, and vertical trend for smooth, scenery‑aware restoration without abrupt jumps.
+    - Lightning symbols show with the FPS reading and TLOD range in the status line when periodic frame time spikes are detected and when resultant TLOD reduction is active respectively.
+    - A "SpikeThresholdMultiplier" common config file option, defaulting to 2.0, determines the multiple of the frame time median at which a spike will be counted.
+    - Log entries show spike detection and protection settings, spike TLOD reduction amount when greater than zero, and when associated TLOD reduction and recovery commence.
+    - Additional diagnostic logging occurs when Log+ is enabled.
   - TLOD Base Min - Sets the minimum TLOD the automation algorithm will use at or below the Base altitude. (Range: 10 - TLOD Max-10)
   - Alt TLOD Base – Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100,000 ft; N/A in Free TLOD mode)
   - TLOD Base Extra option in FPS Sensitivity or Tolerance modes in Manual or Fixed Target FPS:
@@ -648,12 +666,14 @@ box to advise this.
       - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
       - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction theshold, allows adequate VRAM usage headroom before settings recovery is activated.
       - With MSFS 2024, user auto reduce settings are overriden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
-      - VRAM LOD reductions occur at twice the rate of normal LOD reductions to more quickly address VRAM overflow. VRAM LOD recovery rate is half the normal LOD recovery rate to more gently recover from VRAM overflow.
+      - VRAM LOD reductions occur proportionally based on how far VRAM usage exceeds the reduce threshold until TLOD Min is reached, after which reductions occur at twice the normal rate to more quickly address VRAM overflow.
+      - VRAM LOD recovery rate is half the normal LOD recovery rate to more gently recover from VRAM overflow.
       - VRAM protection will limit LOD reductions to 50% max, aligning it with normal settings reduction. 
       - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
       - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use below the VRAM reduce threshold being required before recovery is allowed.
         - Each VRAM+ recovery will increase the recovery altitude setting by one, up to , to reduce instances of VRAM+ cycling too often.
       - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
+      - The app status line will also append HLD or RED to VRAM+ to indicate VRAM+ hold and reduction events respectively.
     - Auto Increase Clouds
       - Auto increase cloud quality option with TLOD Base Extra enabled.
       - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process.
@@ -672,7 +692,7 @@ box to advise this.
   - Performance monitoring and logging:
     - Shown as an extra line on the app status line during flight sessions.
       - Total CPU – overall system CPU usage across all logical processors.
-      - Dominant Core – instantaneous load of the core selected by 10‑second averaging, including its core number.
+      - Dominant Core – instantaneous load of the core selected by 10‑second averaging.
       - TopXAvg – instantaneous load of the busiest X (configurable) cores.
       - MSFS CPU – MSFS CPU usage based on the applied affinity mask, showing core count when set.
     - Extra performance data logging to provide clearer context when performance limits are hit.
