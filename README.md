@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.1.0
+# MSFS_AutoFPS v0.5.2.0
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -24,7 +24,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Auto settings reduction option, activated under marginal performance conditions to help improve FPS and reduce VRAM usage.
     - Auto cloud increase option with TLOD Base Extra enabled and sufficient performance margin exists,
     - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
-- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, FG mod, FSR3 or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, MFG, FG mod, FSR or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto future MSFS version compatibility, provided MSFS memory changes are minor,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
@@ -70,6 +70,7 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Target FPS dropdown allows editing inactive mode’s setting.
   - Dropdown background turns orange when target FPS differs from current mode.
   - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset.
+  - Dynamic/adaptive FG of any type should be configured under Man FG.
 - **NFR (Native Frame Rate)**
   - Default non-VR, non-FG graphics mode (formerly “PC”).
   - Automatically selected when MSFS graphics settings do not enable FG.
@@ -93,8 +94,8 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Adaptive FG not detectable—uses NFR for target FPS.
   - After changing LS settings mid-flight, press Reset to redetect.
   - Only one FG type should be active—mixing LSFG with native FG or FG mod causes incorrect FPS readings.
-- **FSR3 FG**
-  - Available in MSFS 2024.
+- **FSR FG**
+  - Available in MSFS 2024, which supports FSR 3 and 4.
   - Activated via MSFS graphics settings.
   - Autodetected by AutoFPS.
   - Uses fixed 2× multiplier.
@@ -102,6 +103,7 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
 - **Man FG (Manual FG)**
   - Allows future-proofing for externally set or unsupported FG types via manual tuning.
   - Manual FG selection from 2X to 8X.
+  - Use DynFG for dynamic/adaptive FG setups, whereby the user sets Target FPS using the NFR (1×) value, and the app displays FPS as NFR because DynFG’s dynamic behaviour prevents reliable detection of its actual FG multiplier at any specific point in time.
   - Functions as a **forced mode**, remaining active across app restarts until manually changed to a different graphics mode.
   - Select Auto to return to auto detection of all other modes.
 
@@ -373,7 +375,7 @@ Some Notes:
     - Loading in to a flight  - whether MSFS memory integrity test have failed, and
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
-      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR3 or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
+      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
@@ -404,7 +406,7 @@ Some Notes:
         - Halves maximum TLOD reduction in non‑cockpit camera states to account for larger transient FPS drops typical of these views.
         - A one‑off per‑profile migration prompt converts existing FPS Cap settings to the recommended Sensitivity + Fixed Target FPS mode while preserving equivalent tuning.
     - Target FPS graphics mode
-      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR3, VR) and each flight type (VFR, IFR, and four user profiles in Expert mode).
+      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR, VR) and each flight type (VFR, IFR, and four user profiles in Expert mode).
       - On startup, the app defaults to the graphics mode last used.
       - Automatically switches to the detected graphics mode when loading into a flight session (except in Man FG).
       - Users can adjust Target FPS for non‑active graphics modes using the drop‑down list.
@@ -425,9 +427,12 @@ Some Notes:
       - VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR.
       - Accounts for the greater performance expectation that GA flights in rural areas will have.
     - Expert mode:
+      - Extends Non-Expert mode IFR and VFR profiles by adding 6 user profiles by default.
+        - Can be altered to provide between 4 and 12 total profiles by editing the ProfileCount key in the common config file.
       - Defaults to similar settings differences as Non-Expert mode for VFR and IFR.
-      - user1 through user4 profiles are initially based on the IFR profile.
+      - User profiles are initially based on the IFR profile.
       - Settings are fully customisable and saved to/restored from the respective profile.
+      - Profiles can be reset to default by clicking the Reset button after MSFS has been detected while not in a flight session.
       - Profile names can be edited, including VFR and IFR:
         - Double clicking on the profile combo box text area toggles edit-ability, with non-editable being the initial state on startup.
         - Press Enter, press Tab or click on another control on the app UI for the changed text to be accepted.
@@ -446,7 +451,7 @@ Some Notes:
         - TLOD Base Extra will still reduce below  Min/Max as normal, but since this is additive to Top Min/Max, the reduction will be much smaller than usual.
     - Command line argument support for flight type profiles is as follows:
       - -ifr and -vfr continue launching the app with the default IFR and VFR profiles, even if renamed in Expert mode.
-      - -user1 to -user4 now open their corresponding user profiles, restricted to Expert mode.
+      - -user1 to -user6 now open their corresponding user profiles, restricted to Expert mode.
       - -profile "`<profile name>`" loads the specified profile in Expert mode, requiring an exact match.
   - Use Expert Options
     - Non-Expert Mode (unchecked and default)
