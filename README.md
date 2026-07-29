@@ -104,7 +104,10 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
 - **Man FG (Manual FG)**
   - Allows future-proofing for externally set or unsupported FG types via manual tuning.
   - Manual FG selection from 2X to 8X.
-  - Use DynFG for dynamic/adaptive FG setups, whereby the user sets Target FPS using the NFR (1×) value, and the app displays FPS as NFR because DynFG’s dynamic behaviour prevents reliable detection of its actual FG multiplier at any specific point in time.
+  - Use DynFG for dynamic/adaptive FG setups:
+    - Target FPS is set using the NFR (1×) value.
+    - FPS displays as NFR because DynFG’s dynamic behaviour prevents reliable detection of its actual FG multiplier at any specific point in time.
+    - Use MSFS, not RTSS, as the FPS source as it provides the NFR FPS required for this mode. 0.5.3.0 will force this behaviour.
   - Functions as a **forced mode**, remaining active across app restarts until manually changed to a different graphics mode.
   - Select Auto to return to auto detection of all other modes.
 
