@@ -209,7 +209,7 @@ Some Notes:
     - Create a shortcut to MSFS_AutoFPS.exe and move it to a place of your choice eg. desktop.
     - AutoFPS should now work when you click on the shortcut.
 - MSFS_AutoFPS and/or MSFS2020_AutoFPS must not be running before installing/updating/upgrading.
-- Do not run the Installer as Admin unless it will not install due to a permissions issue.
+- Do not run the Installer as Admin unless it will not install due to a permissions issue. If the installer is run as Admin, a warning message will be shown.
 - There is no need to uninstall MSFS2020_AutoFPS before upgrading to MSFS_AutoFPS. The installer uninstalls MSFS2020_AutoFPS if currently installed but preserves its MSFS 2020 config for use in this new app beforehand if desired or applicable.
 - If you have previously removed MSFS2020_FPS without using the installer to remove it properly, you may experience issues installing MSFS_AutoFPS. If this happens, do the following:
   - Run the installer for the MSFS_AutoFPS and select remove to uninstall it completely.
@@ -269,7 +269,7 @@ Some Notes:
   - If you wish to have the app exit at the conclusion of a flight session, change ExitAppAfterFlightSession in the common config file to true.
   - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions. Exit by clicking on the app window's close button and providing user confirmation when prompted.
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exits when MSFS closes.
-  - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS).
+  - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS). 'Admin' will be shown on the app title bar when the app is running as Admin.
   - Do NOT change MSFS graphics settings manually while in a flight with this app running as it will conflict with what the app is managing and they will automatically restore to what they originally were when you exit your flight. If you wish to change the defaults for these MSFS settings, you must do so either without this app running or, if it is, only while you are in the MSFS main menu (ie not in a flight).
 - App Window
   - Position and minimised/maximised state will be remembered between sessions, except movements to it made while in VR due to window restoration issues.
@@ -325,9 +325,25 @@ Some Notes:
       - Averaging period is 5 seconds.
   - FPS source icon - RTSS (RivaTuner Statistics Server) or MSFS.
     - **[RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)** is a well-established tool for FPS monitoring, widely used in the gaming community and fully compatible with MSFS.
-    - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running or if Dynamic FG is the graphics mode.
+    - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running, if Dynamic FG is the graphics mode or if RTSS data is detected as frozen.
     - Clicking the FPS source icon will switch the FPS source to the alternate source and the icon will change accordingly, with the added requirement that RTSS must be running in order to switch to RTSS as a source.
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
+    - RTSS data can freeze (swap-chain latched) when switching from 2D Frame Generation (FG) to VR or when MSFS recreates its graphics swap-chain.
+      - FPS/frame time values stop updating and remain constant.
+      - AutoFPS detects this as frozen RTSS data.
+    - Restarting RTSS (manually or via AutoFPS running as Admin) clears the frozen shared‑memory state.
+      - Effective after the RTSS injection delay passes, nominally 15 seconds.
+      - Potential side‑effect: restarting RTSS while FG is active can trigger a graphics‑driver‑level MSFS CTD on some systems.
+    - Restarting MSFS fully resets the graphics pipeline and RTSS integration.
+      - Always resolves the frozen state.
+      - Heavy‑handed and time‑consuming.
+    - Disabling the MSFS RTSS compatibility profile prevents freezes when switching between 2D FG and VR.
+      - MSFS must remain single‑window only (no pop‑outs).
+      - Side‑effects:
+        - FPS data becomes corrupted if any pop‑out windows are used.
+        - MSFS can CTD when corrupted FPS data is fed back into RTSS.
+    - AutoFPS displays a warning when unresolvable frozen RTSS data is detected.
+      - Users can choose to suppress this warning in future runs.
 - General
   - Update Management
     - Visible whenever not in a flight session.
@@ -546,12 +562,13 @@ box to advise this.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
            - If stuttering persists, either uncheck TLOD Base Extra, use a lower multiplier, or use AutoTLOD for the lowest possible TLOD on the ground.
   - Periodic Spike Detection/Protection:
-    - Detection is auto enabled in Expert mode, requiring detection of the shared RTSS frame time buffer to activate.
+    - Detection is auto enabled in Expert mode, requiring detection of the shared RTSS frame time buffer to activate. RTSS must therefore be running for this feature to work.
     - Detects periodic MSFS frame time spikes (4+ fresh spikes of same 0.3-1.8s cadence), which can occur with high TLOD and photogrammetry conditions and can cause stutters.
     - Protection checkbox, enabled by default, is shown only in Expert mode and when RTSS is detected as running; otherwise the controls are removed entirely.
     - Automatic TLOD reduction when protection is enabled and periodic frame time spikes are detected, helping reduce stutters in affected areas.
     - Automatic TLOD restoration when periodic frame time spikes are no longer detected, using a time‑delayed, continuously‑scaled recovery model driven by distance travelled, altitude above ground, and vertical trend for smooth, scenery‑aware restoration without abrupt jumps.
     - Lightning symbols show with the FPS reading and TLOD range in the status line when periodic frame time spikes are detected and when resultant TLOD reduction is active respectively.
+    - A spike-protection UI panel (multiplier textbox, frame-time record button, and spike status) will show when both Spike Protection and Log+ are enabled.
     - A "SpikeThresholdMultiplier" common config file option, defaulting to 2.0, determines the multiple of the frame time median at which a spike will be counted.
     - Log entries show spike detection and protection settings, spike TLOD reduction amount when greater than zero, and when associated TLOD reduction and recovery commence.
     - Additional diagnostic logging occurs when Log+ is enabled.
