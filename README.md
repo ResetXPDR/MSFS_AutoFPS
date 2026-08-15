@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.2.0
+# MSFS_AutoFPS v0.5.3.0
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with neglible, or preferably no, UI impact, and if I have the available time to do it.
@@ -71,7 +71,10 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Target FPS dropdown allows editing inactive mode’s setting.
   - Dropdown background turns orange when target FPS differs from current mode.
   - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset.
-  - Dynamic/adaptive FG of any type should be configured under Man FG.
+  - Dynamic/adaptive FG of any type set external to MSFS should be configured under Man FG, otherwise it should auto-detect.
+    - Target FPS is set using the NFR (1×) value.
+    - FPS displays as NFR because DynFG’s dynamic behaviour prevents reliable detection of its actual FG multiplier at any specific point in time.
+    - Forces MSFS as the FPS source as it provides the NFR FPS required for this mode.
 - **NFR (Native Frame Rate)**
   - Default non-VR, non-FG graphics mode (formerly “PC”).
   - Automatically selected when MSFS graphics settings do not enable FG.
@@ -84,6 +87,7 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
 - **nVidia FG (native, FG mod or MFG)**
   - Activated via MSFS graphics settings or FG mod.
   - MFG is now auto detected if DLSS FG 3X or greater set within MSFS settings.
+  - Dynamic FG should also be detected when set within MSFS settings.
   - Autodetected by AutoFPS but only active when MSFS is the focused window.
   - FG becomes inactive when MSFS loses focus (driver-level behavior).
   - Use app’s “On Top” option to ensure MSFS maintains focus.
@@ -104,10 +108,7 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
 - **Man FG (Manual FG)**
   - Allows future-proofing for externally set or unsupported FG types via manual tuning.
   - Manual FG selection from 2X to 8X.
-  - Use DynFG for dynamic/adaptive FG setups:
-    - Target FPS is set using the NFR (1×) value.
-    - FPS displays as NFR because DynFG’s dynamic behaviour prevents reliable detection of its actual FG multiplier at any specific point in time.
-    - Use MSFS, not RTSS, as the FPS source as it provides the NFR FPS required for this mode. 0.5.3.0 will force this behaviour.
+  - Use DynFG for dynamic/adaptive FG setups set external to MSFS.
   - Functions as a **forced mode**, remaining active across app restarts until manually changed to a different graphics mode.
   - Select Auto to return to auto detection of all other modes.
 
@@ -324,7 +325,7 @@ Some Notes:
       - Averaging period is 5 seconds.
   - FPS source icon - RTSS (RivaTuner Statistics Server) or MSFS.
     - **[RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)** is a well-established tool for FPS monitoring, widely used in the gaming community and fully compatible with MSFS.
-    - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running.
+    - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running or if Dynamic FG is the graphics mode.
     - Clicking the FPS source icon will switch the FPS source to the alternate source and the icon will change accordingly, with the added requirement that RTSS must be running in order to switch to RTSS as a source.
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
 - General
