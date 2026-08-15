@@ -562,7 +562,8 @@ box to advise this.
            - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
            - If stuttering persists, either uncheck TLOD Base Extra, use a lower multiplier, or use AutoTLOD for the lowest possible TLOD on the ground.
   - Periodic Spike Detection/Protection:
-    - Detection is auto enabled in Expert mode, requiring detection of the shared RTSS frame time buffer to activate. RTSS must therefore be running for this feature to work.
+    - Require RTSS to be running and configured to monitor frame time data. 
+    - Detection is auto enabled in Expert mode and disabled in Non-Expert mode.
     - Detects periodic MSFS frame time spikes (4+ fresh spikes of same 0.3-1.8s cadence), which can occur with high TLOD and photogrammetry conditions and can cause stutters.
     - Protection checkbox, enabled by default, is shown only in Expert mode and when RTSS is detected as running; otherwise the controls are removed entirely.
     - Automatic TLOD reduction when protection is enabled and periodic frame time spikes are detected, helping reduce stutters in affected areas.
