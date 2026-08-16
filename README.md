@@ -266,7 +266,7 @@ Some Notes:
 
 - General
   - Can be started anytime, but preferably just after MSFS has loaded in to the main menu to minimise sudden MSFS settings changes when the app is initialising. The app will exit itself when MSFS closes.
-  - If you wish to have the app exit at the conclusion of a flight session, change ExitAppAfterFlightSession in the common config file to true.
+  - If you wish to have the app exit at the conclusion of a flight session, change 'ExitAppAfterFlightSession' in the common config file to true.
   - With the default install option, the app's icon more intuitively resides on the task bar when the app is running, not in the system tray overflow where it has been located in previous versions. Exit by clicking on the app window's close button and providing user confirmation when prompted.
   - If installed with the close app to system tray option, the app will remain running in the system tray until the user right clicks and selects Exit or the app auto exits when MSFS closes.
   - Running as Admin NOT usually required (BUT: It is required to be run under the same User/Elevation as MSFS). 'Admin' will be shown on the app title bar when the app is running as Admin.
