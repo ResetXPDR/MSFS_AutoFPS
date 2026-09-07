@@ -390,7 +390,7 @@ Some Notes:
     - `DynSet` and the MSFS target frame rate can be changed at any time, including mid-flight, with changes reflected in the Reduce status display.
     - DynSet enable/disable and increase/decrease buttons are available when Log+ is enabled to allow instant changes to these settings without needing to open MSFS settings. 
     - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
-    - Works best when using MSFS-set FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS, and the FPS Cap automation mode in AutoFPS.
+    - Works best when using MSFS-set FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS, and a Fixed Target FPS in AutoFPS.
     - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to at least 10 FPS lower than the native frame rate equivalent of the AutoFPS target FPS for best results.
     - Since Dynamic Settings Target Frame Rate is only configurable in 5 FPS increments, choose the next lowest value if your desired setting is not a direct multiple of 5.
   - Status Message - Displays key system messages, such as:
