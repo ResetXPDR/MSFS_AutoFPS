@@ -316,7 +316,9 @@ Some Notes:
   - Red values indicate not connected, green is connected, or royal blue for the Sim Version if the MSFS Performance Optimiser is enabled.
   - Automatically identifies which MSFS version is in use as either MSFS2020 or MSFS2024 and the version number. 
   - If the sim version is showing in red and is not the MSFS version you wish to configure before starting that MSFS version, click the 20>24 or 24>20 button, as applicable, and it will change to that.
-  - **Widget Status Indicator:** A `Widget` connection status label appears in this panel if the In-Game Widget is installed for the active simulator. It shows green when the in-game toolbar panel is open and actively receiving telemetry, and red when closed.
+  - **Widget Status Indicator:**
+    - A `Widget` connection status label appears in this panel if the In-Game Widget is installed for the active simulator.
+    - It shows green when either the in-game toolbar widget or the external web browser widget (`http://localhost:54321/`) is open and actively receiving telemetry, and red when closed or inactive.
   - MSFS Performance Optimiser - enabled via the "+" checkbox to the left of the Sim Version label:
     - When first enabled, a one‑off warning dialog advises users of potential performance, stuttering, audio, or unexpected MSFS behaviour when using this feature.
     - The Sim Values panel reflects optimiser‑controlled states such as CPU affinity, process priority, and power‑plan selection, updating immediately when these values are applied or restored.
