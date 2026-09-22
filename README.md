@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.4.0
+# MSFS_AutoFPS v0.5.4.1
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with negligible, or preferably no, UI impact, and if I have the available time to do it.
@@ -307,7 +307,8 @@ Some Notes:
   - **Streamlined Close Confirmation:** The *"Are you sure you want to close?"* confirmation prompt only appears when physically clicking the window close `[X]` button (when not in system tray). Deliberate multi-step exits—such as right-clicking the Taskbar icon and selecting *Close window*, pressing `Alt + F4`, or using the context menu—exit immediately without prompting.
   - **Right-Click Context Menu:** Right-clicking anywhere on the window provides quick access to:
     - **Hide/Show Title Bar:** Toggles the window title bar.
-    - **Minimise:** Minimises the app window to the taskbar or tray.
+    - **Minimise:** Minimises the app window to the taskbar.
+    - **Close to Tray:** Sends the app window to the system tray. Only shown if the "Close to Tray" option was chosen during installation.
     - **Exit:** Exits the application immediately without requiring confirmation dialogs.
   - **UI Layout & Sizing:**
     - The user can progressively hide parts of the UI when double-clicking the title bar area. The first double click hides the Expert settings section (if applicable), the second hides the general settings section, and a third double click restores all hidden settings sections.
