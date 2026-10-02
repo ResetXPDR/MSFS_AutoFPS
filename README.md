@@ -662,6 +662,7 @@ Some Notes:
         - Default fpm constants are stored in the associated MSFS version config file for easier adjustment.
   - Mtns - additional TLOD Max in high elevation areas for all modes except FPS Cap.
     - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (Range: 100 ft - 100,000 ft) by the TLOD Mtn Amt amount (Range: 10 - 1000), progressively increasing by the TLOD step size per second until completely activated.
+    - When Free TLOD mode is active in FPS Sensitivity mode, Mountains+ applies at all altitudes, including on the ground, allowing TLOD to reach up to TLOD Top Max + Mountains Extra everywhere based on performance.
     - If terrain drops below Mtn Alt Min, Mtns will remain fixed for 5 minutes then progressively reduce by the TLOD step size per second until completely deactivated.
   - Night÷2 - reduced TLOD Max at night
     - Halves TLOD Max/Top at night to reduce system workload by not drawing scenery out to distances that can't be seen in the dark anyway.
