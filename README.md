@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.4.2
+# MSFS_AutoFPS v0.5.4.3
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with negligible, or preferably no, UI impact, and if I have the available time to do it.
@@ -28,7 +28,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
 - Native Dark Mode theme with title bar hiding, whole-window dragging, and streamlined exit handling,
 - Fully responsive UI layout that dynamically adapts to Windows text and DPI scaling without clipping,
-- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, Dynamic FG (with MSFS or RTSS), MFG, FG mod, FSR or Lossless Scaling - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, Dynamic FG (with MSFS or RTSS), MFG, FG mod, FSR, Lossless Scaling and OFXR FG for VR - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto future MSFS version compatibility, provided MSFS memory changes are minor,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
@@ -49,7 +49,7 @@ Important:<br/>
 
 ## FAQ
 
-I am new to this app/MSFS, or I don't care for all this technical jargon. What is the simplest way to use this app to make my MSFS experience better?
+### I am new to this app/MSFS, or I don't care for all this technical jargon. What is the simplest way to use this app to make my MSFS experience better?
 - Leave your relevant MSFS graphics settings set as you normally would without this app, 
 - Start the app before you load your flight,
 - Leave Use Expert Settings unchecked,
@@ -60,18 +60,19 @@ I am new to this app/MSFS, or I don't care for all this technical jargon. What i
 - Due to potential settings conflict, don't change any MSFS graphics settings that could be adjusted by AutoFPS while in a flight with AutoFPS already running.
 - If performance still drops significantly in complex scenarios or you receive memory capacity warnings, see the VRAM+ FAQ entry.
 
-What is the MSFS In-Game Toolbar Widget and how do I use it?
+### What is the MSFS In-Game Toolbar Widget and how do I use it?
 - The In-Game Widget is a companion toolbar panel that displays live AutoFPS telemetry, connection status, flight profile switching, in-session reset, and Dark Mode controls directly inside the MSFS cockpit without alt-tabbing to the desktop app.
 - It can be installed into your MSFS 2020 and/or MSFS 2024 Community folder via the installer (select the **MSFS Widget** checkbox during installation).
 - Once installed and AutoFPS is running, open the MSFS in-game toolbar and click the **AutoFPS** icon to open the panel.
 - Features:
-  - **Live Telemetry & Status:** Displays real-time FPS, TLOD, OLOD, AGL, FPM, Cloud/Reduce status, and connection states.
-  - **Controls:** Change the active Flight Type profile on the fly, trigger an in-flight reset directly from the cockpit or toggle Dark/Light mode in-cockpit, with two-way synchronization to the desktop app.
-  - **Title Bar Hiding:** Double-click anywhere on the widget window or header to toggle the title bar on or off. When collapsed, the active app and widget versions are displayed on the top toolbar line, also syncrhonized with the desktop app.
-  - **Fluid Scaling:** The widget dynamically scales its fonts and spacing as you resize the in-game panel.
+  - **Live Telemetry & Status:** Displays real-time FPS, TLOD, OLOD, AGL, FPM, Cloud/Reduce status, and connection states with matching app glyphs.
+  - **Controls:** Change the active Flight Type profile on the fly, trigger an in-flight reset directly from the cockpit or toggle Dark/Light mode in-cockpit, with two-way synchronisation to the desktop app.
+  - **Show/Hide Hotkey:** Configure a persistent keyboard shortcut directly from the toolbar to toggle widget visibility without using the MSFS top bar.
+  - **Title Bar Hiding:** Double-click anywhere on the widget window or header to toggle the title bar on or off. When collapsed, the active app and widget versions are displayed on the top toolbar line, also synchronised with the desktop app.
+  - **Fluid Scaling & Auto-Height:** The widget automatically adjusts its height to fit content, eliminating manual vertical resizing, and dynamically scales text and spacing when resized horizontally to prevent clipping in VR and 2D.
 - You can also view this widget in any local web browser (or from a secondary tablet/device on your local network) while AutoFPS is running by navigating to `http://localhost:54321/`.
 
-What is a Fixed FPS vs an NTE FPS in reference to this app?
+### What is a Fixed FPS vs an NTE FPS in reference to this app?
 - A **Fixed FPS** is when your FPS is truly locked to one value with almost no variation (e.g., 72‑72‑72‑72‑72 across the detection windows).
   - In this case, use **Fixed Target FPS** and set it to match your lock.
   - The app will warn you if your settings don’t match a detected fixed FPS.
@@ -80,7 +81,7 @@ What is a Fixed FPS vs an NTE FPS in reference to this app?
   - Use **Manual Target FPS** and set the target slightly below the cap for stable TLOD behaviour.
 - The app only classifies FPS as “Fixed” after five stable checks; one‑off dips are ignored.
 
-What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
+### What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
   - App defaults to last-used mode on startup.
   - Auto-switches to detected mode on flight load (excludes Man FG, which is manually selected and locked).
@@ -99,6 +100,14 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Activated within MSFS.
   - Autodetected by AutoFPS.
   - No notable limitations.
+- **OFXR (Optical Flow OpenXR)**
+  - Dedicated VR graphics mode using the external OFXR Bridge Tray app.
+  - Autodetected when entering VR with the bridge running and armed.
+  - Automatically reverts to standard VR mode if the bridge is disarmed.
+  - Dynamically tracks active and paused states in real time:
+    - Applies detected frame generation multiplier (2× or 3×) to FPS calculations when active.
+    - Reverts to native sim FPS and freezes LOD adjustments when paused via hotkey (`OFXR ⏸`) for steady A/B visual comparison.
+  - Has its own independently saved Target FPS setting.
 - **nVidia FG (native, FG mod or MFG)**
   - Activated via MSFS graphics settings or FG mod.
   - MFG is now auto detected if DLSS FG 3X or greater set within MSFS settings.
@@ -127,7 +136,7 @@ What are these various graphics modes shown in the dropdown list for Target FPS 
   - Functions as a **forced mode**, remaining active across app restarts until manually changed to a different graphics mode.
   - Select Auto to return to auto detection of all other modes.
 
-How does AutoFPS compare to the in-built Dynamic Setting feature that MS included in MSFS 2024?
+### How does AutoFPS compare to the in-built Dynamic Setting feature that MS included in MSFS 2024?
 - Dynamic Setting adjusts both TLOD and OLOD, the former initially then the latter if still significantly under target FPS. AutoFPS adjusts these settings independently, with OLOD changing inversely proportional to altitude by default, and can also change a lot more settings when auto settings reduction and VRAM+ are active.
 - Dynamic Setting only ever adjusts down to as low as 50% of your currently set TLOD and/or OLOD, whereas AutoFPS in non-expert mode uses the default values as a centre point for adjustments and in expert mode is configurable to whatever range you want, including above the max of 400 settable within the MSFS settings menu.
 - Dynamic Settings is much quicker than AutoFPS at responding to FPS reductions, due to it having internal access to MSFS performance metrics that AutoFPS does not, which also means it tends to overreact to short term stutters which are quite common now.
@@ -139,14 +148,14 @@ How does AutoFPS compare to the in-built Dynamic Setting feature that MS include
   - Together, MSFS dynamic settings and AutoFPS now work in tandem to manage both performance and visual quality, each addressing different layers of the optimisation stack.
   - See the Usage / Configuration section for details on how to optimally configure this feature.
 
-You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
+### You developed this app and must therefore know how to best configure it, so surely you can tell me the best settings for me to use?
 - The best settings for you to use are highly dependent on your system's capabilities, what other addons and supporting apps you use, and what your expectation of "best" actually is - higher FPS, improved visuals, smoother experience - some of which are mutually exclusive (i.e you can have one but only at the expense of another).
 - Additionally, there are now thousands of users of this app and I simply don't have the time to provide individual settings advice to everyone that asks.
 - As such, your best course of action is to start off with non-expert mode to see what the app actually does and when.
 - Once you are comfortable with how the app operates, enable expert settings and start reading the tooltip and readme on what each setting does.
 - When making changes, it is best to make small changes to only a few settings so that you can see the effect of them and adjust as desired.
 
-What does this VRAM+ feature do? How do I use it?
+### What does this VRAM+ feature do? How do I use it?
 - MSFS 2024 and MSFS 2020 in DX12 mode are very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
 - VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and makes MSFS much more prone to CTD.
 - While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM are still regularly encountering VRAM overflow situations, even with modest settings.
@@ -157,7 +166,7 @@ What does this VRAM+ feature do? How do I use it?
   - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
   - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
 
-I am getting major stuttering (visual or sound), freezes or CTDs in MSFS using this app. What can I do to stop them?
+### I am getting major stuttering (visual or sound), freezes or CTDs in MSFS using this app. What can I do to stop them?
 - By far the most common reason is users have enabled Expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
 - As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer and selecting the Reset Configs options, which will recreate your config files.
 - Rerun the app and try Non-Expert mode with IFR flight type and Auto Target FPS checked.
@@ -169,7 +178,7 @@ My default MSFS graphics settings are messed up and each time I try to change th
 - You are likely trying to change these default MSFS settings while the app is still running and you are in an active flight, where the app will override any such changes you try to make.
 - Either exit the app completely or be in the MSFS main menu (ie. NOT in a flight), then you can go to the MSFS settings screen and change your default MSFS settings to what you want and the app will restore these at the conclusion of a flight session or upon exiting.
 
-Why am I getting a dangerous/unsafe/virus/trojan/malware warning when trying to download or install?
+### Why am I getting a dangerous/unsafe/virus/trojan/malware warning when trying to download or install?
 - This app is unsigned because I am a hobbyist and the cost of obtaining certification is prohibitive to me, so you may get a warning message of a potentially dangerous app when you download it in a web browser like Chrome or from your antivirus program, especially Kaspersky which is known to flag false positives with this installer and the app.
 - You can either trust this download, based on feedback you can easily find on Avsim and Youtube, make an exception in your browser and/or antivirus program for the download then run a virus scan and malware scan before you install just be sure, or just not install and use this app.<br/><br/>
 
@@ -347,7 +356,7 @@ Some Notes:
   - Will not show valid values unless all three connections are green, or royal blue for the Sim Version if the MSFS Performance Optimiser is enabled. n/a means not available right now.
   - When MSFS is detected and **NOT** in a flight session:
     - Default **TLOD**, **OLOD**, and **Cloud Quality** values are displayed and refresh within one second of changes made in the MSFS settings menu.
-    - **VR‑specific defaults** show automatically when in VR mode or when VR is selected in the Target FPS dropdown.
+    - **VR‑specific defaults** show automatically when in VR or OFXR mode or when VR or OFXR is selected in the Target FPS dropdown.
     - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
   - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
   - Green means the sim value meets or exceeds the target. Red means it is at its minimum or below target. Orange with arrows for TLOD or OLOD means the value is auto‑adjusting. Orange for FPS and TLOD means adjustment is limited because FG is inactive and TLOD increases are disabled. Black is shown otherwise.
@@ -441,8 +450,8 @@ Some Notes:
     - Loading in to a flight - whether MSFS memory integrity tests have failed, and
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
-      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
-      - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
+      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR, OFXR or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
+      - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/OFXR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
@@ -472,7 +481,7 @@ Some Notes:
         - Halves maximum TLOD reduction in non‑cockpit camera states to account for larger transient FPS drops typical of these views.
         - A one‑off per‑profile migration prompt converts existing FPS Cap settings to the recommended Sensitivity + Fixed Target FPS mode while preserving equivalent tuning.
     - Target FPS graphics mode
-      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR, VR) and each flight type (VFR, IFR, and six user profiles in Expert mode).
+      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR, OFXR and VR) and each flight type (VFR, IFR, and six user profiles in Expert mode).
       - On startup, the app defaults to the graphics mode last used.
       - Automatically switches to the detected graphics mode when loading into a flight session (except in Man FG).
       - Users can adjust Target FPS for non‑active graphics modes using the drop‑down list.
