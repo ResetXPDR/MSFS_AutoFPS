@@ -28,7 +28,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
 - Native Dark Mode theme with title bar hiding, whole-window dragging, and streamlined exit handling,
 - Fully responsive UI layout that dynamically adapts to Windows text and DPI scaling without clipping,
-- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, Dynamic FG (with MSFS or RTSS), MFG, FG mod, FSR, Lossless Scaling and OFXR FG for VR - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, Dynamic FG (with MSFS or RTSS), MFG, FG mod, FSR, Lossless Scaling, and OFXR (VR) - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
 - Auto future MSFS version compatibility, provided MSFS memory changes are minor,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
