@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.4.3
+# MSFS_AutoFPS v0.5.4.4
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with negligible, or preferably no, UI impact, and if I have the available time to do it.
@@ -67,9 +67,10 @@ Important:<br/>
 - Features:
   - **Live Telemetry & Status:** Displays real-time FPS, TLOD, OLOD, AGL, FPM, Cloud/Reduce status, and connection states with matching app glyphs.
   - **Controls:** Change the active Flight Type profile on the fly, trigger an in-flight reset directly from the cockpit or toggle Dark/Light mode in-cockpit, with two-way synchronisation to the desktop app.
+  - **Repositioning & Dragging:** Move the widget by dragging its title bar or any empty background area, allowing smooth repositioning in VR and 2D even when the title bar is hidden.
   - **Show/Hide Hotkey:** Configure a persistent keyboard shortcut directly from the toolbar to toggle widget visibility without using the MSFS top bar.
-  - **Title Bar Hiding:** Double-click anywhere on the widget window or header to toggle the title bar on or off. When collapsed, the active app and widget versions are displayed on the top toolbar line, also synchronised with the desktop app.
-  - **Fluid Scaling & Auto-Height:** The widget automatically adjusts its height to fit content, eliminating manual vertical resizing, and dynamically scales text and spacing when resized horizontally to prevent clipping in VR and 2D.
+  - **Title Bar Hiding:** Double-click anywhere on empty widget space or the header to toggle the title bar on or off. The title bar state is saved between sessions and two-way synchronised with the desktop app. When collapsed, the active app and widget versions are displayed on the top toolbar line.
+  - **Fluid Scaling & Auto-Height:** The widget automatically adjusts its height to fit content dynamically, eliminating manual vertical resizing. It anchors to the left edge to reliably remember its 2D screen position, and dynamically scales text and spacing when resized horizontally to prevent clipping in VR and 2D.
 - You can also view this widget in any local web browser (or from a secondary tablet/device on your local network) while AutoFPS is running by navigating to `http://localhost:54321/`.
 
 ### What is a Fixed FPS vs an NTE FPS in reference to this app?
@@ -225,8 +226,11 @@ Some Notes:
   - The installer automatically records and remembers custom Community paths across all future auto-updates in `Install.log`.
 - Smart Deferred Auto-Updates:
   - When an update contains an in-game widget change and MSFS is currently running, AutoFPS automatically defers the installation until MSFS has closed, avoiding flight interruptions and file-lock errors.
-  - A status line message indicates when an update is deferred and waiting for MSFS to exit.
-  - If you manually close AutoFPS mid-flight while an update is waiting, an exit confirmation dialog allows you to keep AutoFPS running until you close MSFS, or close immediately and postpone the update to the next launch.
+  - A status line message on the main app window indicates when an update is deferred and waiting for MSFS to exit.
+  - If an exit is initiated while an update is waiting (via the system tray menu, window title bar, or post-flight auto-close), a confirmation dialog gives you the choice:
+    - Click 'No' to keep AutoFPS running so the update installs automatically when MSFS exits. If post-flight auto-close is enabled, it is suspended for that session so you are not repeatedly prompted.
+    - Click 'Yes' to close AutoFPS immediately and postpone the update until the next launch with MSFS closed.
+  - Minimizing to the system tray is unaffected and leaves the update queued for when MSFS exits.
   - Updates that do not contain widget changes continue to install immediately while MSFS is running.
 - If the installer did not download or is zero size, try redownloading again with a different browser and possibly with AV temporarily disabled if required. It should be about 1.5Mb in size. 
 - If the installer will not run at all:
