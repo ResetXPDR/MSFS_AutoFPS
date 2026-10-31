@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.4.4
+# MSFS_AutoFPS v0.5.5.0
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with negligible, or preferably no, UI impact, and if I have the available time to do it.
@@ -9,16 +9,15 @@ Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by
 Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to improve the MSFS user experience by automatically changing key MSFS settings that impact MSFS performance and smoothness the most. It has an easy to use UI and provides features such as:<br/>
 - Automatic TLOD adjustment to either achieve and maintain a target FPS or to an altitude schedule,
 - Improved FPS smoothing (FPS+) to filter out brief performance spikes and dips, delivering a more resilient user experience,
-- An MSFS In-Game Toolbar Widget providing in-cockpit telemetry, status, flight profile switching, in-session reset, and Dark Mode toggling,
-- An embedded lightweight local webserver (port 54321) allowing live telemetry access from any web browser or networked device,
+- An MSFS In-Game Toolbar Widget and local web interface (port 54321) providing in-cockpit telemetry, target FPS controls, camera-based auto-hiding, profile switching, and Dark Mode toggling,
 - A choice between VFR (GA) and IFR (Airliner) flight types, which defaults to settings suitable to each flight type:
   - Expert mode is fully customisable with six additional profiles available, any of which can be paired for VR/non-VR and Sim Rate auto flight type switching.
 - Auto target FPS option, which is useful if you don't know what target FPS to choose or if your flight types are so varied that a single target FPS value is not always appropriate,
-- A greatly simplified Non-Expert default UI option that uses pre-defined settings for an automated experience suited to most user scenarios,
+- A greatly simplified Non-Expert default UI option that uses pre-defined settings with built-in guardrails suited to most user scenarios,
 - An Expert mode Option, which allows user customisation of the following:
   - A choice of TLOD automation method, each suitable for different specific uses of the app, namely FPS Sensitivity, FPS Tolerance, Auto TLOD and FPS Cap,
   - Auto raising and lowering of the minimum or base TLOD option, depending on low altitude performance being either very favourable or poor respectively,
-  - Auto lowering of the maximum or top TLOD at night option, reducing system workload by not having to draw distant scenery that can't be seen in the dark anyway,
+  - Unified Night Mode option to automatically lower TLOD, reduce cloud quality, or both at night,
   - Automatic OLOD adjustment option based on an automatic or user-definable OLOD range and altitude band (AGL),
   - MSFS 2020 only 
     - Cloud quality decrease option for when either FPS can't be achieved at the lowest desired TLOD or when the GPU load is too high,
@@ -28,7 +27,7 @@ Now fully compatible with MSFS 2020 and 2024 in the one app, this app aims to im
     - Hybrid dynamic settings / AutoFPS automation support (auto-disabled in Non-Expert mode).
 - Native Dark Mode theme with title bar hiding, whole-window dragging, and streamlined exit handling,
 - Fully responsive UI layout that dynamically adapts to Windows text and DPI scaling without clipping,
-- Simultaneous Native Frame Rate (NFR), Frame Generation (FG) - including native nVidia, Dynamic FG (with MSFS or RTSS), MFG, FG mod, FSR, Lossless Scaling, and OFXR (VR) - and VR graphics mode compatibility, including correct FG FPS display, and separate FPS targets for each mode,
+- Dynamic graphics mode detection supporting Native Frame Rate (NFR), VR, Frame Generation (native, MFG, MSM, FSR, Lossless Scaling), and VR frame generation (OFXR, VectorXR), with separate FPS targets and dual-layer VR conflict protection,
 - Auto future MSFS version compatibility, provided MSFS memory changes are minor,
 - Auto detection and protection from known similar apps already running or incompatibilities with newer MSFS versions, 
 - VRAM+ overflow protection option, when running the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app.
@@ -65,8 +64,10 @@ Important:<br/>
 - It can be installed into your MSFS 2020 and/or MSFS 2024 Community folder via the installer (select the **MSFS Widget** checkbox during installation).
 - Once installed and AutoFPS is running, open the MSFS in-game toolbar and click the **AutoFPS** icon to open the panel.
 - Features:
-  - **Live Telemetry & Status:** Displays real-time FPS, TLOD, OLOD, AGL, FPM, Cloud/Reduce status, and connection states with matching app glyphs.
-  - **Controls:** Change the active Flight Type profile on the fly, trigger an in-flight reset directly from the cockpit or toggle Dark/Light mode in-cockpit, with two-way synchronisation to the desktop app.
+  - **Live Telemetry & Status:** Displays real-time FPS, TLOD, OLOD, AGL, FPM, Cloud/Reduce status, and connection states across three balanced columns mirroring the desktop hierarchy, complete with active FPS source badges and matching status glyphs.
+  - **Controls:** Change the active Flight Type profile, adjust Target FPS settings directly via interactive stepper buttons, collapse the General section, trigger an in-flight reset, or toggle Dark/Light mode in-cockpit, with two-way synchronisation to the desktop app.
+  - **Click-to-Toggle FPS Source:** Switch between MSFS and RTSS capture sources directly by clicking the FPS source icon on the widget panel (read-only during active OFXR or VXR sessions).
+  - **Camera-Based Auto-Hide:** Automatically hides the in-game widget when switching away from the cockpit view to keep external views and screenshots clear (options: Off, Chase, or All Ext).
   - **Repositioning & Dragging:** Move the widget by dragging its title bar or any empty background area, allowing smooth repositioning in VR and 2D even when the title bar is hidden.
   - **Show/Hide Hotkey:** Configure a persistent keyboard shortcut directly from the toolbar to toggle widget visibility without using the MSFS top bar.
   - **Title Bar Hiding:** Double-click anywhere on empty widget space or the header to toggle the title bar on or off. The title bar state is saved between sessions and two-way synchronised with the desktop app. When collapsed, the active app and widget versions are displayed on the top toolbar line.
@@ -75,7 +76,7 @@ Important:<br/>
 
 ### What is a Fixed FPS vs an NTE FPS in reference to this app?
 - A **Fixed FPS** is when your FPS is truly locked to one value with almost no variation (e.g., 72‑72‑72‑72‑72 across the detection windows).
-  - In this case, use **Fixed Target FPS** and set it to match your lock.
+  - In this case, use **Fixed Target FPS** and set it to match your lock. Target FPS can be set up to 5% below a detected cap without warning to accommodate standard G-Sync, FreeSync, and Reflex frame-rate caps.
   - The app will warn you if your settings don’t match a detected fixed FPS.
 - An **NTE FPS** (“Not‑To‑Exceed FPS”) is when you have an FPS cap but your FPS still varies too much to be considered fixed.
   - In this case, do **not** use Fixed Target FPS.
@@ -84,11 +85,12 @@ Important:<br/>
 
 ### What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
+  - The app uses dynamic graphics mode management. Core modes (NFR, VR, FG, FSR, Man FG) are always present, while external mods (OFXR, VXR, LSFG, MSM) populate only when detected on your system, falling back to NFR if closed.
   - App defaults to last-used mode on startup.
   - Auto-switches to detected mode on flight load (excludes Man FG, which is manually selected and locked).
   - Target FPS dropdown allows editing inactive mode’s setting.
   - Dropdown background turns orange when target FPS differs from current mode.
-  - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset.
+  - VR-friendly: users can adjust target FPS in 2D before adorning and activating VR headset (pre-flight Sim Values automatically reflect VR defaults when VR, OFXR, or VXR is selected).
   - Dynamic/adaptive FG of any type set external to MSFS should be configured under Man FG, otherwise it should auto-detect.
     - When using **MSFS as the FPS source**, Target FPS is set using the NFR (1×) value, and FPS displays as NFR because DynFG’s dynamic behaviour prevents reliable detection of its actual FG multiplier at any specific point in time.
     - When using **RTSS as the FPS source**, Target FPS is set as a post-FG target value. AutoFPS calculates and displays the active dynamic FG multiplier in real time on the status line. TLOD automation is disabled in this specific configuration because pre-FG base frametimes cannot be reliably derived.
@@ -103,25 +105,36 @@ Important:<br/>
   - No notable limitations.
 - **OFXR (Optical Flow OpenXR)**
   - Dedicated VR graphics mode using the external OFXR Bridge Tray app.
-  - Autodetected when entering VR with the bridge running and armed.
+  - Autodetected when entering VR with supported community builds running and armed.
   - Automatically reverts to standard VR mode if the bridge is disarmed.
-  - Dynamically tracks active and paused states in real time:
-    - Applies detected frame generation multiplier (2× or 3×) to FPS calculations when active.
-    - Reverts to native sim FPS and freezes LOD adjustments when paused via hotkey (`OFXR ⏸`) for steady A/B visual comparison.
-  - Has its own independently saved Target FPS setting.
+  - Sub-50 ms controller loop synchronisation with live compositor telemetry.
+  - Automatically derives effective multipliers in Auto mode (e.g. OFXR Auto 2X).
+  - Recovers from pacing desyncs using an FPS settle event rather than locking LOD adjustments indefinitely.
+  - Pausing via hotkey (`OFXR ⏸`) reverts to native sim FPS and freezes LOD adjustments for steady visual comparisons.
+  - Fixed FPS mismatch warnings are disabled in this mode.
+- **VXR (VectorXR)**
+  - Dedicated VR graphics mode integrating directly with VectorXR via its Status API.
+  - Reads real-time OpenXR compositor telemetry, reports fractional delivered multipliers, and supports paused and standby states.
+  - Fixed FPS mismatch warnings are disabled in this mode.
+- **Dual-Layer VR Conflict Protection**
+  - If both OFXR and VectorXR OpenXR layers run simultaneously, AutoFPS warns the user, falls back to standard VR mode, and pauses LOD automation to prevent pacing contention.
 - **nVidia FG (native, FG mod or MFG)**
   - Activated via MSFS graphics settings or FG mod.
-  - MFG is now auto detected if DLSS FG 3X or greater set within MSFS settings.
-  - Dynamic FG should also be detected when set within MSFS settings.
+  - MFG is auto-detected if DLSS FG 3X or greater is set within MSFS settings.
+  - Dynamic FG is detected when set within MSFS settings.
   - Autodetected by AutoFPS but only active when MSFS is the focused window.
-  - FG becomes inactive when MSFS loses focus (driver-level behavior).
+  - FG becomes inactive when MSFS loses focus (driver-level behaviour).
   - Use app’s “On Top” option to ensure MSFS maintains focus.
+- **MSM (MFG Super Motion)**
+  - Autodetected when the MFG Super Motion mod process is running.
+  - Resolves dynamic multipliers with independent IFR and VFR Target FPS settings.
+  - Tracks MSFS window focus matching native FG: displays MSM Inact at base framerate when MSFS loses focus.
 - **Lossless Scaling FG (LSFG)**
   - Activated through LSFG app (v2.13.2+ required).
   - Auto detected when LS is running, regardless of actual FG activation.
   - AutoFPS checks for profiles named `MSFS2020` or `MSFS2024`.
     - Falls back to first config profile (usually `Default`) if none found.
-  - Adaptive FG not detectable—uses NFR for target FPS.
+  - Adaptive mode operates as LSFG using the pre-LSFG multiplier (e.g. 1X).
   - After changing LS settings mid-flight, press Reset to redetect.
   - Only one FG type should be active—mixing LSFG with native FG or FG mod causes incorrect FPS readings.
 - **FSR FG**
@@ -360,7 +373,7 @@ Some Notes:
   - Will not show valid values unless all three connections are green, or royal blue for the Sim Version if the MSFS Performance Optimiser is enabled. n/a means not available right now.
   - When MSFS is detected and **NOT** in a flight session:
     - Default **TLOD**, **OLOD**, and **Cloud Quality** values are displayed and refresh within one second of changes made in the MSFS settings menu.
-    - **VR‑specific defaults** show automatically when in VR or OFXR mode or when VR or OFXR is selected in the Target FPS dropdown.
+    - **VR‑specific defaults** show automatically when in VR, OFXR, or VXR mode or when VR, OFXR, or VXR is selected in the Target FPS dropdown.
     - The Sim Values header shows an **MSFS icon** to indicate default values are being displayed.
   - When in a flight session, the Sim Values header shows an **AutoFPS icon** to indicate values are being actively controlled by AutoFPS.
   - Green means the sim value meets or exceeds the target. Red means it is at its minimum or below target. Orange with arrows for TLOD or OLOD means the value is auto‑adjusting. Orange for FPS and TLOD means adjustment is limited because FG is inactive and TLOD increases are disabled. Black is shown otherwise.
@@ -379,7 +392,7 @@ Some Notes:
   - FPS source icon - RTSS (RivaTuner Statistics Server) or MSFS.
     - **[RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)** is a well-established tool for FPS monitoring, widely used in the gaming community and fully compatible with MSFS.
     - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running, if Dynamic FG is the graphics mode (with MSFS FPS source) or if RTSS data is detected as frozen.
-    - Clicking the FPS source icon will switch the FPS source to the alternate source and the icon will change accordingly, with the added requirement that RTSS must be running in order to switch to RTSS as a source.
+    - Clicking the FPS source icon on either the desktop app or the toolbar widget switches between MSFS and RTSS capture sources, provided RTSS is running (read-only during active OFXR or VXR sessions).
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
     - RTSS data can freeze (swap-chain latched) when switching from 2D Frame Generation (FG) to VR or when MSFS recreates its graphics swap-chain.
       - FPS/frame time values stop updating and remain constant.
@@ -454,7 +467,7 @@ Some Notes:
     - Loading in to a flight - whether MSFS memory integrity tests have failed, and
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
-      - Shows detected Graphics Mode (NFR, FG, LSFG, MFG, FSR, OFXR or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
+      - Displays a centred two-line status message showing detected Graphics Mode (NFR, FG, LSFG, MFG, MSM, FSR, OFXR, VXR or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/OFXR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
@@ -485,7 +498,7 @@ Some Notes:
         - Halves maximum TLOD reduction in non‑cockpit camera states to account for larger transient FPS drops typical of these views.
         - A one‑off per‑profile migration prompt converts existing FPS Cap settings to the recommended Sensitivity + Fixed Target FPS mode while preserving equivalent tuning.
     - Target FPS graphics mode
-      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, Man FG, FSR, OFXR and VR) and each flight type (VFR, IFR, and six user profiles in Expert mode).
+      - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, MSM, VXR, Man FG, FSR, OFXR and VR) and each flight type (VFR, IFR, and six user profiles in Expert mode).
       - On startup, the app defaults to the graphics mode last used.
       - Automatically switches to the detected graphics mode when loading into a flight session (except in Man FG).
       - Users can adjust Target FPS for non‑active graphics modes using the drop‑down list.
@@ -537,31 +550,31 @@ Some Notes:
       - -profile "`<profile name>`" loads the specified profile in Expert mode, requiring an exact match.
   - Use Expert Options (shortened to **Expert**)
     - Non-Expert Mode (unchecked and default)
-      - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability.
+      - Allows the app to use default settings in conjunction with your chosen target FPS that should produce good automated FPS tracking, provided you have set reasonable MSFS TLOD, OLOD and Cloud settings and a realistic FPS target within your system's performance capability. Built-in guardrails cap daytime TLOD at 400, night TLOD at 200, and ground OLOD at 200.
       - The following settings will be used:
         - Target FPS option, graphics mode and value - user selectable. Enabling Auto automatically disables Extra due to automation control ambiguity
         - VFR or IFR flight type - user selectable
         - TLOD Automation Method - FPS Sensitivity
         - FPS Sensitivity - 5%
-        - TLOD Base Min - VFR 50% of your current MSFS TLOD setting, IFR 25%, doubled if using Auto Target FPS
+        - TLOD Base Min - VFR 50% of your current MSFS TLOD setting, IFR 25%, doubled if using Auto Target FPS (clamped to a maximum of 150)
         - TLOD Base Extra - enabled with an x4 multiplier, unless Auto Target FPS is enabled, then disabled
         - Alt TLOD Base - VFR 100 ft, IFR 1000 ft
-        - TLOD Top Max - VFR 300% of your current MSFS TLOD setting, IFR 200%
+        - TLOD Top Max - VFR 250% of your current MSFS TLOD setting (capped at 400), IFR 200% (capped at 400)
         - Alt TLOD Top - internally calculated to achieve a maximum recommended descent rate of 1350 fpm for VFR and 2000 fpm for IFR.
         - Mtns - disabled
-        - Night÷2 - enabled
-        - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting, IFR 100% 
+        - Night Mode - TLOD÷2 (capped at 200)
+        - Auto OLOD - enabled and VFR 150% of your current MSFS OLOD setting (capped at 200), IFR 100% 
         - VRAM+ - enabled,
           - Only functional if GPU-Z is running.
           - Imposes different auto settings reduction settings, namely Floor: off and Recovery: Ground with 5% VRAM reduction achieved. 
           - Can be disabled by temporarily checking Expert Options, selecting Off in the VRAM+ dropdown control, then unchecking Expert Options.
-        - MSFS 2020 only
+        - MSFS 2020 only 
           - Decrease Cloud Quality
             - enabled by default and uses the GPU load activation method if GPU-Z is found to be running, otherwise the TLOD activation method is used.
             - can be disabled by setting DecCloudQNonExpert to false in the app config file located in the app's root, NOT bin, directory.
             - GPU load activation method decreases cloud quality with greater than 98% GPU load and recovers with less than 80% GPU load.
             - TLOD activation method uses a Cloud Recovery TLOD 2/5 between TLOD Base Min and TLOD Top Max or + 50 over TLOD Base Min, whichever is lower. If excessive changing of cloud quality levels are detected, the app will automatically increase its calculated cloud recovery TLOD.
-        - MSFS 2024 only
+        - MSFS 2024 only 
           - Auto Settings Reduction - enabled with Max Levels: 2, Floor: Lowest, and Recovery: Ground. Reduction Settings Suite:
             - IFR: Full reduction suite minus clouds (to minimise impact on user experience). OLOD may reduce by up to 50%, but TLOD will not reduce below TLOD Base Min when not using Auto Target FPS, as it is already very low for this flight‑type profile.
             - VFR: Flora (Trees, Plants, Grass), Ray Traced and Terrain Shadows and Displacement Mapping 
@@ -677,14 +690,14 @@ Some Notes:
     - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (Range: 100 ft - 100,000 ft) by the TLOD Mtn Amt amount (Range: 10 - 1000), progressively increasing by the TLOD step size per second until completely activated.
     - When Free TLOD mode is active in FPS Sensitivity mode, Mountains+ applies at all altitudes, including on the ground, allowing TLOD to reach up to TLOD Top Max + Mountains Extra everywhere based on performance.
     - If terrain drops below Mtn Alt Min, Mtns will remain fixed for 5 minutes then progressively reduce by the TLOD step size per second until completely deactivated.
-  - Night÷2 - reduced TLOD Max at night
-    - Halves TLOD Max/Top at night to reduce system workload by not drawing scenery out to distances that can't be seen in the dark anyway.
-    - Does not reduce or disable TLOD Extra.
-    - Works with all automation methods: FPS Sensitivity, FPS Tolerance and Auto TLOD.
-    - Defaults to enabled in Non-Expert mode. Enabled in Expert mode by checking the checkbox to the right of the TLOD Max/Top textbox.
-    - When your flight transitions from day to night time, based on your location and the local time, TLOD Max/Top will progressively reduce to half its normal value, including the progressive removal of any TLOD Base and Top Extra in use in FPS Cap mode only.
-    - When your flight transitions from night to day time, based on your location and the local time, TLOD Max/Top will first progressively increase to its normal value then, providing you are either stopped on the ground or are in the air above Alt TLOD Base Min, will activate the seeking process if TLOD Base Min Extra is enabled and reactivate Mtns if enabled.
-    - The status line will show either Day or Night when activated and Δ while transitioning between them.
+  - Night Mode - unified per-profile night-time performance optimisation
+    - Replaces the previous checkbox with a per-profile dropdown offering four modes: Off, TLOD÷2, Clds-X, and Both.
+    - Decouples night-time cloud reduction from TLOD halving, allowing users to reduce cloud overhead while preserving full draw distance for city lights and runways.
+    - Steps down volumetric cloud quality by configurable levels (default 2, minimum Low) at night and cleanly restores daytime settings at sunrise.
+    - Automatically clears any active daytime cloud boost (IncCloudQ) upon entering night mode and restores it at sunrise.
+    - Works with all automation methods: FPS Sensitivity, FPS Tolerance, and Auto TLOD.
+    - Settings adjust progressively when transitioning between day and night based on local time and aircraft position.
+    - The status line displays Day, Night, or Δ while transitioning between them.
   - Auto OLOD
     - When enabled, four user definable parameters relating to this feature will be revealed on the UI.
     - Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
