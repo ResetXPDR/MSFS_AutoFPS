@@ -75,13 +75,13 @@ Important:<br/>
 - You can also view this widget in any local web browser (or from a secondary tablet/device on your local network) while AutoFPS is running by navigating to `http://localhost:54321/`.
 
 ### What is a Fixed FPS vs an NTE FPS in reference to this app?
-- A **Fixed FPS** is when your FPS is truly locked to one value with almost no variation (e.g., 72‑72‑72‑72‑72 across the detection windows).
-  - In this case, use **Fixed Target FPS** and set it to match your lock. Target FPS can be set up to 5% below a detected cap without warning to accommodate standard G-Sync, FreeSync, and Reflex frame-rate caps.
+- A **Fixed FPS** is when your FPS is truly locked to one value with almost no variation (e.g. 72‑72‑72‑72‑72 across the detection windows).
+  - In this case, use **Fixed Target FPS** and set it to match your lock. Target FPS can be set between 0% and 5% below a detected cap without warning to accommodate standard G-Sync, FreeSync, and Reflex frame-rate limits. If set more than 5% below the cap, the app will advise switching to Manual mode or raising the target to match.
   - The app will warn you if your settings don’t match a detected fixed FPS.
 - An **NTE FPS** (“Not‑To‑Exceed FPS”) is when you have an FPS cap but your FPS still varies too much to be considered fixed.
   - In this case, do **not** use Fixed Target FPS.
-  - Use **Manual Target FPS** and set the target slightly below the cap for stable TLOD behaviour.
-- The app only classifies FPS as “Fixed” after five stable checks; one‑off dips are ignored.
+  - Use **Manual Target FPS** and set the target at least 5% below the cap for stable TLOD behaviour when Settings Reduction is disabled, or at least 5% plus your profile FPS tolerance percentage below the cap when Settings Reduction is enabled so reduced settings have sufficient headroom to recover.
+- The app only classifies FPS as “Fixed” after five stable checks; one‑off dips are ignored. Setting Target FPS strictly higher than a detected cap triggers an invalid target warning with a 0.5 FPS jitter buffer.
 
 ### What are these various graphics modes shown in the dropdown list for Target FPS and on the status line and how do I use them?
 - **How to use**
@@ -389,10 +389,11 @@ Some Notes:
       - FPS values outside of this range are considered outliers and are not included in the average until a sustained change over 3 seconds in the same direction is detected.
       - The average will recover more quickly if the very recent trend is detected to have minimal variance.
       - Averaging period is 5 seconds.
-  - FPS source icon - RTSS (RivaTuner Statistics Server) or MSFS.
+- FPS source icon - RTSS (RivaTuner Statistics Server), MSFS, OFXR, or VXR.
     - **[RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)** is a well-established tool for FPS monitoring, widely used in the gaming community and fully compatible with MSFS.
     - RTSS is the default FPS source and will automatically revert to MSFS as the FPS source if RTSS is not installed and running, if Dynamic FG is the graphics mode (with MSFS FPS source) or if RTSS data is detected as frozen.
-    - Clicking the FPS source icon on either the desktop app or the toolbar widget switches between MSFS and RTSS capture sources, provided RTSS is running (read-only during active OFXR or VXR sessions).
+    - In VR sessions using OFXR or VectorXR, the icon displays the dedicated VR compositor source (**OFXR** or **VXR**) and is read-only.
+    - In standard 2D and VR modes, clicking the FPS source icon on either the desktop app or the toolbar widget switches between MSFS and RTSS capture sources, provided RTSS is running.
     - The last used FPS source will be saved and restored upon the next app launch, when a flight session begins, or when the Reset button is pressed during a flight session.
     - RTSS data can freeze (swap-chain latched) when switching from 2D Frame Generation (FG) to VR or when MSFS recreates its graphics swap-chain.
       - FPS/frame time values stop updating and remain constant.
@@ -472,16 +473,17 @@ Some Notes:
       - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
-  - Target FPS — the most important setting in the app (range 10–500, fractional values of 0.5 supported)
+- Target FPS — the most important setting in the app (range 10–500, fractional values of 0.5 supported)
     - Set this to the FPS you want the app to target after any frame‑generation technology has been applied.
     - Target FPS option (FPS Sensitivity and Tolerance mode only)
       - Manual
         - Automates proportionally above and below the user‑set value: smaller, more frequent adjustments in FPS Sensitivity mode; larger, less frequent adjustments in FPS Tolerance mode.
         - Requires FPS headroom above the target. If FPS rarely exceeds the target, TLOD increases may be slow or may not occur.
-        - If you are using a true fixed FPS (FPS holding the same value with minimal variation) or VSync for the same purpose, it is strongly recommended to use the Fixed option in Expert mode and set the Fixed Target FPS to match your lock.
-          - A user warning system triggers only when a 5‑times‑proven detected fixed FPS, Target FPS option and Target FPS value would block TLOD automation.
-          - When triggered, the Target FPS option and/or Target FPS value controls show an orange background for 30 seconds and display a dynamic tooltip with recommendation(s) to resolve the detected fixed FPS / Target FPS / Target FPS option mismatch.
-        - If you are using an NTE FPS (an FPS cap acting as a ceiling rather than a true fixed FPS), the Target FPS must be set at least 5% below the cap for automation to function correctly. This may introduce tearing or break VR motion reprojection, which is why the Fixed option is preferred when a true fixed FPS is actually present.
+        - When an FPS cap is in place:
+          - Target FPS must be set at least 5% below the cap when Settings Reduction is disabled.
+          - Target FPS must be set at least 5% plus your profile FPS tolerance percentage below the cap when Settings Reduction is enabled, ensuring reduced settings have sufficient headroom to recover.
+          - Setting Target FPS strictly higher than a detected cap triggers an orange mismatch warning (buffered by 0.5 FPS to prevent frame jitter false alarms).
+        - If you are using a true fixed FPS (FPS holding the same value with minimal variation) or VSync for that purpose, use the Fixed option instead of Manual.
       - Auto
         - Automatically calculates a target FPS after initial FPS settling, when stationary on the ground or any time you are in the air.
         - Recalculates automatically if performance becomes too low for the current target, after arriving at a new destination, when changing graphics mode, pressing Reset, or toggling the option off/on for a quick recalibration.
@@ -490,7 +492,10 @@ Some Notes:
         - With VFR, each percentage is reduced by 5% to better suit higher performance expectations.
         - Auto settings reduction and TLOD Base Extra and Free are mutually exclusive with Auto Target FPS, hence are not selectable. Fixed TLOD must be used.
       - Fixed
-        - Maintains a fixed FPS more responsively and achieves higher average TLOD than FPS Cap mode, and enables the FreeTLOD option.
+        - Designed for true locked framerates (e.g. driver locks, monitor refresh divisors, or Reflex caps). Maintains a fixed FPS more responsively and achieves higher average TLOD than FPS Cap mode, and enables the FreeTLOD option.
+        - Set Target FPS to match your locked rate, or between 0% and 5% below a detected cap without warning to accommodate standard G-Sync, FreeSync, and Reflex frame-rate caps.
+        - Setting Target FPS more than 5% below a detected lock advises switching to Manual mode or raising the target to match the cap.
+        - Setting Target FPS higher than a detected cap triggers an orange mismatch warning with recommendations to resolve.
         - Gently raises TLOD when FPS is close to or at the Fixed Target FPS, and applies proportionally larger reductions when FPS drops, maintaining the fixed FPS with maximum possible TLOD.
         - Requires two consecutive raw FPS drops or a 5‑second downward trend before reducing TLOD, avoiding reactions to brief dips.
         - Recovers at twice the normal increase rate when below the last stable TLOD peak, improving responsiveness within previously safe ranges while avoiding overshoot above them.
