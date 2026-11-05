@@ -85,6 +85,7 @@ The companion In-Game Toolbar Widget and local web server allow in-cockpit monit
   - **Chase:** Automatically hides only in standard chase exterior view.
   - **All Ext:** Automatically hides across all external views (chase, drone, showcase, and exterior fixed cameras) with sub-150 ms SimVar response.
 - **Click-to-Toggle FPS Source:** Click the FPS source badge on the panel to toggle capture between MSFS and RTSS (read-only during active OFXR or VectorXR sessions).
+- **Show/Hide Hotkey:** The previous on-screen hotkey button has been replaced by the Auto-Hide dropdown. Any previously configured hotkeys continue to work in the background. To set, change, or clear a manual toggle hotkey, edit the `WidgetHotkey` key in `MSFS2020_AutoFPS.config` or `MSFS2024_AutoFPS.config` located in `%appdata%\MSFS_AutoFPS` (set to `"None"` to disable).
 - **Collapsible General Controls:** Click the General section header to collapse controls during flight, synchronised two-way with the desktop application.
 - **Title Bar Hiding & Dragging:** Double-click empty space on the widget header to toggle the title bar. Move the widget by dragging anywhere on its background. Text and elements dynamically scale when resized horizontally to prevent clipping in VR.
 
