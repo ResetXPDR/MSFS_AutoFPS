@@ -1,0 +1,20 @@
+{
+  "dependencies": [],
+  "content_type": "MISC",
+  "title": "AutoFPS Widget Panel",
+  "manufacturer": "",
+  "creator": "Community",
+  "package_version": "1.6.0",
+  "minimum_game_version": "1.9.21",
+  "minimum_compatibility_version": "9.21.0.251",
+  "export_type": "Community",
+  "builder": "Microsoft Flight Simulator 2024",
+  "package_order_hint": "UI_PATCH",
+  "release_notes": {
+    "neutral": {
+      "LastUpdate": "",
+      "OlderHistory": ""
+    }
+  },
+  "total_package_size": "205547"
+}

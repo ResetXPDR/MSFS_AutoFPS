@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#E61E1F22" />
+  <SolidColorBrush x:Key="GroupBorderBrush" Color="#FF4A4D55" />
+  <SolidColorBrush x:Key="InputBackgroundBrush" Color="#40FFFFFF" />
+  <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#FF35383F" />
+  <SolidColorBrush x:Key="TextForegroundBrush" Color="#FFEAEAEA" />
+  <SolidColorBrush x:Key="PopupBackgroundBrush" Color="#FF202227" />
+  <SolidColorBrush x:Key="PopupHoverBrush" Color="#FF3A3D46" />
+</ResourceDictionary>

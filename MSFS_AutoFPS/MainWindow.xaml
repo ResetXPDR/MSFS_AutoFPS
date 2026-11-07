@@ -1,240 +1,613 @@
-﻿<Window x:Class="MSFS_AutoFPS.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MSFS_AutoFPS"
-        mc:Ignorable="d"
-        Name ="AutoFPS" Title="MSFS_AutoFPS" Height="618" Width="412" MouseDoubleClick="AutoFPS_DoubleClick" IsVisibleChanged="Window_IsVisibleChanged"  Closing="Window_Closing" Topmost="True" Background="#D8FFFFFF" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight">
-    <Window.Resources>
-        <Style TargetType="GroupBox">
-            <Setter Property="HeaderTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontWeight="DemiBold"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
-
-    <Viewbox Name="viewBox" Stretch="None" StretchDirection="DownOnly" HorizontalAlignment="Left" Width="410">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="MSFS_AutoFPS.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:MSFS_AutoFPS" x:Name="AutoFPS" Title="MSFS_AutoFPS" Opacity="0.88" Topmost="True" WindowStyle="SingleBorderWindow" ShowInTaskbar="true" Background="{DynamicResource WindowBackgroundBrush}" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" PreviewMouseLeftButtonDown="Window_PreviewMouseLeftButtonDown" MouseDoubleClick="AutoFPS_DoubleClick" Closing="Window_Closing" StateChanged="Window_StateChanged">
+  <FrameworkElement.ContextMenu>
+    <ContextMenu>
+      <MenuItem Name="mnuToggleTitleBar" Header="Hide Title Bar" Click="mnuToggleTitleBar_Click" />
+      <MenuItem Header="Minimise" Click="mnuMinimise_Click" />
+      <MenuItem Name="mnuCloseToTray" Header="Close to Tray" Visibility="Collapsed" Click="mnuCloseToTray_Click" />
+      <Separator />
+      <MenuItem Header="Exit" Click="mnuExit_Click" />
+    </ContextMenu>
+  </FrameworkElement.ContextMenu>
+  <FrameworkElement.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/MSFS_AutoFPS;component/Themes/ThemeLight.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <Style x:Key="{x:Type GroupBox}" TargetType="{x:Type GroupBox}">
+        <Setter Property="BorderBrush" Value="{DynamicResource GroupBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+        <Setter Property="HeaderTemplate">
+          <Setter.Value>
+            <DataTemplate>
+              <TextBlock FontWeight="DemiBold" Foreground="{DynamicResource TextForegroundBrush}" Text="{Binding}" />
+            </DataTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type Label}" TargetType="{x:Type Label}">
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+      </Style>
+      <Style x:Key="{x:Type TextBlock}" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+      </Style>
+      <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBox}">
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+        <Setter Property="TextBoxBase.CaretBrush" Value="{DynamicResource TextForegroundBrush}" />
+      </Style>
+      <Style x:Key="{x:Type ToolTip}" TargetType="{x:Type ToolTip}">
+        <Setter Property="Background" Value="{DynamicResource PopupBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource GroupBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="6,4" />
+      </Style>
+      <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}">
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}" />
+      </Style>
+      <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PopupBackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="5,3" />
+        <Style.Triggers>
+          <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
+            <Setter Property="Background" Value="{DynamicResource PopupHoverBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+      <Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
+        <Setter Property="Background" Value="{DynamicResource PopupBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource GroupBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type ContextMenu}">
+              <Border Background="{TemplateBinding Control.Background}" BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="{TemplateBinding Control.BorderThickness}" CornerRadius="4" Padding="3">
+                <StackPanel IsItemsHost="True" />
+              </Border>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type MenuItem}" TargetType="{x:Type MenuItem}">
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+        <Setter Property="Background" Value="#00FFFFFF" />
+        <Setter Property="FrameworkElement.Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type MenuItem}">
+              <Border Name="border" Background="{TemplateBinding Control.Background}" CornerRadius="3" Padding="12,5" Margin="1">
+                <ContentPresenter ContentSource="Header" HorizontalAlignment="Left" VerticalAlignment="Center" TextBlock.Foreground="{TemplateBinding Control.Foreground}" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="MenuItem.IsHighlighted" Value="True">
+                  <Setter TargetName="border" Value="{DynamicResource PopupHoverBrush}" Property="Border.Background" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type Separator}" TargetType="{x:Type Separator}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type Separator}">
+              <Border Height="1" Background="{DynamicResource GroupBorderBrush}" Margin="4,3" />
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="{x:Type CheckBox}" TargetType="{x:Type CheckBox}">
+        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FrameworkElement.Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type CheckBox}">
+              <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Name="chkBorder" MinWidth="14" Height="14" Background="{DynamicResource InputBackgroundBrush}" BorderBrush="{DynamicResource GroupBorderBrush}" BorderThickness="1" CornerRadius="2" Margin="0,0,4,0">
+                  <Path Name="chkPath" Data="M2.5,6.5 L5.5,9.5 L11.5,2.5" Stroke="{DynamicResource TextForegroundBrush}" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Visibility="Collapsed" />
+                </Border>
+                <ContentPresenter VerticalAlignment="Center" />
+              </StackPanel>
+              <ControlTemplate.Triggers>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                  <Setter TargetName="chkPath" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                  <Setter Property="UIElement.Opacity" Value="0.45" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </ResourceDictionary>
+  </FrameworkElement.Resources>
+  <Viewbox Name="viewBox" Stretch="None" StretchDirection="DownOnly" HorizontalAlignment="Stretch">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="6,6,6,2">
+      <GroupBox Name="gpboxConnectionStatus" BorderThickness="1" Margin="0,0,0,6" BorderBrush="{DynamicResource GroupBorderBrush}" Header="Connection Status">
+        <Border Background="#00FFFFFF" MouseLeave="PerfOpt_MouseLeave">
+          <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+              <Label Name="lblPerfOptEnabled" Height="40" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,0,-2,0">+</Label>
+              <CheckBox Name="chkPerfOptEnabled" VerticalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Content="" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" IsChecked="True" MouseEnter="PerfOpt_MouseEnter" Click="chkPerfOptEnabled_Click">
+                <FrameworkElement.ToolTip>
+                  <TextBlock>Enable MSFS performance optimisations<LineBreak />(can improve or reduce performance depending on system;<LineBreak />monitor performance after enabling)</TextBlock>
+                </FrameworkElement.ToolTip>
+              </CheckBox>
+              <Label Name="lblConnStatMSFS" Height="40" VerticalContentAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="#FFFF0000" Padding="0,0,16,0" MouseEnter="PerfOpt_MouseEnter">MSFS</Label>
+              <Label Name="lblConnStatSimConnect" Height="40" VerticalContentAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="#FFFF0000" Padding="8,0,16,0">SimConnect</Label>
+              <Label Name="lblConnStatSession" Height="40" VerticalContentAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="#FFFF0000" Padding="8,0,16,0">Session</Label>
+              <Label Name="lblConnStatWidget" Height="40" VerticalContentAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="#FFFF0000" Padding="8,0,16,0">Widget</Label>
+            </StackPanel>
+            <StackPanel Name="stkpnlPerfOptDetails" Visibility="Collapsed" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,-4,0,10">
+              <CheckBox Name="chkPerfOptAffinity" Content="Physical Cores" Height="24" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,12,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkPerfOptAffinity_Click" />
+              <CheckBox Name="chkPerfOptPriority" Content="" Height="24" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,4,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkPerfOptPriority_Click" />
+              <ComboBox Name="cbPerfOptPriority" ToolTip="Sets the MSFS process priority to AboveNormal or High" Height="24" VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="3,0,0,0" Margin="-5,0,4,0" SelectionChanged="cbPerfOptPriority_SelectionChanged">
+                <ComboBoxItem Content="AboveNormal" />
+                <ComboBoxItem Content="High" IsSelected="True" />
+              </ComboBox>
+              <Label Name="lblPerfOptPriority" Content="Priority" Height="24" VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0" Margin="-2,0,12,0" />
+              <CheckBox Name="chkPerfOptPowerPlan" Content="Best Power Plan" Height="24" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkPerfOptPowerPlan_Click" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+      </GroupBox>
+      <GroupBox Name="gpboxSimValues" BorderThickness="1" Margin="0,0,0,6" BorderBrush="{DynamicResource GroupBorderBrush}">
+        <HeaderedContentControl.Header>
+          <DockPanel>
+            <Image Name="imgSimHeaderIcon" Visibility="Collapsed" Source="/MSFS_Icon.png" Width="16" Height="16" Margin="0,0,5,0" VerticalAlignment="Center" ToolTip="Default MSFS settings" />
+            <Image Name="imgSimHeaderIcon2" Visibility="Collapsed" Source="/AutoFPS.png" Width="16" Height="16" Margin="0,0,5,0" VerticalAlignment="Center" ToolTip="AutoFPS-controlled MSFS settings" />
+            <TextBlock Text="Sim Values" VerticalAlignment="Center" />
+          </DockPanel>
+        </HeaderedContentControl.Header>
+        <HeaderedContentControl.HeaderTemplate>
+          <DataTemplate>
+            <ContentPresenter Content="{Binding}" />
+          </DataTemplate>
+        </HeaderedContentControl.HeaderTemplate>
         <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="32" Width="*" />
+            <ColumnDefinition MinWidth="32" Width="*" />
+            <ColumnDefinition MinWidth="32" Width="*" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
+            <Label Name="lblSimFPSType" MinWidth="60" VerticalContentAlignment="Center">FPS+:</Label>
+            <Label Name="lblSimFPS" VerticalContentAlignment="Center">n/a</Label>
+            <Image Name="imgSimFPSRTSS" Width="16" Height="16" ToolTip="FPS source: RTSS. Click to change to MSFS" Visibility="Hidden" VerticalAlignment="Center" Margin="5,0,0,0" Source="/RTSS_Icon.png" MouseLeftButtonDown="imgSimFPS_Click" />
+            <Image Name="imgSimFPSMSFS" Width="16" Height="16" ToolTip="FPS source: MSFS. Click to change to RTSS (must be running)" Visibility="Hidden" VerticalAlignment="Center" Margin="5,0,0,0" Source="/MSFS_Icon.png" MouseLeftButtonDown="imgSimFPS_Click" />
+            <Image Name="imgSimFPSOFXR" Width="16" Height="16" ToolTip="FPS source: OFXR" Visibility="Hidden" VerticalAlignment="Center" Margin="5,0,0,0" Source="/OFXR_armed.png" MouseLeftButtonDown="imgSimFPS_Click" />
+            <Image Name="imgSimFPSVXR" Width="16" Height="16" ToolTip="FPS source: VXR" Visibility="Hidden" VerticalAlignment="Center" Margin="5,0,0,0" Source="/VectorXR.png" MouseLeftButtonDown="imgSimFPS_Click" />
+          </StackPanel>
+          <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label Name="lblSimTLODlbl" MinWidth="60" VerticalContentAlignment="Center">TLOD:</Label>
+            <Label Name="lblSimTLOD" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label Name="lblSimOLODlbl" MinWidth="60" VerticalContentAlignment="Center">OLOD:</Label>
+            <Label Name="lblSimOLOD" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center" Margin="10,0,0,0">AGL:</Label>
+            <Label Name="lblPlaneAGL" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center">FPM:</Label>
+            <Label Name="lblPlaneVS" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label Name="lblSimReduce" MinWidth="60" VerticalContentAlignment="Center" MouseEnter="lblSimReduce_MouseEnter" MouseLeave="lblSimReduce_MouseLeave">Clouds:</Label>
+            <Label Name="lblSimReduce2" VerticalContentAlignment="Center" MouseEnter="lblSimReduce2_MouseEnter" MouseLeave="lblSimReduce_MouseLeave">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="2" Grid.Column="0" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center" Margin="10,0,0,0">Clouds:</Label>
+            <Label Name="lblReduceCloudQ" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="2" Grid.Column="1" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center">Trees:</Label>
+            <Label Name="lblReduceTrees" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="2" Grid.Column="2" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center">RTShad:</Label>
+            <Label Name="lblReduceRTShadows" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="3" Grid.Column="0" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center" Margin="10,0,0,0">TShad:</Label>
+            <Label Name="lblReduceTShadows" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="3" Grid.Column="1" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center">Bldings:</Label>
+            <Label Name="lblReduceBldings" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="3" Grid.Column="2" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center">DispMap:</Label>
+            <Label Name="lblReduceDispMap" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="4" Grid.Column="0" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center" Margin="10,0,0,0">OSTPC:</Label>
+            <Label Name="lblReduceOSTPCache" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="4" Grid.Column="1" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center">Plants:</Label>
+            <Label Name="lblReducePlants" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="4" Grid.Column="2" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label MinWidth="60" VerticalContentAlignment="Center">Grass:</Label>
+            <Label Name="lblReduceGrass" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="5" Grid.Column="0" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label Name="lblReducePkdAcQ2" MinWidth="60" VerticalContentAlignment="Center" Margin="10,0,0,0">PkdAcQ:</Label>
+            <Label Name="lblReducePkdAcQ" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+          <StackPanel Grid.Row="5" Grid.Column="1" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+            <Label Name="lblReduceAcTrafQ2" MinWidth="60" VerticalContentAlignment="Center">AcTrafQ:</Label>
+            <Label Name="lblReduceAcTrafQ" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
+          </StackPanel>
+        </Grid>
+      </GroupBox>
+      <StackPanel Name="stkpnlGeneral" Orientation="Vertical" HorizontalAlignment="Stretch">
+        <GroupBox BorderThickness="1" Margin="0,0,0,6" VerticalAlignment="Stretch" BorderBrush="{DynamicResource GroupBorderBrush}" Header="General">
+          <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="33*" MinWidth="240"/>
-                <ColumnDefinition Width="261*"/>
-                <ColumnDefinition Width="55*"/>
-                <ColumnDefinition Width="55*"/>
+              <ColumnDefinition Width="369*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="64*"/>
-                <RowDefinition Height="64*"/>
-                <RowDefinition Height="64*"/>
-                <RowDefinition Height="256*"/>
+              <RowDefinition MinHeight="32" Height="*" />
+              <RowDefinition MinHeight="32" Height="*" />
+              <RowDefinition MinHeight="32" Height="Auto" />
             </Grid.RowDefinitions>
-
-            <StackPanel Orientation="Vertical" Grid.ColumnSpan="4" Margin="0,0,0,17" Grid.RowSpan="2">
-                <GroupBox Grid.Row="0" Grid.Column="0" BorderThickness="1" Margin="10,8,10,8" BorderBrush="DarkGray">
-                    <GroupBox.Header>Connection Status</GroupBox.Header>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Label Name="lblConnStatMSFS" Height="40" VerticalContentAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="Red" Padding="8,0,16,0">MSFS</Label>
-                        <Label Name="lblConnStatSimConnect" Height="40" VerticalContentAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="Red" Padding="8,0,16,0">SimConnect</Label>
-                        <Label Name="lblConnStatSession" Height="40" VerticalContentAlignment="Center" VerticalAlignment="Center" TextBlock.Foreground="Red" Padding="8,0,16,0">Session</Label>
-                    </StackPanel>
-                </GroupBox>
-
-                <GroupBox Name ="gpboxSimValues" Grid.Row="1" Grid.Column="0" BorderThickness="1" Width="390" Margin="10,0,10,0" BorderBrush="DarkGray">
-                    <GroupBox.Header>Sim Values</GroupBox.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="32" Width="*"/>
-                            <ColumnDefinition MinWidth="32" Width="*"/>
-                            <ColumnDefinition MinWidth="32" Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition MinHeight="32" Height="*"/>
-                            <RowDefinition MinHeight="32" Height="*"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
-                            <Label MinWidth="60" VerticalContentAlignment="Center">FPS:</Label>
-                            <Label Name="lblSimFPS" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
-                        </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Label MinWidth="60" VerticalContentAlignment="Center">TLOD:</Label>
-                            <Label Name="lblSimTLOD" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
-                        </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Label MinWidth="60" VerticalContentAlignment="Center">OLOD:</Label>
-                            <Label Name="lblSimOLOD" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Label MinWidth="60" VerticalContentAlignment="Center" Margin="10,0,0,0">AGL:</Label>
-                            <Label Name="lblPlaneAGL" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Label MinWidth="60" VerticalContentAlignment="Center">FPM:</Label>
-                            <Label Name="lblPlaneVS" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Label MinWidth="60" VerticalContentAlignment="Center">Clouds:</Label>
-                            <Label Name="lblSimCloudQs" MinWidth="64" VerticalContentAlignment="Center">n/a</Label>
-                        </StackPanel>
-                    </Grid>
-                </GroupBox>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0,4,0,0" Grid.ColumnSpan="2">
+              <StackPanel Name="stkTargetFPS" Orientation="Horizontal" MinWidth="120">
+                <ComboBox Name="cbTargetFPSOption" MinWidth="60" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbTargetFPSOption_SelectionChange">
+                  <FrameworkElement.ToolTip>
+                    <TextBlock>Target FPS option<LineBreak />Manual: User choice (default)<LineBreak />Auto: AutoFPS chooses automatically<LineBreak />Fixed: FPS stays at the system-set<LineBreak />fixed value; requires matching it<LineBreak /><LineBreak />Orange highlight means a Fixed FPS<LineBreak />was detected that does not match your<LineBreak />Target FPS. If this is a permanent<LineBreak />setup, adjust Target FPS to match.</TextBlock>
+                  </FrameworkElement.ToolTip>
+                  <ComboBoxItem Content="Manual" />
+                  <ComboBoxItem Content="Auto" />
+                  <ComboBoxItem Content="Fixed" IsSelected="True" />
+                </ComboBox>
+                <Label Name="lblTargetFPS1" Content="Target" />
+                <ComboBox Name="cbTargetFPSType" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbTargetFPSType_SelectionChange">
+                  <FrameworkElement.ToolTip>
+                    <TextBlock>Graphics mode for Target FPS selection<LineBreak />NFR (Native Frame Rate) is initial default<LineBreak />Defaults to last used graphics mode on startup<LineBreak />Man FG enables manual frame‑generation settings<LineBreak />All others auto detect when graphics mode changes<LineBreak />Manual select allows editing non‑active graphics mode settings<LineBreak />(background changes to orange)</TextBlock>
+                  </FrameworkElement.ToolTip>
+                </ComboBox>
+                <ComboBox Name="cbManFgMultiplier" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" Visibility="Collapsed" SelectionChanged="cbManFgMultiplier_SelectionChange">
+                  <FrameworkElement.ToolTip>
+                    <TextBlock>Manual frame‑generation multiplier settings<LineBreak />Auto returns to NFR and disables manual FG<LineBreak />FG 2X–8X apply fixed frame‑generation ratios<LineBreak />DynFG uses 1X (NFR) when MSFS is the FPS source<LineBreak />and variable multipliers when RTSS is the FPS source<LineBreak />Used only when Man FG is the active graphics mode</TextBlock>
+                  </FrameworkElement.ToolTip>
+                  <ComboBoxItem Content="Auto" />
+                  <ComboBoxItem Content="FG 2X " IsSelected="True" />
+                  <ComboBoxItem Content="FG 3X " />
+                  <ComboBoxItem Content="FG 4X " />
+                  <ComboBoxItem Content="FG 5X " />
+                  <ComboBoxItem Content="FG 6X " />
+                  <ComboBoxItem Content="FG 7X " />
+                  <ComboBoxItem Content="FG 8X " />
+                  <ComboBoxItem Content="DynFG" />
+                </ComboBox>
+                <Label Name="lblTargetFPS2" Content="FPS" />
+              </StackPanel>
+              <TextBox Name="txtTargetFPS" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp">
+                <FrameworkElement.ToolTip>
+                  <TextBlock>Enter a target FPS achievable by your system<LineBreak />for the selected graphics mode.<LineBreak /><LineBreak />If using frame generation, this is the target for<LineBreak />the rendered FPS AFTER frame generation is applied,<LineBreak />EXCEPT when using DynFG with MSFS as the FPS source,<LineBreak />which targets the rendered FPS BEFORE frame generation is applied.<LineBreak /></TextBlock>
+                </FrameworkElement.ToolTip>
+              </TextBox>
+              <CheckBox Name="chkOnTop" VerticalContentAlignment="Center" ToolTip="Show MSFS_AutoFPS on top of all other windows" Content="On top" Margin="30,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkOnTop_Click" />
+              <CheckBox Name="chkDarkMode" Content="Dark" VerticalContentAlignment="Center" Margin="10,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkDarkMode_Click">
+                <FrameworkElement.ToolTip>
+                  <TextBlock>Enable or disable dark mode</TextBlock>
+                </FrameworkElement.ToolTip>
+              </CheckBox>
             </StackPanel>
-
-            <StackPanel Name="stkpnlGeneral" Orientation="Vertical" Grid.Row="1" HorizontalAlignment="Left" Width="410" Grid.ColumnSpan="4" Margin="1,75,0,22" Grid.RowSpan="2">
-                <GroupBox BorderThickness="1" Margin="10,8,10,8" BorderBrush="DarkGray">
-                    <GroupBox.Header>General</GroupBox.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="369*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition MinHeight="32" Height="*"/>
-                            <RowDefinition MinHeight="32" Height="*"/>
-                            <RowDefinition MinHeight="32" Height="*"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0,8,0,0" Grid.ColumnSpan="2">
-                            <Label Name="lblTargetFPS" Content="Target PC FPS" MinWidth="120"/>
-                            <TextBox x:Name="txtTargetFPS" ToolTip ="Achievable for your system" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42"   LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Background="#7FFFFFFF"/>
-                            <CheckBox x:Name="chkOnTop" VerticalContentAlignment="Center" Width="76"  Height="24" MaxHeight="24" MinHeight="24" Click="chkOnTop_Click" Content="On top" Margin="13,0,0,0" Background="#7FFFFFFF"/>
-                            <CheckBox x:Name="chkAutoTargetFPS" VerticalContentAlignment="Center" ToolTip ="Recommended for VFR flights. Unchecks TLOD Min + as they conflict" Height="24" MaxHeight="24" MinHeight="24" Click="chkAutoTargetFPS_Click" Content="Auto Target FPS" IsChecked="False" Background="#7FFFFFFF"/>
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,8,0,0">
-                            <CheckBox Name="chkUseExpertOptions" VerticalContentAlignment="Center" Width="110"  Height="24" MaxHeight="24" MinHeight="24" Click="chkUseExpertOptions_Click" Margin="5,0,0,0" Background="#7FFFFFFF">Expert Options</CheckBox>
-                            <Button Name ="btnReset" Content ="_Reset" Width="42" Margin="5,0,10,0" BorderThickness="1,1,2,2" Background="#FFD8D7D7" ToolTip ="Reset TLOD, Clouds, Auto Target FPS and graphics mode detection to initial state." Click="btnReset_Click"/>
-                            <Label Content="Flight Type" Margin="0,0,8,0"/>
-                            <RadioButton x:Name="optVFRFlight" Margin="5" ToolTip ="General Aviation flights in regional areas" Click="chkFlightType_Click" GroupName="FlightType" Content="VFR" IsChecked="False" Background="#7FFFFFFF" />
-                            <RadioButton x:Name="optIFRFlight" ToolTip ="Airliner flights in urban areas" Margin="5" Click="chkFlightType_Click" GroupName="FlightType" Content="IFR" IsChecked="True" Background="#7FFFFFFF" />
-                        </StackPanel>
-                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,8,0,0">
-                            <Label Name="lblStatusMessage" MinWidth="50" VerticalContentAlignment="Center" Content=""/>
-                            <TextBlock x:Name="lblappUrl" VerticalAlignment="Center"> <Hyperlink NavigateUri="https://github.com/ResetXPDR/MSFS_AutoLOD/releases/latest" RequestNavigate="Hyperlink_RequestNavigate">
-                                here</Hyperlink>
-                            </TextBlock>
-                        </StackPanel>
-                    </Grid>
-
-                </GroupBox>
+            <StackPanel Grid.Row="1" Grid.Column="0" Visibility="Visible" Orientation="Horizontal" Margin="0,8,0,0">
+              <CheckBox Name="chkUseExpertOptions" Visibility="Visible" ToolTip="See readme and tooltips for detailed descriptions of the expert settings this enables" VerticalContentAlignment="Center" Height="24" Margin="5,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkUseExpertOptions_Click">Expert</CheckBox>
+              <CheckBox Name="chkLOGPlus" Content="Log+" VerticalContentAlignment="Center" Margin="10,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkLOGPlus_Click">
+                <FrameworkElement.ToolTip>
+                  <TextBlock>Additional logging to assist with<LineBreak />troubleshooting and development</TextBlock>
+                </FrameworkElement.ToolTip>
+              </CheckBox>
+              <Button Name="btnReset" Content="_Reset" MinWidth="42" Padding="3,1" Margin="10,0,0,0" BorderThickness="1,1,2,2" Background="{DynamicResource ButtonBackgroundBrush}" Foreground="{DynamicResource TextForegroundBrush}" ToolTip="Reset TLOD, Clouds, Auto Target FPS and graphics mode detection to initial state." Click="btnReset_Click" />
+              <Label Content="Flight Type" Margin="10,0,0,0" />
+              <ComboBox Name="cbActiveProfile" MinWidth="115" IsTextSearchEnabled="False" IsEditable="False" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbActiveProfile_SelectionChange" MouseDoubleClick="cbActiveProfile_MouseDoubleClick" Loaded="cbActiveProfile_Loaded">
+                <FrameworkElement.ToolTip>
+                  <TextBlock>Select a flight type applicable to your current flight.<LineBreak />VFR: General Aviation flights in regional areas<LineBreak />IFR: Airliner flights in urban areas<LineBreak />(Expert) Double click to edit profile names<LineBreak />↔ Indicates Non-VR/VR pairing<LineBreak />Use xX to enable Sim Rate pairing</TextBlock>
+                </FrameworkElement.ToolTip>
+              </ComboBox>
+              <CheckBox Name="chkVRAMPlus" Visibility="Collapsed" VerticalContentAlignment="Center" Content="VRAM+" Padding="4,0,0,0" Margin="15,0,0,0" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" Click="chkVRAMPlus_Click">
+                <FrameworkElement.ToolTip>
+                  <TextBlock>Hold/reduce key settings if VRAM<LineBreak />use is nearing full capacity<LineBreak />(Global, including Non-Expert)</TextBlock>
+                </FrameworkElement.ToolTip>
+              </CheckBox>
             </StackPanel>
-            <StackPanel Name="stkpnlExpertSettings" Orientation="Vertical"  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Margin="0,120,0,0" Grid.RowSpan="2">
-                <GroupBox BorderThickness="1" Margin="10,0,10,8" BorderBrush="DarkGray">
-                    <GroupBox.Header>Expert Options</GroupBox.Header>
-                    <Grid Margin="0,2,0,2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                <Label Content="Auto Method" MinWidth="108"/>
-                                <ComboBox Name="cbTLODAutoMethod" MinWidth ="103" SelectionChanged="cbTLODAutoMethod_SelectionChange" SelectedIndex="0" Background="#7FFFFFFF" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}">
-                                    <ComboBox.ItemContainerStyle>
-                                        <Style TargetType="ComboBoxItem">
-                                            <Setter Property="Background" Value="#7FFFFFFF"/>
-                                            <Setter Property="BorderBrush" Value="#7FFFFFFF"/>
-                                        </Style>
-                                    </ComboBox.ItemContainerStyle>
-                                    <ComboBoxItem Content="FPS Sensitivity" IsSelected="True"/>
-                                    <ComboBoxItem Content="FPS Tolerance"/>
-                                    <ComboBoxItem Content="Auto TLOD"/>
-                                </ComboBox>
-                                <Label Name="lblTLODAuto1" Content="LOD Step" MinWidth="62" Margin="10,0,0,0"></Label>
-                                <TextBox x:Name="txtFPSTolerance" ToolTip ="TLOD responsiveness to FPS variances" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42"   LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,0,0" Background="#7FFFFFFF"/>
-                                <Label Name="lblTLODAuto2" Content="%" MinWidth="20"></Label>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                <Label Name="lblTLODMin" Content="TLOD Min    +" MinWidth="85"/>
-                                <CheckBox x:Name="chkMinTLODExtra" VerticalContentAlignment="Center"  ToolTip="+ additional TLOD Min with good performance conditions Unchecks Auto Target FPS as they conflict" Click="chkMinTLODExtra_Click" Margin="0,0,7,0" Background="#7FFFFFFF">
-                                </CheckBox>
-                                <TextBox Name="txtMinTLod" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,20,0" Background="#7FFFFFFF"/>
-                                <Label Name="lblTLODMax" Content="TLOD Max    +" MinWidth="87"/>
-                                <CheckBox x:Name="chkTLODExtraMtns" VerticalContentAlignment="Center"  ToolTip="+ extra TLOD Max in high terrain areas" Click="chkTLODExtraMtns_Click" Margin="0,0,7,0" Background="#7FFFFFFF">
-                                </CheckBox>
-                                <TextBox x:Name="txtMaxTLod" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="5,0,0,0" Background="#7FFFFFFF"/>
-                                <Label Name="lblMaxTLODHalvedNight" Content=" -"/>
-                                <CheckBox x:Name="chkMaxTLODHalvedNight" VerticalContentAlignment="Center"  ToolTip="Halve TLOD Max at night" Click="chkMaxTLODHalvedNight_Click" Margin="0,0,7,0" Background="#7FFFFFFF">
-                                </CheckBox>
-                            </StackPanel>
-                            <StackPanel Name="stkpnlTLODExtraMtns" Orientation="Vertical" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2">
-                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                    <Label Content="Mtn Alt Min" MinWidth="108"/>
-                                    <TextBox Name="txtTLODExtraMtnsTriggerAlt" VerticalContentAlignment="Center" ToolTip="Minimum terrain altitude at which additional TLOD Max will activate" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,20,0" Background="#7FFFFFFF"/>
-                                    <Label Content="TLOD Mtn Amt     +" MinWidth="115"/>
-                                    <TextBox x:Name="txtTLODExtraMtnsAmount" VerticalContentAlignment="Center" ToolTip="Additional TLOD Max in mountainous areas" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,0,0" Background="#7FFFFFFF"/>
-                                </StackPanel>
-                            </StackPanel>
-                            <StackPanel Name="stkpnlFlightTypeIFROptions" Orientation="Vertical" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2">
-                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                    <Label Content="Alt TLOD Base" MinWidth="108"/>
-                                    <TextBox Name="txtAltTLODBase" ToolTip ="TLOD Min will be locked below this altitude" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,0,0" Background="#7FFFFFFF"/>
-                                    <Label Content="ft" Margin="0,0,12,0"/>
-                                    <Label Name="lblAltTLOD1" Content="Avg Descent Rate" MinWidth="103"/>
-                                    <TextBox x:Name="txtAvgDescentRate" ToolTip ="Determines what altitude TLOD will start reducing towards TLOD Min" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="2,0,0,0" Background="#7FFFFFFF"/>
-                                    <Label Name="lblAltTLOD2" Content="fpm"/>
-                                </StackPanel>
-                            </StackPanel>
-                            <StackPanel Name="stkpnlCloudQualityOptions" Orientation="Horizontal" Margin="0,2,0,0">
-                                <CheckBox x:Name="chkDecCloudQ" ToolTip ="Reduce cloud quality by one level if activation condition is met" VerticalContentAlignment="Center" Click="chkDecCloudQ_Click" Width="152" Content="Decrease Cloud Quality" Checked="chkDecCloudQ_Checked" Padding="4,0,0,0" Background="#7FFFFFFF"/>
-                                <Label Name="lblCloudMethod" Content="Activation Method" Padding="28,2,0,0" MinWidth="132"/>
-                                <ComboBox Name="cbCloudMethod" MinWidth ="70" SelectionChanged="cbCloudMethod_SelectionChange" SelectedIndex="0" Background="#7FFFFFFF" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}">
-                                    <ComboBox.ItemContainerStyle>
-                                        <Style TargetType="ComboBoxItem">
-                                            <Setter Property="Background" Value="#7FFFFFFF"/>
-                                            <Setter Property="BorderBrush" Value="#7FFFFFFF"/>
-                                        </Style>
-                                    </ComboBox.ItemContainerStyle>
-                                    <ComboBoxItem Content="TLOD" IsSelected="True"/>
-                                    <ComboBoxItem Content="GPU Load"/>
-                                </ComboBox>
-
-                            </StackPanel>
-                            <StackPanel Name="stkpnlCloudQualityOptions2" Orientation="Horizontal" Margin="187,2,0,0">
-                                <Label Name= "lblCloudRecoveryTLOD" MinWidth="85">Recovery TLOD</Label>
-                                <TextBox Name="txtCloudRecoveryTLOD" ToolTip ="Minimum TLOD required to cancel cloud quality reduction" Margin="8,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Background="#7FFFFFFF"></TextBox>
-                                <Label Name="lblCloudPlus" Content="+" />
-                                <CheckBox x:Name="chkCloudRecoveryPlus" VerticalContentAlignment="Center"  ToolTip="+ for relative rather than absolute cloud recovery TLOD " Click="chkCloudRecoveryPlus_Click" Width="33" Padding="4,0,0,0" Checked="chkCloudRecoveryPlus_Checked" Background="#7FFFFFFF">
-                                </CheckBox>
-                            </StackPanel>
-                            <StackPanel Name="stkpnlCloudQualityOptions3" Orientation="Horizontal" Margin="101,2,0,0">
-                                <Label Name="lblCloudDecRec">Decrease / Recover @</Label>
-                                <TextBox Name="txtCloudDecreaseGPUPct" ToolTip ="Minimum GPU load required to decrease cloud quality reduction" Margin="8,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Background="#7FFFFFFF"></TextBox>
-                                <TextBox Name="txtCloudRecoverGPUPct" ToolTip ="Maximum GPU load required to cancel cloud quality reduction" Margin="8,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Background="#7FFFFFFF"></TextBox>
-                                <Label Name="lblCloudGPUPercent" Content="GPU %" MinWidth="20"></Label>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                                <CheckBox x:Name="chkCustomAutoOLOD" ToolTip ="Adjusts OLOD based on an altitude band" VerticalContentAlignment="Center" Click="chkCustomAutoOLOD_Click" Width="140" Content="Auto OLOD" Padding="4,0,0,0" Checked="chkCustomAutoOLOD_Checked" Background="#7FFFFFFF"/>
-                                <CheckBox x:Name="chkPauseMSFSFocusLost" ToolTip ="Use if FG Active/Inactive transitions cause TLOD hunting"  VerticalContentAlignment="Center" Click="chkPauseMSFSFocusLost_Click" Width="185" Content="Pause when MSFS loses focus" Checked="chkPauseMSFSFocusLost_Checked" Padding="4,0,0,0" Margin="15,0,0,0" Background="#7FFFFFFF"/>
-                            </StackPanel>
-                            <StackPanel Name="stkpnlCustomAutoOLOD" Orientation="Vertical" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2">
-                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                    <Label Content="OLOD @ Base" MinWidth="108"/>
-                                    <TextBox Name="txtOLODAtBase" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,30,0" Background="#7FFFFFFF"/>
-
-                                    <Label Content="OLOD @ Top" MinWidth="100"/>
-                                    <TextBox x:Name="txtOLODAtTop" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="5,0,0,0" Background="#7FFFFFFF"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                    <Label Content="Alt OLOD Base" MinWidth="108"/>
-                                    <TextBox Name="txtAltOLODBase" ToolTip ="OLOD @ Base will be locked below this altitude" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="0,0,0,0" Background="#7FFFFFFF"/>
-                                    <Label Content="ft" Margin="0,0,12,0"/>
-                                    <Label Content="Alt OLOD Top" MinWidth="100"/>
-                                    <TextBox x:Name="txtAltOLODTop" ToolTip ="OLOD @ top will be locked above this altitude" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" Width="42" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" Margin="5,0,0,0" Background="#7FFFFFFF"/>
-                                    <Label Content="ft"/>
-                                </StackPanel>
-                            </StackPanel>
-
-
-                        </StackPanel>
-                    </Grid>
-                </GroupBox>
+            <StackPanel Name="stkStatusRow" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,8,0,0">
+              <StackPanel Name="stkDynSet" Visibility="Collapsed" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Name="btnDynSet" Content="DynSet" Margin="0,0,0,0" BorderThickness="1,1,2,2" Background="{DynamicResource ButtonBackgroundBrush}" Foreground="{DynamicResource TextForegroundBrush}" ToolTip="MSFS dynamic settings options." Click="btnDynSet_Click" />
+                <StackPanel Name="stkDynSetChange" Orientation="Vertical" VerticalAlignment="Center">
+                  <Button Name="btnDynSetPlus" Content="+" Width="12" Height="12" FontSize="8" Padding="0" Margin="0" Background="{DynamicResource ButtonBackgroundBrush}" Foreground="{DynamicResource TextForegroundBrush}" Click="btnDynSetPlus_Click" />
+                  <Button Name="btnDynSetMinus" Content="−" Width="12" Height="12" FontSize="8" Padding="0" Margin="0" Background="{DynamicResource ButtonBackgroundBrush}" Foreground="{DynamicResource TextForegroundBrush}" Click="btnDynSetMinus_Click" />
+                </StackPanel>
+              </StackPanel>
+              <ComboBox Name="cbUpdateOption" MinWidth="100" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbUpdateOption_SelectionChange">
+                <FrameworkElement.ToolTip>
+                  <TextBlock>Choose Silent (no prompts), Prompted (previously Auto),<LineBreak />Show (available updates and links), or Mandatory‑only</TextBlock>
+                </FrameworkElement.ToolTip>
+                <ComboBoxItem Content="Silent Updates" />
+                <ComboBoxItem Content="Prompted Updates" IsSelected="True" />
+                <ComboBoxItem Content="Show Updates" />
+                <ComboBoxItem Content="Mandatory Updates Only " />
+              </ComboBox>
+              <ComboBox Name="cbUpdateChannel" Margin="5,0,0,0" Background="{DynamicResource InputBackgroundBrush}" VerticalContentAlignment="Center" SelectionChanged="cbUpdateChannel_SelectionChanged">
+                <FrameworkElement.ToolTip>
+                  <TextBlock>Choose Release (stable), RC+ (release candidates or higher),<LineBreak />Test+ (test builds or higher), or Exp+ (experimental builds or higher)</TextBlock>
+                </FrameworkElement.ToolTip>
+                <ComboBoxItem Content="Release" IsSelected="True" />
+                <ComboBoxItem Content="RC+" />
+                <ComboBoxItem Content="Test+" />
+                <ComboBoxItem Content="Exp+" />
+              </ComboBox>
+              <Label Name="lblStatusMessage" MinWidth="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextBlock.TextAlignment="Left" Content="" />
+              <TextBlock Name="lblappUrl" Visibility="Collapsed" VerticalAlignment="Center">
+                <Hyperlink NavigateUri="https://github.com/ResetXPDR/MSFS_AutoFPS/releases/latest" RequestNavigate="Hyperlink_RequestNavigate">here</Hyperlink>
+              </TextBlock>
+              <TextBlock Name="lblappUrlTestVersion" Visibility="Collapsed" VerticalAlignment="Center">
+                <Hyperlink NavigateUri="https://github.com/ResetXPDR/MSFS_AutoFPS/releases" RequestNavigate="Hyperlink_RequestNavigate">here</Hyperlink>
+              </TextBlock>
             </StackPanel>
-        </Grid>
-    </Viewbox>
+          </Grid>
+        </GroupBox>
+      </StackPanel>
+      <StackPanel Name="stkpnlExpertSettings" Orientation="Vertical" HorizontalAlignment="Stretch">
+        <GroupBox BorderThickness="1" Margin="0,0,0,6" BorderBrush="{DynamicResource GroupBorderBrush}" Header="Expert Options">
+          <Grid Margin="0,2,0,2">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition />
+              <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Vertical">
+              <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                <Label Content="Auto Method" MinWidth="90" />
+                <ComboBox Name="cbTLODAutoMethod" MinWidth="95" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbTLODAutoMethod_SelectionChanged">
+                  <FrameworkElement.ToolTip>
+                    <ToolTip>
+                      <TextBlock>Auto Method<LineBreak />FPS Sensitivity: recommended; preferred for FPS caps (use Fixed Target FPS).<LineBreak />FPS Tolerance (legacy): for older profiles or stutter cases.<LineBreak />Auto TLOD: DynamicLOD-style auto TLOD.<LineBreak />FPS Cap (legacy): compatibility only; Sensitivity + Fixed Target FPS preferred.<LineBreak /><LineBreak />Legacy modes may not receive future enhancements.</TextBlock>
+                    </ToolTip>
+                  </FrameworkElement.ToolTip>
+                  <ComboBoxItem Content="FPS Sensitivity" IsSelected="True" />
+                  <ComboBoxItem Content="FPS Tolerance (legacy)" />
+                  <ComboBoxItem Content="Auto TLOD" />
+                  <ComboBoxItem Content="FPS Cap (legacy)" />
+                </ComboBox>
+                <Label Name="lblTLODAuto1" Content="LOD Step" MinWidth="61" Margin="10,0,0,0" />
+                <TextBox Name="txtFPSTolerance" ToolTip="TLOD responsiveness to FPS variances" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                <CheckBox Name="chkSpikeProtect" Visibility="Collapsed" VerticalContentAlignment="Center" ToolTip="Auto reduce TLOD Max when periodic FPS spikes detected" ToolTipService.ShowOnDisabled="True" Margin="10,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkSpikeProtect_Click" />
+                <Label Name="lblSpikeProtect" Visibility="Collapsed" Content="⚡Prot" Margin="-5,0,0,0" MinWidth="15" />
+              </StackPanel>
+              <StackPanel Name="stkpnlSpikeDetect" Visibility="Collapsed" Orientation="Horizontal" Margin="0,2,0,0">
+                <Label Content="⚡Mult" Margin="-5,0,0,0" MinWidth="40" />
+                <TextBox Name="txtSpikeThresholdMultiplier" ToolTip="Sets the spike threshold as a ratio of the median frame time, making detection more or less sensitive" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="32" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                <Button Name="btnSpikeRec" Content="⚡Rec " MinWidth="42" Padding="3,1" Margin="10,0,0,0" BorderThickness="1,1,2,2" Background="{DynamicResource ButtonBackgroundBrush}" Foreground="{DynamicResource TextForegroundBrush}" ToolTip="Record last 10s of frame times to log file." Click="btnSpikeRec_Click" />
+                <Label Content="⚡Status:" Margin="0,0,0,0" />
+                <Label Name="lblSpikeDetectProtStatus" Content="" Margin="-5,0,0,0" MinWidth="50" />
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                <Label Name="lblTLODMin" Content="TLOD Base Min" MinWidth="90" />
+                <TextBox Name="txtMinTLod" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="32" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                <Label Content="@" />
+                <TextBox Name="txtAltTLODBase" ToolTip="TLOD Min will be locked below this altitude" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                <Label Content="ft" MinWidth="25" Margin="0,0,0,0" />
+                <ComboBox Name="cbTLODBaseOption" MinWidth="45" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbTLODBaseOption_SelectionChange">
+                  <FrameworkElement.ToolTip>
+                    <TextBlock>TLOD Base option<LineBreak />Fixed: TLOD Base stays at the system-set fixed value (default)<LineBreak />Extra: Additional TLOD Base with good performance conditions<LineBreak />Free: TLOD may range between Min and Max, depending on performance conditions</TextBlock>
+                  </FrameworkElement.ToolTip>
+                  <ComboBoxItem Content="Fixed" IsSelected="True" />
+                  <ComboBoxItem Content="Extra" />
+                  <ComboBoxItem Content="Free" />
+                </ComboBox>
+                <CheckBox Name="chkMinTLODExtra" Visibility="Collapsed" VerticalContentAlignment="Center" ToolTip="Extra TLOD Base with good performance conditions" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkMinTLODExtra_Click" />
+                <CheckBox Name="chkTLODBaseMinus" Visibility="Collapsed" Content="Extra" VerticalContentAlignment="Center" ToolTip="Extra TLOD Base below Alt TLOD Top with good performance conditions" Margin="0,0,5,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkTLODBaseMinus_Click" />
+                <ComboBox Name="cbMinTLODExtraCapMult" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbMinTLODExtraCapMult_SelectionChange">
+                  <FrameworkElement.ToolTip>
+                    <TextBlock>Multiple of TLOD Base Min</TextBlock>
+                  </FrameworkElement.ToolTip>
+                  <ComboBoxItem Content="×1.5" />
+                  <ComboBoxItem Content="×2" IsSelected="True" />
+                  <ComboBoxItem Content="×2.5" />
+                  <ComboBoxItem Content="×3" />
+                  <ComboBoxItem Content="×3.5" />
+                  <ComboBoxItem Content="×4" />
+                </ComboBox>
+                <CheckBox Name="chkStartTLODExtraAtMax" Visibility="Collapsed" VerticalContentAlignment="Center" Content="Start Max" Margin="10,0,0,0" Background="{DynamicResource InputBackgroundBrush}" IsChecked="True" Click="chkStartTLODExtraAtMax_Click">
+                  <FrameworkElement.ToolTip>
+                    <TextBlock>Start with TLOD Extra at maximum.<LineBreak />WARNING: Initial performance may<LineBreak />be sub-optimal when enabled.</TextBlock>
+                  </FrameworkElement.ToolTip>
+                </CheckBox>
+              </StackPanel>
+              <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2">
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                  <Label Name="lblTLODMax" Content="TLOD Top Max" MinWidth="90" Margin="0,0,0,0" />
+                  <TextBox Name="txtMaxTLod" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="32" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                  <Label Content="@" />
+                  <TextBox Name="txtAltTLODTop" ToolTip="Determines what altitude TLOD will start reducing towards TLOD Min" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                  <Label Content="ft" MinWidth="25" />
+                  <CheckBox Name="chkTLODExtraMtns" VerticalContentAlignment="Center" ToolTip="Extra TLOD Top Max in high terrain areas" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkTLODExtraMtns_Click" />
+                  <Label Name="lblTLODExtraMtns" Content="Mtns" Margin="0,0,0,0" />
+                  <CheckBox Name="chkMaxTLODExtra" Visibility="Collapsed" IsEnabled="false" VerticalContentAlignment="Center" ToolTip="Extra TLOD Top with good performance conditions" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkMaxTLODExtra_Click" />
+                  <Label Name="lblMaxTLODExtra" Visibility="Collapsed" Content="Extra" Margin="0,0,0,0" />
+                  <ComboBox Name="cbMaxTLODExtraCapMult" Visibility="Collapsed" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbMaxTLODExtraCapMult_SelectionChange">
+                    <FrameworkElement.ToolTip>
+                      <TextBlock>Multiple of TLOD Top Max</TextBlock>
+                    </FrameworkElement.ToolTip>
+                    <ComboBoxItem Content="×1.5" />
+                    <ComboBoxItem Content="×2" IsSelected="True" />
+                    <ComboBoxItem Content="×2.5" />
+                    <ComboBoxItem Content="×3" />
+                    <ComboBoxItem Content="×3.5" />
+                    <ComboBoxItem Content="×4" />
+                  </ComboBox>
+                  <Label Name="lblNightMode" Content="Night" Margin="0,0,2,0" VerticalContentAlignment="Center" />
+                  <ComboBox Name="cbNightMode" Height="24" MaxHeight="24" MinHeight="24" VerticalContentAlignment="Center" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbNightMode_SelectionChanged">
+                    <FrameworkElement.ToolTip>
+                      <TextBlock>Night optimization mode: Halve TLOD, reduce cloud quality, or both</TextBlock>
+                    </FrameworkElement.ToolTip>
+                    <ComboBoxItem Content="Off" />
+                    <ComboBoxItem Content="TLOD÷2" />
+                    <ComboBoxItem Content="Clds-2" />
+                    <ComboBoxItem Content="Both" />
+                  </ComboBox>
+                </StackPanel>
+              </StackPanel>
+              <StackPanel Name="stkpnlTLODExtraMtns" Visibility="Visible" Orientation="Vertical" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2">
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                  <Label Content="Mtns Amt      +" MinWidth="90" />
+                  <TextBox Name="txtTLODExtraMtnsAmount" VerticalContentAlignment="Center" ToolTip="Additional TLOD Max in mountainous areas" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="32" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                  <Label Content="@" />
+                  <TextBox Name="txtTLODExtraMtnsTriggerAlt" VerticalContentAlignment="Center" ToolTip="Minimum terrain altitude at which additional TLOD Max will activate" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                  <Label Content="ft" MinWidth="25" Margin="0,0,0,0" />
+                </StackPanel>
+              </StackPanel>
+              <StackPanel Name="stkpnlCloudQualityOptions" Orientation="Horizontal" Margin="0,2,0,0">
+                <CheckBox Name="chkDecCloudQ" ToolTip="Reduce cloud quality by one level if activation condition is met" VerticalContentAlignment="Center" Margin="0,0,8,0" Content="Decrease Cloud Quality" Padding="4,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkDecCloudQ_Click" />
+                <Label Name="lblCloudMethod" Content="Activation Method" Padding="28,2,0,0" MinWidth="132" />
+                <ComboBox Name="cbCloudMethod" MinWidth="70" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbCloudMethod_SelectionChange">
+                  <ComboBoxItem Content="TLOD" IsSelected="True" />
+                  <ComboBoxItem Content="GPU Load" />
+                </ComboBox>
+              </StackPanel>
+              <StackPanel Name="stkpnlCloudQualityOptions2" Orientation="Horizontal" Margin="187,2,0,0">
+                <Label Name="lblCloudRecoveryTLOD" MinWidth="85">Recovery TLOD</Label>
+                <TextBox Name="txtCloudRecoveryTLOD" ToolTip="Minimum TLOD required to cancel cloud quality reduction" Margin="8,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                <Label Name="lblCloudPlus" Content="+" />
+                <CheckBox Name="chkCloudRecoveryPlus" VerticalContentAlignment="Center" ToolTip="+ for relative rather than absolute cloud recovery TLOD " MinWidth="33" Padding="4,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkCloudRecoveryPlus_Click" Checked="chkCloudRecoveryPlus_Checked" />
+              </StackPanel>
+              <StackPanel Name="stkpnlCloudQualityOptions3" Orientation="Horizontal" Margin="101,2,0,0">
+                <Label Name="lblCloudDecRec">Decrease / Recover @</Label>
+                <TextBox Name="txtCloudDecreaseGPUPct" ToolTip="Minimum GPU load required to decrease cloud quality reduction" Margin="8,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                <TextBox Name="txtCloudRecoverGPUPct" ToolTip="Maximum GPU load required to cancel cloud quality reduction" Margin="8,0,0,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                <Label Name="lblCloudGPUPercent" Content="GPU %" MinWidth="20" />
+              </StackPanel>
+              <StackPanel Name="stkCustomAutoOLOD" Orientation="Horizontal" Margin="0,2,0,0">
+                <CheckBox Name="chkCustomAutoOLOD" ToolTip="Adjusts OLOD based on an altitude band" VerticalContentAlignment="Center" Content="Auto OLOD" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" Click="chkCustomAutoOLOD_Click" />
+                <CheckBox Name="chkOLODPanelHide" ToolTip="Adjusts OLOD based on an altitude band" VerticalContentAlignment="Center" Content="Hide OLOD Settings" Margin="59,0,0,0" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" Click="chkOLODPanelHide_Click" />
+                <CheckBox Name="chkVRAMPlus2" Visibility="Collapsed" VerticalContentAlignment="Center" Content="VRAM+" Padding="4,0,0,0" Margin="15,0,0,0" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" Click="chkVRAMPlus2_Click">
+                  <FrameworkElement.ToolTip>
+                    <TextBlock>Hold/reduce key settings if VRAM<LineBreak />use is nearing full capacity<LineBreak />(Global, including Non-Expert)</TextBlock>
+                  </FrameworkElement.ToolTip>
+                </CheckBox>
+              </StackPanel>
+              <StackPanel Name="stkpnlCustomAutoOLOD" Orientation="Vertical" Visibility="Visible" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2">
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                  <Label Content="OLOD Base " MinWidth="10" />
+                  <TextBox Name="txtOLODAtBase" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="32" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                  <Label Content="@" />
+                  <TextBox Name="txtAltOLODBase" ToolTip="OLOD @ Base will be locked below this altitude" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                  <Label Content="ft" Margin="0,0,0,0" />
+                  <Label Content="OLOD Top" MinWidth="5" Margin="5,0,0,0" />
+                  <TextBox Name="txtOLODAtTop" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="32" Margin="5,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                  <Label Content="@" />
+                  <TextBox Name="txtAltOLODTop" ToolTip="OLOD @ top will be locked above this altitude" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="24" MaxHeight="24" MinHeight="24" MinWidth="42" Margin="0,0,0,0" Background="{DynamicResource InputBackgroundBrush}" LostFocus="TextBox_LostFocus" KeyUp="TextBox_KeyUp" />
+                  <Label Content="ft" />
+                </StackPanel>
+                <StackPanel Visibility="Collapsed" Orientation="Horizontal" Margin="0,4,0,0">
+                  <Label Content="Alt OLOD Base" MinWidth="108" />
+                  <Label Content="ft" Margin="0,0,12,0" />
+                  <Label Content="Alt OLOD Top" MinWidth="100" />
+                </StackPanel>
+              </StackPanel>
+              <StackPanel Name="stkpnlAutoReduceSettings" Visibility="Visible" Orientation="Vertical" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2">
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                  <CheckBox Name="chkAutoReduceSettings" ToolTip="Reduce key settings if target FPS can't be achieved" VerticalContentAlignment="Center" Margin="0,0,8,0" Content="Auto Reduce Settings" Padding="4,0,0,0" Background="{DynamicResource InputBackgroundBrush}" Click="chkAutoReduceSettings_Click" />
+                  <CheckBox Name="chkIncCloudQ" VerticalContentAlignment="Center" Content="Auto Increase Clouds" Padding="4,0,0,0" Margin="5,0,0,0" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" Click="chkIncCloudQ_Click">
+                    <FrameworkElement.ToolTip>
+                      <TextBlock>Increase cloud quality by one level<LineBreak />in favourable performance conditions</TextBlock>
+                    </FrameworkElement.ToolTip>
+                  </CheckBox>
+                  <Label Name="lblVRAMPlus" Visibility="Collapsed" Margin="3,0,0,0">VRAM+</Label>
+                  <ComboBox Name="cbVRAMPlus" Visibility="Collapsed" Margin="0,0,0,0" MinWidth="38" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbVRAMPlus_SelectionChange">
+                    <FrameworkElement.ToolTip>
+                      <TextBlock>Hold/reduce key settings if VRAM<LineBreak />use is nearing full capacity<LineBreak />Set = use auto reduce settings<LineBreak />(Global)</TextBlock>
+                    </FrameworkElement.ToolTip>
+                    <ComboBoxItem Content="Off" />
+                    <ComboBoxItem Content="Max" IsSelected="True" />
+                    <ComboBoxItem Content="Set" />
+                  </ComboBox>
+                </StackPanel>
+                <StackPanel Name="stkpnlAutoReduceSettings2" Visibility="Visible" Orientation="Vertical" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2">
+                  <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                    <Label Content="Max Levels" Margin="0,0,4,0" />
+                    <ComboBox Name="cbReductionSettingsMaxLevels" Margin="0,0,4,0" MinWidth="40" ToolTip="Maximum number of levels settings can reduce by" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbReductionSettingsMaxLevels_SelectionChange">
+                      <ComboBoxItem Content="1" />
+                      <ComboBoxItem Content="2" />
+                      <ComboBoxItem Content="3" />
+                      <ComboBoxItem Content="4" />
+                      <ComboBoxItem Content="5" />
+                    </ComboBox>
+                    <Label Content="Floor" Margin="2,0,4,0" />
+                    <ComboBox Name="cbReductionSettingsFloor" Margin="0,0,4,0" MinWidth="53" ToolTip="Lowest quality level reduction allowable for quality settings" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbReductionSettingsFloor_SelectionChange">
+                      <ComboBoxItem Content="Off" />
+                      <ComboBoxItem Content="Lowest" IsSelected="True" />
+                      <ComboBoxItem Content="Medium" />
+                      <ComboBoxItem Content="High" />
+                    </ComboBox>
+                    <Label Content="Recover" Margin="3,0,4,0" />
+                    <ComboBox Name="cbReductionSettingsRecoveryAlt" Margin="0,0,4,0" MinWidth="91" ToolTip="Lowest altitude at which settings reduction will attempt to recover" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbReductionSettingsRecoveryAlt_SelectionChange">
+                      <ComboBoxItem Content="Ground" />
+                      <ComboBoxItem Content="Alt TLOD Base" />
+                      <ComboBoxItem Content="Alt TLOD Top" IsSelected="True" />
+                    </ComboBox>
+                  </StackPanel>
+                  <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                    <Label Content="Reduction Settings Suite" Margin="0,0,4,0" MouseEnter="cbReductionSettingsSuite_MouseEnter" MouseLeave="cbReductionSettingsSuite_MouseLeave" />
+                    <ComboBox Name="cbReductionSettingsSuite" Margin="23,0,4,0" MinWidth="200" ToolTip="Settings that will be automatically reduced" SelectedIndex="0" Background="{DynamicResource InputBackgroundBrush}" SelectionChanged="cbReductionSettingsSuite_SelectionChange" MouseEnter="cbReductionSettingsSuite_MouseEnter" MouseLeave="cbReductionSettingsSuite_MouseLeave">
+                      <ComboBoxItem Content="LODs 50% Only" />
+                      <ComboBoxItem Content="LODs, Clouds, Trees, RT Shadows" IsSelected="True" />
+                      <ComboBoxItem Content="Full Reduction Suite" />
+                      <ComboBoxItem Content="Custom" />
+                    </ComboBox>
+                  </StackPanel>
+                </StackPanel>
+              </StackPanel>
+              <StackPanel Name="stkpnlSettingsReduction" Visibility="Collapsed" Orientation="Vertical" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="1" Margin="0,0,0,0" Grid.RowSpan="2" MouseEnter="cbReductionSettingsSuite_MouseEnter" MouseLeave="cbReductionSettingsSuite_MouseLeave">
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                  <CheckBox Name="chkReduceCloudQ" Visibility="Visible" MinWidth="95" ToolTip="Volumetric Clouds" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="Clouds" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReduceCloudQ_Click" />
+                  <CheckBox Name="chkReduceTrees" ToolTip="Trees" MinWidth="95" VerticalContentAlignment="Center" Content="Trees" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReduceTrees_Click" />
+                  <CheckBox Name="chkReduceRTShadows" Visibility="Visible" MinWidth="95" ToolTip="Raytraced Shadows" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="RTShad" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReduceRTShadows_Click" />
+                  <CheckBox Name="chkReduceTShadows" Visibility="Visible" MinWidth="95" ToolTip="Terrain Shadows" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="TShad" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReduceTShadows_Click" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                  <CheckBox Name="chkReduceBldings" Visibility="Visible" MinWidth="95" ToolTip="Buildings" VerticalContentAlignment="Center" Content="Bldings" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReduceBldings_Click" />
+                  <CheckBox Name="chkReduceDispMap" Visibility="Visible" MinWidth="95" ToolTip="Displacement Mapping" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="DispMap" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReduceDispMap_Click" />
+                  <CheckBox Name="chkReduceOSTPCache" ToolTip="Off Screen Terrain Pre-Caching" MinWidth="95" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="OSTPC" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReduceOSTPCache_Click" />
+                  <CheckBox Name="chkReducePlants" ToolTip="Plants" MinWidth="95" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="Plants" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReducePlants_Click" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                  <CheckBox Name="chkReduceGrass" ToolTip="Grass" MinWidth="95" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="Grass" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" ToolTipService.ShowOnDisabled="True" IsEnabled="False" Click="chkReduceGrass_Click" />
+                  <CheckBox Name="chkReducePkdAcQ" ToolTip="Parked Aircraft Quantity" MinWidth="95" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="PkdAcQ" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" IsEnabled="False" ToolTipService.ShowOnDisabled="True" Click="chkReducePkdAcQ_Click" />
+                  <CheckBox Name="chkReduceAcTrafQ" ToolTip="Aircraft Traffic Quantity" MinWidth="95" Margin="0,0,0,0" VerticalContentAlignment="Center" Content="AcTrafQ" Padding="4,4,0,4" Background="{DynamicResource InputBackgroundBrush}" IsEnabled="False" ToolTipService.ShowOnDisabled="True" Click="chkReduceAcTrafQ_Click" />
+                </StackPanel>
+              </StackPanel>
+            </StackPanel>
+          </Grid>
+        </GroupBox>
+      </StackPanel>
+    </StackPanel>
+  </Viewbox>
 </Window>

@@ -1,0 +1,136 @@
+﻿MSFS Compatibility: 1.39.12.0, 1.9.21.0, 1.9.23.0.  
+MSFS Widget Version: 1.6.0
+
+## **Release notes for 0.5.5.0**
+
+This major update introduces a comprehensive rewrite of the readme for vastly improved readability, alongside a next-generation In-Game Toolbar Widget and Web Interface with camera-based auto-hiding, interactive FPS controls, and full desktop visual parity. Other key highlights include dynamic graphics mode management, native MSM and VectorXR frame generation integrations, enhanced OFXR telemetry, dual-layer VR conflict protection, unified Night Mode cloud controls, and refined fixed FPS configuration warnings.
+
+Please review the redesigned readme [here](https://github.com/ResetXPDR/MSFS_AutoFPS/blob/master/README.md), which provides a detailed description of the app, installation, features and settings, before asking any questions or raising any issues about the app. For this release, the original format readme is also bundled alongside the new version.
+
+## Executive Summary:
+
+### Restructured & Streamlined Documentation
+- Re-architects the project readme into an accessible, tiered layout: introduces a dedicated Quick Start and Non-Expert guide for immediate flying without jargon, consolidates shared widget and graphics mode features into central sections, preserves an uncompromised deep Expert reference manual, and uses collapsible sections for advanced configuration keys, error code walkthroughs, and manual installation.
+
+### In-Game Toolbar Widget (v1.6.0) & Web Interface
+- Introduces native, sub-150 ms camera-based auto-hiding (Off, Chase, All Ext) powered directly by the sim's internal SimVar engine, adds full in-sim and browser-based Target FPS management (Mode, Target, and stepped FPS controls), reorganises the interface into three balanced Sim Values columns to mirror the desktop hierarchy, displays active FPS source and Sim Values header status icons with interactive click-to-toggle support for switching between MSFS and RTSS sources, adds a collapsible General section with real-time two-way synchronisation, and delivers complete UI and theme parity across the toolbar widget and web interface (localhost:54321).
+
+### Dynamic Graphics Mode Architecture
+- Overhauls graphics mode selection into a dynamic, installation-aware system that conditionally populates external frame generation mods (OFXR, VXR, LSFG, MSM) only when their processes or files are detected, decoupling internal tracking from rigid UI dropdown indices and adding an automatic fallback to NFR when a mod is closed.
+
+### New Frame Generation Mod Integrations (MSM & VXR)
+- Adds native integration for the MFG Super Motion (MSM) mod with dynamic multiplier resolution, MSFS window-focus tracking, and independent IFR/VFR Target FPS profiles.
+- Implements direct integration with VectorXR via its real-time Runtime Relay and public Status API v1 (`api/status.json`), including atomic non-exclusive file sharing, legacy fallback, fractional multiplier tracking, and dedicated status badging.
+
+### VR & OpenXR Telemetry Improvements
+- Integrates real-time compositor telemetry from OFXR Bridge across multiple community builds with sub-50 ms controller loop phase synchronisation, adds intelligent FPS settle events to recover from frame pacing desyncs without freezing LODs, and automatically derives effective multipliers in Auto mode.
+
+### Dual-Layer VR Conflict Protection
+- Automatically detects simultaneous execution of both OFXR and VectorXR OpenXR API layers, alerts the user, and safely falls back to standard VR mode to prevent pacing contention and VRAM exhaustion.
+
+### Unified Per-Profile Night Mode & Cloud Optimisations
+- Unifies night-time optimisations into a per-profile dropdown (Off, TLOD÷2, Clds-X, Both), decoupling night cloud reduction from TLOD halving to allow full draw distance for night city and runway lighting while shedding cloud overhead, with automatic daytime boost reset and restoration.
+
+### Non-Expert Mode Automation Guardrails
+- Rebalances Non-Expert mode to protect against performance degradation when using high simulator baseline settings: reduces the VFR cruise multiplier to 250%, enforces hard caps of 400 for daytime TLOD, 200 for night TLOD, and 200 for ground OLOD, caps base Min TLOD to 150, and introduces altitude delta protection to eliminate mathematical edge cases.
+
+### Core Controller & Timing Improvements
+- Re-architects internal controller loop timing to maintain an accurate 1-second cadence with automatic overrun recovery, refines Fixed FPS detection rules to eliminate false warnings while respecting G-Sync/Reflex caps and Settings Reduction recovery margins, streamlines periodic spike detection logging to minimise log spam, and centres status messages across desktop and widget interfaces.
+
+---
+
+## Detailed Changes:
+
+### In-Game Toolbar Widget (v1.6.0) & Web Interface
+- **Camera-Based Automatic Show/Hide:**
+  - Added an intelligent auto-hide system that automatically conceals the in-game widget when switching away from the cockpit view, eliminating floating panel clutter during external flight and screenshots (especially beneficial in VR).
+  - Selectable directly via a header dropdown in the widget toolbar, web interface, or configuration file (`WidgetAutoHide`):
+    - **Off:** Widget remains visible across all camera views (default behaviour).
+    - **Chase:** Widget automatically hides only while in the standard external chase camera view.
+    - **All Ext:** Widget automatically hides across all external views, including chase, drone / showcase, and exterior fixed cameras.
+  - Directly evaluated inside the in-game widget using the MSFS native SimVar engine, slashing view transition response down to sub-150 ms and decoupling auto-hiding from local webserver HTTP polling.
+  - Intelligently bounded to operational exterior views (camera states 3 through 9), preserving widget visibility during cockpit instrument zoom views (state 2) and ignoring menus, loading screens, and pause transitions.
+  - Existing manual show/hide hotkeys remain fully operational in the background if configured.
+- **In-Widget & Web Interface Target FPS Controls:**
+  - Added full Target FPS management to the widget and web interface (`localhost:54321`), allowing VR and fullscreen users to adjust settings without switching to the desktop app:
+    - **Mode:** Toggle between Manual, Auto, and Fixed modes directly.
+    - **Target:** Switch between detected native and modded graphics modes. When Man FG is active, dynamically switches to manual frame generation multipliers (Auto, FG 2X–8X, DynFG).
+    - **FPS Stepper:** Replaced the text input with responsive `–` and `+` adjustment buttons (range 10–500 FPS) featuring an accelerating repeat hold for quick adjustments.
+  - Reorganised the widget and web layouts to mirror the desktop visual hierarchy: Status, Sim Values, and General sections.
+  - Added toggles for Expert Options, Log+ logging, active Flight Type profile selection, and the in-session Reset button.
+  - Synchronised orange configuration warning highlights across dropdowns and FPS values between the widget, web interface, and desktop app.
+- **Widget & Web UI Parity and Usability:**
+  - Added active FPS source badges (MSFS, RTSS, OFXR, VXR) directly beside the live FPS readout in the in-game widget and companion web interface.
+  - Added interactive click-to-toggle support to the live FPS source icon, allowing users to switch between MSFS and RTSS sources directly from the panel (automatically excluded and read-only during active OFXR or VXR sessions).
+  - Added the MSFS and AutoFPS status icons to the Sim Values group header line to indicate default versus AutoFPS-controlled settings.
+  - Re-aligned the Sim Values readouts into three balanced columns matching the desktop application's layout and spacing.
+  - Added the ability to collapse the General controls section by clicking its header to minimise footprint during flight, with two-way real-time synchronisation across the in-game widget, browser interface, and desktop app.
+  - Centred the two-line in-flight status display and implemented dynamic text downscaling (`status-compact`) for long telemetry strings to prevent unwanted line wrapping.
+  - Styled browser controls to match the in-game widget: custom-rendered checkboxes, aligned Reset button height, interactive blue border hover highlights, and upwards-opening flight type dropdowns.
+
+### Dynamic Graphics Mode Architecture & New Mod Support
+- **Dynamic Graphics Mode Management:**
+  - Overhauled graphics mode selection from a static list into a dynamic, installation-aware system that only displays modes installed or running on your system.
+  - Core native modes (NFR, VR, FG, FSR, and Man FG) remain permanently available, while external mods (OFXR, VXR, LSFG, and MSM) populate conditionally only when their respective files or processes are detected.
+  - Switched from fixed dropdown index tracking to mode name keys, preventing index shifts when external mods are added or removed.
+  - Added an automatic fallback to NFR if a previously selected external mod is not running on launch, preventing invalid configuration states.
+- **MFG Super Motion (MSM) Integration:**
+  - Added live process detection for `Mfg Super Motion` and dynamic multiplier resolution (2X–6X fixed modes and 1X Adaptive) parsed from its profile hierarchy.
+  - Added independent Target FPS persistence settings (`targetFpsMSM` and `targetFpsMSMVFR`) for IFR and VFR flight profiles.
+  - Tracks MSFS window focus states matching native FG: when MSFS loses focus, MSM frame generation disengages and AutoFPS automatically tracks it as `MSM Inact` at base framerate, preventing false readings or unwanted LOD adjustments until focus returns.
+  - Supports both SimConnect and RTSS capture sources, deferring to internal MSFS Frame Generation when active and reverting to NFR when the mod process exits.
+- **LSFG & Manual FG Refinements:**
+  - Changed LSFG Adaptive mode detection to display and behave as LSFG Graphics mode using the pre-LSFG multiplier (e.g. 1X) rather than dropping back to NFR when operating at a 1X multiplier.
+  - Fixed an issue where selecting Man FG from the Target dropdown during an active flight failed to switch to the manual frame generation option list.
+
+### VR & OpenXR Enhancements
+- **VectorXR (VXR) Status API v1 & Runtime Relay Integration:**
+  - Updated VectorXR integration to support the new public Status API contract (`api/status.json`) introduced in VectorXR v0.20.0, moving away from internal runtime relay channels in line with VectorXR's latest architectural specifications.
+  - Maintained backward compatibility: AutoFPS prioritises `api/status.json` while automatically falling back to legacy runtime directories (`runtime/status/*.json`) for pre-v0.20.0 builds.
+  - Implemented non-exclusive file sharing to support VectorXR's atomic file updates and eliminate lock contention during session handoffs.
+  - Standardised internal pacing telemetry across schema revisions, bridging `targetAppFps` and modular `framegen` states.
+  - Ingests live telemetry directly from the active OpenXR layer without requiring the companion app process, calculating real-time delivered multipliers and reporting fractional rates (e.g. `VXRDyn 2.4X`, `VXR 2.4X*`).
+  - Added HUD status indicators for VectorXR paused (`VXR ⏸`) and standby (`VXR Stby`) modes, a dedicated status badge (`imgSimFPSVXR`), and disabled fixed framerate mismatch warnings in VXR mode.
+- **Dual-Layer VR Conflict Protection:**
+  - Added automatic detection for inadvertent simultaneous execution of both OFXR and VectorXR OpenXR layers.
+  - Alerts the user via a warning dialog and safely falls back to standard VR mode (`1X` / `VR Conflict!`) to prevent pacing contention and VRAM spikes, while automatically pausing LOD automation until resolved.
+- **Enhanced OFXR Bridge Integration:**
+  - Broadened live telemetry support across multiple community builds (djules v0.2.14.2, elliottate V439, and tigermaster v0.3.0) with dynamic active folder detection to prevent stale installs from hijacking telemetry.
+  - Reads live compositor delivered framerates directly from the headset into AutoFPS's spike-protected moving average pipeline, accompanied by an OFXR status badge and build number logging.
+  - Synchronised the LOD controller loop phase with `status.json` update cycles, reducing telemetry response latency down to approximately 50 ms.
+  - Refined pacing desync handling: replaces hard pauses with an FPS settle event (holding for up to 10 seconds with widened 0.5 ratio tolerance) to allow the frame generation pipeline to re-establish pacing without locking LOD indefinitely.
+  - Automatically derives effective multipliers in OFXR Auto mode (e.g. `OFXR Auto 2X`) and disabled system fixed framerate mismatch warnings in OFXR mode.
+- Fixed an issue where pre-flight Sim Values displayed 2D graphics defaults instead of VR defaults when Target FPS was set to OFXR or VXR outside of an active flight.
+
+### Unified Night Mode & Cloud Optimisations
+- **Unified Per-Profile Night Mode:**
+  - Replaced the Night÷2 checkbox with a unified Night Mode dropdown offering four operational modes: **Off**, **TLOD÷2**, **Clds-X**, and **Both**.
+  - Decoupled night-time cloud reduction from TLOD halving, allowing users to reduce volumetric cloud overhead while preserving full TLOD draw distance for city lights and runway approaches.
+  - Configured per flight type profile, allowing different night-time strategies between airliner (IFR) and general aviation (VFR) profiles.
+- **Night-Time Cloud Quality Reduction:**
+  - Steps down volumetric cloud quality by a configurable number of levels (defaulting to 2, clamped to a minimum of Low) when night falls, restoring daytime settings at sunrise.
+  - Dynamically displays the active profile's reduction level on the dropdown item (e.g. `Clds-2`) and indicates active reductions in orange on the Sim Values panel.
+  - Prioritised over Increase Cloud Quality (IncCloudQ) at night: automatically clears daytime cloud boosts upon night entry and cleanly restores default cloud quality at sunrise.
+  - Fully backward compatible: automatically migrates legacy `MaxTLODHalvedNight` settings on launch while dual-writing legacy keys on save.
+
+### Non-Expert Mode Automation Guardrails
+- **Ceiling Caps Aligned with MSFS In-Game Maximums:**
+  - Added hard ceilings in Non-Expert mode matching native simulator menu maximums: daytime TLOD is capped at 400 and night TLOD is capped at 200, preventing runaway draw distance targets (e.g. up to 600) when running high baseline simulator settings.
+  - Added a hard ceiling of 200 for ground OLOD in Non-Expert mode, ensuring the 150% VFR ground multiplier cannot exceed the in-game menu maximum.
+- **VFR Profile Rebalancing & Min TLOD Bounds:**
+  - Reduced the Non-Expert VFR cruise TLOD multiplier from 300% to 250% of baseline simulator settings to ensure a smoother climb/descent schedule and prevent excessive performance drops.
+  - Clamped Non-Expert ground Min TLOD to a maximum ceiling of 150, guaranteeing at least a 250-point dynamic shedding range to Day Max and a 50-point range to Night Max.
+  - Guarded the `AltTLODTop` descent calculation against zero or negative deltas with a 10.0f minimum step, preventing altitude slope collapse and division-by-zero errors when using ultra-low baseline settings (e.g. TLOD 10) or during FPS settle events.
+
+### Core Performance & Diagnostic Improvements
+- **Refined Fixed FPS Configuration Warnings & Thresholds:**
+  - Overhauled fixed framerate detection and warning recommendations to prevent false alarms when deliberate capping or headroom strategies are used:
+    - **Fixed Target FPS Mode:** Target FPS may now be set up to 5% below a detected system cap without warning, accommodating standard G-Sync, FreeSync, and Nvidia Reflex frame-rate caps. Setting Target FPS more than 5% below the cap will suggest switching to Manual mode or raising the target to match the cap.
+    - **Manual Target FPS Mode:** Setting Target FPS below a detected cap is now fully permitted provided sufficient headroom exists for automation. The required margin is 5% below the cap when Settings Reduction is disabled, and 5% plus the profile FPS tolerance percentage when Settings Reduction is enabled, ensuring reduced settings have sufficient headroom to recover.
+    - Setting Target FPS strictly higher than a detected fixed cap continues to trigger an invalid target warning, with a 0.5 FPS jitter buffer to prevent false alarms from minor frame timing fluctuations.
+- **Controller Cadence & Scheduler Accuracy:**
+  - Reworked internal scheduler timing across all graphics modes to maintain an accurate 1-second cadence, minimising long-term timing drift and adding automatic overrun recovery following major system stalls.
+- **Spike Detection Logging Optimisation:**
+  - Streamlined periodic spike detection logging to only write to logs when 4 or more spikes are detected and the newest spike did not occur within the last 1.8 seconds, significantly reducing log spam during normal flights.
+- **Desktop UI Refinements:**
+  - Centred the two-line in-flight status message on the main application interface for improved readability and visual alignment with the in-game widget.
