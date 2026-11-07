@@ -1,678 +1,436 @@
 ﻿// ============================================================
-// HtmlWidgetPanel.js
+// HtmlWidgetPanel.js — AutoFPS widget (Fluent redesign)
+//
+// One script for both front-ends:
+//   * the in-game MSFS toolbar panel (HtmlWidgetPanel.html, inside <ingame-ui>)
+//   * the browser page served by the app at http://localhost:54321
+// It builds the whole UI into #mainSection and talks to the AutoFPS app API:
+//   GET  /api/status            live values + overview controls (polled)
+//   GET  /api/page/{tuning|settings}  description of that app page (polled while shown)
+//   POST /api/control           {"name","value"} change any Tuning/Settings control
+//   POST /api/... (legacy)      reset, flighttype, targetmode, target, targetfps, toggle*
+// Written in plain ES5-style JS for the sim's Coherent engine.
 // ============================================================
-const STATUS_URL = "http://localhost:54321/api/status";
-const RESET_URL = "http://localhost:54321/api/reset";
-const FLIGHT_TYPE_URL = "http://localhost:54321/api/flighttype";
-const TOGGLE_TITLEBAR_URL = "http://localhost:54321/api/toggletitlebar";
-const TOGGLE_DARKMODE_URL = "http://localhost:54321/api/toggledarkmode";
-const TOGGLE_EXPERT_URL = "http://localhost:54321/api/toggleexpert";
-const TOGGLE_LOGPLUS_URL = "http://localhost:54321/api/togglelogplus";
-const HOTKEY_URL = "http://localhost:54321/api/hotkey";
-const TARGET_MODE_URL = "http://localhost:54321/api/targetmode";
-const TARGET_URL = "http://localhost:54321/api/target";
-const TARGET_FPS_URL = "http://localhost:54321/api/targetfps";
-const GENERAL_COLLAPSED_URL = "http://localhost:54321/api/generalcollapsed";
-const AUTO_HIDE_URL = "http://localhost:54321/api/widgetautohide";
-const POLL_INTERVAL_MS = 500;
-
-// EXPERIMENTAL: drag the window from any empty area, not just the title bar.
-const DRAG_ANYWHERE_ENABLED = true;
+var API = "http://localhost:54321";
+var POLL_STATUS_MS = 500;
+var POLL_PAGE_MS = 1000;
 
 // Target FPS stepper
-const FPS_MIN = 10;
-const FPS_MAX = 500;
-const FPS_HOLD_DELAY_MS = 400;     // hold this long before repeating starts
-const FPS_REPEAT_MS = 125;         // repeat interval while held
-const FPS_STEP5_AFTER_MS = 2000;   // held this long: step by 5
-const FPS_STEP10_AFTER_MS = 4000;  // held this long: step by 10
-const FPS_SEND_DEBOUNCE_MS = 450;
+var FPS_MIN = 10;
+var FPS_MAX = 500;
+var FPS_HOLD_DELAY_MS = 400;
+var FPS_REPEAT_MS = 125;
+var FPS_STEP5_AFTER_MS = 2000;
+var FPS_STEP10_AFTER_MS = 4000;
+var FPS_SEND_DEBOUNCE_MS = 450;
 
-// Base width for scaling
-const BASE_WIDTH = 420;
-const MIN_SCALE = 0.6;
-const MAX_SCALE = 3.0;
+// Width-based scaling (VR friendly)
+var BASE_WIDTH = 440;
+var MIN_SCALE = 0.6;
+var MAX_SCALE_INGAME = 3.0;
+var MAX_SCALE_WEB = 1.25;
 
-const DISCONNECTED_BG = "#121418";
-const DISCONNECTED_TEXT = "#F0F0F0";
+var SUPPRESS_MS = 1500;
 
 (function () {
-	function init() {
-		const statusEl = document.getElementById("widget-status");
-		const mainSection = document.getElementById("mainSection");
-		const contentEl = document.getElementById("widget-content");
-		const closeBtn = document.getElementById("widget-close-btn");
-		const groupBoxes = document.querySelectorAll(".group-box");
-		const groupHeaders = document.querySelectorAll(".group-header");
-		const resetBtn = document.getElementById("resetBtn");
-		const flightTypeDropdown = document.getElementById("flightTypeDropdown");
-		const flightTypeBtn = document.getElementById("flightTypeBtn");
-		const flightTypeList = document.getElementById("flightTypeList");
-		const darkModeChk = document.getElementById("darkModeChk");
-		const expertChk = document.getElementById("expertChk");
-		const logPlusChk = document.getElementById("logPlusChk");
-		const logPlusLabel = document.getElementById("logPlusLabel");
-		const customCheckboxes = document.querySelectorAll(".custom-checkbox");
-		const titleEl = document.getElementById("widget-title");
-		const hotkeyBtn = document.getElementById("widget-hotkey-btn");
-		const autoHideGroup = document.getElementById("autoHideGroup");
-		const autoHideBtn = document.getElementById("autoHideBtn");
-		const autoHideList = document.getElementById("autoHideList");
-		const modeDropdown = document.getElementById("modeDropdown");
-		const modeBtn = document.getElementById("modeBtn");
-		const modeList = document.getElementById("modeList");
-		const targetDropdown = document.getElementById("targetDropdown");
-		const targetBtn = document.getElementById("targetBtn");
-		const targetList = document.getElementById("targetList");
-		const fpsDecBtn = document.getElementById("fpsDecBtn");
-		const fpsIncBtn = document.getElementById("fpsIncBtn");
-		const fpsValEl = document.getElementById("fpsVal");
-		const generalHeader = document.getElementById("generalHeader");
-		const generalChevron = document.getElementById("generalChevron");
-		const generalControls = document.getElementById("generalControls");
+	var SVG_CHEV = '<svg class="chev" viewBox="0 0 10 10"><polyline points="2,3.5 5,6.5 8,3.5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
+	var SVG_CHECK = '<svg viewBox="0 0 10 10"><polyline points="1.8,5.2 4.1,7.4 8.4,2.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+	var SVG_MINUS = '<svg viewBox="0 0 10 10"><rect x="1" y="4.3" width="8" height="1.4" fill="currentColor"/></svg>';
+	var SVG_PLUS = '<svg viewBox="0 0 10 10"><rect x="1" y="4.3" width="8" height="1.4" fill="currentColor"/><rect x="4.3" y="1" width="1.4" height="8" fill="currentColor"/></svg>';
+	var SVG_CLOSE = '<svg viewBox="0 0 10 10"><path d="M1.5 1.5 L8.5 8.5 M8.5 1.5 L1.5 8.5" stroke="currentColor" stroke-width="1.3"/></svg>';
+	var SVG_INFO = '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="7.35" y="7" width="1.3" height="4.6" fill="currentColor"/><circle cx="8" cy="4.9" r="0.85" fill="currentColor"/></svg>';
 
-		// ---- Collapsible General Controls ----
-		var isControlsCollapsed = false;
-		var suppressGeneralCollapsedSyncUntil = 0;
-		try {
-			isControlsCollapsed = localStorage.getItem("generalControlsCollapsed") === "true";
-		} catch (e) { }
+	// Status text glyphs the app uses, drawn as SVG so they render in the sim
+	var ICONS = {
+		"▲": '<svg viewBox="0 0 10 10"><polygon points="5,1 9,9 1,9" fill="currentColor"/></svg>',
+		"▼": '<svg viewBox="0 0 10 10"><polygon points="1,1 9,1 5,9" fill="currentColor"/></svg>',
+		"⊥": '<svg viewBox="0 0 10 10"><line x1="5" y1="1" x2="5" y2="7" stroke="currentColor" stroke-width="1.4"/><line x1="1" y1="9" x2="9" y2="9" stroke="currentColor" stroke-width="1.4"/></svg>',
+		"⊤": '<svg viewBox="0 0 10 10"><line x1="5" y1="3" x2="5" y2="9" stroke="currentColor" stroke-width="1.4"/><line x1="1" y1="1" x2="9" y2="1" stroke="currentColor" stroke-width="1.4"/></svg>',
+		"Δ": '<svg viewBox="0 0 10 10"><polygon points="5,1 9,9 1,9" fill="none" stroke="currentColor" stroke-width="1"/></svg>',
+		"⚡": '<svg viewBox="0 0 10 10"><polygon points="6,0 1,6 4.5,6 3.5,10 9,4 5.5,4" fill="currentColor"/></svg>',
+		"⏸": '<svg viewBox="0 0 10 10"><rect x="1" y="1" width="2.5" height="8" fill="currentColor"/><rect x="6.5" y="1" width="2.5" height="8" fill="currentColor"/></svg>',
+		"❄️": '<svg viewBox="0 0 10 10"><g stroke="currentColor" stroke-width="1" stroke-linecap="round"><line x1="5" y1="0.5" x2="5" y2="9.5"/><line x1="0.5" y1="5" x2="9.5" y2="5"/><line x1="1.9" y1="1.9" x2="8.1" y2="8.1"/><line x1="8.1" y1="1.9" x2="1.9" y2="8.1"/></g></svg>',
+		"🔒": '<svg viewBox="0 0 10 10"><rect x="2" y="4.5" width="6" height="5" rx="0.6" fill="currentColor"/><path d="M3.3 4.5V3.2a1.7 1.7 0 0 1 3.4 0V4.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>'
+	};
+	var ICON_KEYS = Object.keys(ICONS).sort(function (a, b) { return b.length - a.length; });
 
-		var SVG_DOWN = '<svg viewBox="0 0 10 10"><polygon points="1,1 9,1 5,9" fill="currentColor"/></svg>';
-		var SVG_RIGHT = '<svg viewBox="0 0 10 10"><polygon points="1,1 1,9 9,5" fill="currentColor"/></svg>';
+	// ------------------------------------------------------------------ helpers
+	function el(tag, cls, html) {
+		var e = document.createElement(tag);
+		if (cls) e.className = cls;
+		if (html !== undefined && html !== null) e.innerHTML = html;
+		return e;
+	}
 
-		function updateGeneralControlsVisibility() {
-			if (!generalControls) return;
-			generalControls.classList.toggle("hidden", isControlsCollapsed);
-			if (generalChevron) {
-				generalChevron.innerHTML = isControlsCollapsed ? SVG_RIGHT : SVG_DOWN;
+	function text(tag, cls, t) {
+		var e = el(tag, cls);
+		e.textContent = t === undefined || t === null ? "" : String(t);
+		return e;
+	}
+
+	function post(path, body) {
+		return fetch(API + path, { method: "POST", cache: "no-store", body: body === undefined ? "" : body }).catch(function () { });
+	}
+
+	function now() { return Date.now(); }
+
+	// Colours from the app are only applied when they carry meaning (green/red/orange...), not neutral greys.
+	function meaningfulColor(hex) {
+		if (!hex || typeof hex !== "string" || hex.charAt(0) !== "#" || hex.length < 7) return null;
+		var r = parseInt(hex.substr(1, 2), 16), g = parseInt(hex.substr(3, 2), 16), b = parseInt(hex.substr(5, 2), 16);
+		if (!isFinite(r) || !isFinite(g) || !isFinite(b)) return null;
+		var mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+		return (mx - mn) < 24 ? null : hex;
+	}
+
+	function setTextWithIcons(node, t) {
+		node.textContent = "";
+		if (!t) return;
+		var i = 0;
+		while (i < t.length) {
+			var matched = null;
+			for (var k = 0; k < ICON_KEYS.length; k++) {
+				if (t.indexOf(ICON_KEYS[k], i) === i) { matched = ICON_KEYS[k]; break; }
 			}
-			scheduleSnap();
-		}
-
-		if (generalHeader) {
-			generalHeader.addEventListener("click", function (e) {
-				e.stopPropagation();
-				suppressGeneralCollapsedSyncUntil = Date.now() + 1500;
-				isControlsCollapsed = !isControlsCollapsed;
-				updateGeneralControlsVisibility();
-
-				// Post updated state to C# backend
-				fetch(GENERAL_COLLAPSED_URL, {
-					method: "POST",
-					cache: "no-store",
-					body: isControlsCollapsed ? "true" : "false"
-				}).catch(function () { });
-			});
-		}
-
-		updateGeneralControlsVisibility();
-		if (!statusEl || !mainSection || !contentEl) {
-			setTimeout(init, 100);
-			return;
-		}
-
-		if (darkModeChk) {
-			darkModeChk.addEventListener("click", function (e) {
-				e.stopPropagation();
-				fetch(TOGGLE_DARKMODE_URL, { method: "POST", cache: "no-store" }).catch(function () { });
-			});
-		}
-
-		if (expertChk) {
-			expertChk.addEventListener("click", function (e) {
-				e.stopPropagation();
-				fetch(TOGGLE_EXPERT_URL, { method: "POST", cache: "no-store" }).catch(function () { });
-			});
-		}
-
-		if (logPlusChk) {
-			logPlusChk.addEventListener("click", function (e) {
-				e.stopPropagation();
-				fetch(TOGGLE_LOGPLUS_URL, { method: "POST", cache: "no-store" }).catch(function () { });
-			});
-		}
-
-		var lastProfilesKey = null;
-		var currentProfiles = [];
-		var suppressSyncUntil = 0;
-		var currentActiveIndex = -1;
-
-		if (closeBtn) {
-			closeBtn.addEventListener("click", function () {
-				if (window.Coherent && typeof Coherent.call === "function") {
-					Coherent.call("TOOLBAR_BUTTON_TOGGLE", "HTML_WIDGET_PANEL", false);
+			if (matched) {
+				var span = el("span", "icon-glyph", ICONS[matched]);
+				node.appendChild(span);
+				i += matched.length;
+				continue;
+			}
+			var start = i;
+			i++;
+			while (i < t.length) {
+				var iconStart = false;
+				for (var k2 = 0; k2 < ICON_KEYS.length; k2++) {
+					if (t.indexOf(ICON_KEYS[k2], i) === i) { iconStart = true; break; }
 				}
-			});
-		}
-
-		// ---- show/hide hotkey ----
-		var hotkey = null;
-		var lastServerHotkeyStr = "";
-		var suppressHotkeySyncUntil = 0;
-		var listening = false;
-		var listeningArmed = false;
-
-		var MODIFIER_KEYCODES = { 16: 1, 17: 1, 18: 1, 91: 1, 92: 1, 93: 1, 224: 1 };
-		var KEYCODE_LABELS = {
-			8: "Backspace", 9: "Tab", 13: "Enter", 19: "Pause", 20: "CapsLock",
-			27: "Esc", 32: "Space", 33: "PgUp", 34: "PgDn", 35: "End", 36: "Home",
-			37: "Left", 38: "Up", 39: "Right", 40: "Down", 45: "Insert", 46: "Delete",
-			106: "Num*", 107: "Num+", 109: "Num-", 110: "Num.", 111: "Num/",
-			186: ";", 187: "=", 188: ",", 189: "-", 190: ".", 191: "/",
-			192: "`", 219: "[", 220: "\\", 221: "]", 222: "'"
-		};
-
-		function labelForKeyCode(kc) {
-			if (KEYCODE_LABELS[kc]) return KEYCODE_LABELS[kc];
-			if (kc >= 48 && kc <= 57) return String.fromCharCode(kc);
-			if (kc >= 65 && kc <= 90) return String.fromCharCode(kc);
-			if (kc >= 96 && kc <= 105) return "Num" + (kc - 96);
-			if (kc >= 112 && kc <= 123) return "F" + (kc - 111);
-			return "Key" + kc;
-		}
-
-		function labelForHotkey(hk) {
-			if (!hk) return "No Hotkey";
-			var parts = [];
-			if (hk.ctrl) parts.push("Ctrl");
-			if (hk.alt) parts.push("Alt");
-			if (hk.shift) parts.push("Shift");
-			if (hk.meta) parts.push("Win");
-			parts.push(hk.label || labelForKeyCode(hk.keyCode));
-			return parts.join("+");
-		}
-
-		function updateHotkeyDisplay() {
-			if (!hotkeyBtn) return;
-			var labelEl = document.querySelector(".hotkey-label");
-			if (!hotkey) {
-				if (labelEl) labelEl.style.display = "none";
-				hotkeyBtn.textContent = "Show/Hide";
-				hotkeyBtn.title = "Click to configure a Show/Hide hotkey";
-			} else {
-				if (labelEl) labelEl.style.display = "";
-				hotkeyBtn.textContent = labelForHotkey(hotkey);
-				hotkeyBtn.title = "Click to clear this hotkey";
+				if (iconStart) break;
+				i++;
 			}
+			node.appendChild(document.createTextNode(t.slice(start, i)));
 		}
+	}
 
-		function saveHotkey(hk) {
-			hotkey = hk;
-			var val = hk ? JSON.stringify(hk) : "";
-			lastServerHotkeyStr = val;
-			suppressHotkeySyncUntil = Date.now() + 2000;
-			updateHotkeyDisplay();
-			fetch(HOTKEY_URL, {
-				method: "POST",
-				cache: "no-store",
-				body: val
-			}).catch(function () { });
-		}
+	function applyField(node, item, extraColorTarget) {
+		if (!node || !item) return;
+		setTextWithIcons(node, item.text === undefined || item.text === null ? "" : String(item.text));
+		var c = meaningfulColor(item.color);
+		node.style.color = c || "";
+		if (extraColorTarget) extraColorTarget.style.background = c || "";
+	}
 
-		function syncHotkeyFromServer(raw) {
-			if (Date.now() < suppressHotkeySyncUntil || listening) return;
-			var str = (raw || "").trim();
-			if (str === lastServerHotkeyStr) return;
-			lastServerHotkeyStr = str;
+	// ------------------------------------------------------------------ components
+	var openSelects = [];
 
-			if (!str || str === "None" || str === "null" || str === "{}") {
-				hotkey = null;
-			} else {
-				try {
-					hotkey = typeof raw === "object" ? raw : JSON.parse(str);
-				} catch (e) {
-					hotkey = null;
-				}
-			}
-			updateHotkeyDisplay();
-		}
+	function closeAllSelects() {
+		for (var i = 0; i < openSelects.length; i++) openSelects[i].list.classList.add("hidden");
+	}
 
-		function startListening() {
-			listening = true;
-			listeningArmed = false;
-			if (hotkeyBtn) {
-				hotkeyBtn.classList.add("listening");
-				hotkeyBtn.style.backgroundColor = "#c0392b";
-				hotkeyBtn.style.color = "#ffffff";
-				hotkeyBtn.textContent = "Press a key...";
-			}
-			setTimeout(function () { listeningArmed = true; }, 50);
-		}
+	/** Custom dropdown: {root, setItems(items), setIndex(i), setWarn(bool)} — onPick(index) on user choice. */
+	function makeSelect(onPick, extraClass) {
+		var root = el("div", "select" + (extraClass ? " " + extraClass : ""));
+		var btn = el("button", "select-btn");
+		btn.type = "button";
+		var label = el("span");
+		btn.appendChild(label);
+		btn.insertAdjacentHTML("beforeend", SVG_CHEV);
+		var list = el("div", "select-list hidden");
+		root.appendChild(btn);
+		root.appendChild(list);
+		var api = { root: root, list: list, items: [], index: -1, key: null };
+		openSelects.push(api);
 
-		function stopListening() {
-			listening = false;
-			if (hotkeyBtn) {
-				hotkeyBtn.classList.remove("listening");
-				hotkeyBtn.style.backgroundColor = "";
-				hotkeyBtn.style.color = "";
-			}
-			updateHotkeyDisplay();
-		}
-
-		if (hotkeyBtn) {
-			hotkeyBtn.addEventListener("click", function (e) {
-				e.stopPropagation();
-				if (listening) {
-					saveHotkey(null);
-					stopListening();
-					return;
-				}
-				if (hotkey) {
-					saveHotkey(null);
-					hotkeyBtn.textContent = "Set Hotkey";
-					return;
-				}
-				startListening();
-			});
-
-			hotkeyBtn.addEventListener("mouseenter", function () {
-				if (listening) return;
-				hotkeyBtn.textContent = hotkey ? "Clear Hotkey" : "Set Hotkey";
-			});
-
-			hotkeyBtn.addEventListener("mouseleave", function () {
-				if (listening) return;
-				updateHotkeyDisplay();
-			});
-		}
-
-		updateHotkeyDisplay();
-
-		window.addEventListener("keydown", function (e) {
-			if (!listening || !listeningArmed) return;
-			if (MODIFIER_KEYCODES[e.keyCode]) return;
-			e.preventDefault();
+		btn.addEventListener("click", function (e) {
 			e.stopPropagation();
-			if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
-
-			if (e.keyCode === 27 || e.keyCode === 8 || e.keyCode === 46) {
-				saveHotkey(null);
-				stopListening();
-				return;
-			}
-
-			saveHotkey({
-				keyCode: e.keyCode,
-				label: labelForKeyCode(e.keyCode),
-				alt: e.altKey, ctrl: e.ctrlKey, shift: e.shiftKey, meta: e.metaKey
-			});
-			stopListening();
-		}, true);
-
-		var isHidden = false;
-		var isCameraHidden = false;
-
-		function updateWidgetVisibility() {
-			var shouldHide = isHidden || isCameraHidden;
-			document.body.classList.toggle("widget-hidden", shouldHide);
-			var ingameUi = document.getElementById("HtmlWidgetPanel");
-			if (ingameUi) {
-				ingameUi.classList.toggle("widget-hidden", shouldHide);
-			}
-		}
-
-		window.addEventListener("keydown", function (e) {
-			if (listening || !hotkey || e.repeat) return;
-			if (e.keyCode !== hotkey.keyCode) return;
-			if (!!e.altKey !== !!hotkey.alt) return;
-			if (!!e.ctrlKey !== !!hotkey.ctrl) return;
-			if (!!e.shiftKey !== !!hotkey.shift) return;
-			if (!!e.metaKey !== !!hotkey.meta) return;
-			e.preventDefault();
-			e.stopPropagation();
-			if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
-
-			isHidden = !isHidden;
-			updateWidgetVisibility();
-		}, true);
-
-		if (resetBtn) {
-			resetBtn.addEventListener("click", function () {
-				resetBtn.disabled = true;
-				fetch(RESET_URL, { method: "POST", cache: "no-store" })
-					.catch(function () { })
-					.then(function () {
-						setTimeout(function () { resetBtn.disabled = false; }, 1000);
-					});
-			});
-		}
-
-		// Title bar toggle on double click
-		var DOUBLE_CLICK_MS = 500;
-		var DOUBLE_CLICK_PX = 40;
-		var lastClickTime = 0;
-		var lastClickX = 0;
-		var lastClickY = 0;
-
-		function isInteractiveTarget(e) {
-			if (e.target && e.target.closest) {
-				if (e.target.closest("button, .custom-select, input, .chk-label, .stepper, .collapsible-header")) return true;
-				var fpsIcon = e.target.closest(".fps-source-icon");
-				if (fpsIcon && fpsIcon.dataset.clickable === "true") return true;
-			}
-			return false;
-		}
-		function blockNativeDblClick(e) {
-			if (isInteractiveTarget(e)) return;
-			e.preventDefault();
-			e.stopPropagation();
-			if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
-		}
-
-		function onClickForDoubleClick(e) {
-			if (isInteractiveTarget(e)) {
-				lastClickTime = 0;
-				return;
-			}
-
-			var now = Date.now();
-			var dx = e.clientX - lastClickX;
-			var dy = e.clientY - lastClickY;
-			var closeEnough = (dx * dx + dy * dy) <= (DOUBLE_CLICK_PX * DOUBLE_CLICK_PX);
-
-			if (lastClickTime && (now - lastClickTime) <= DOUBLE_CLICK_MS && closeEnough) {
-				lastClickTime = 0;
-				fetch(TOGGLE_TITLEBAR_URL, { method: "POST", cache: "no-store" }).catch(function () { });
-				return;
-			}
-
-			lastClickTime = now;
-			lastClickX = e.clientX;
-			lastClickY = e.clientY;
-		}
-
-		window.addEventListener("dblclick", blockNativeDblClick, true);
-		document.addEventListener("dblclick", blockNativeDblClick, true);
-		document.addEventListener("click", onClickForDoubleClick, true);
-
-		// Drag window anywhere
-		function forwardPressToHeader(e) {
-			if (!DRAG_ANYWHERE_ENABLED || e.button !== 0 || isInteractiveTarget(e)) return;
-			if (e.target && e.target.closest && e.target.closest("ingame-ui-header")) return;
-
-			var headerEl = document.querySelector("ingame-ui-header");
-			if (!headerEl) return;
-
-			try {
-				headerEl.dispatchEvent(new MouseEvent("mousedown", {
-					bubbles: true, cancelable: true, view: window,
-					clientX: e.clientX, clientY: e.clientY, screenX: e.screenX, screenY: e.screenY,
-					button: 0, buttons: 1
-				}));
-			} catch (err) { }
-		}
-		document.addEventListener("mousedown", forwardPressToHeader, true);
-
-		var headerHoverForwarded = false;
-		function dispatchToHeader(type, bubbles, e) {
-			var headerEl = document.querySelector("ingame-ui-header");
-			if (!headerEl) return;
-			try {
-				headerEl.dispatchEvent(new MouseEvent(type, {
-					bubbles: bubbles, cancelable: false, view: window,
-					clientX: e.clientX, clientY: e.clientY, screenX: e.screenX, screenY: e.screenY
-				}));
-			} catch (err) { }
-		}
-
-		function setHeaderHover(on, e) {
-			if (on === headerHoverForwarded) return;
-			headerHoverForwarded = on;
-			if (on) {
-				dispatchToHeader("mouseover", true, e);
-				dispatchToHeader("mouseenter", false, e);
-			} else {
-				dispatchToHeader("mouseout", true, e);
-				dispatchToHeader("mouseleave", false, e);
-			}
-		}
-
-		var lastDeadSpacePos = null;
-		document.addEventListener("mousemove", function (e) {
-			if (!DRAG_ANYWHERE_ENABLED) return;
-			var t = e.target;
-			var overHeader = !!(t && t.closest && t.closest("ingame-ui-header"));
-			if (overHeader) {
-				headerHoverForwarded = false;
-				lastDeadSpacePos = null;
-				return;
-			}
-			var dead = !isInteractiveTarget(e);
-			lastDeadSpacePos = dead ? { clientX: e.clientX, clientY: e.clientY, screenX: e.screenX, screenY: e.screenY } : null;
-			setHeaderHover(dead, e);
-		}, true);
-
-		document.addEventListener("mouseout", function (e) {
-			if (!DRAG_ANYWHERE_ENABLED) return;
-			if (!e.relatedTarget) {
-				lastDeadSpacePos = null;
-				setHeaderHover(false, e);
-			}
-		}, true);
-
-		document.addEventListener("mouseup", function (e) {
-			if (!DRAG_ANYWHERE_ENABLED || e.button !== 0) return;
-			setTimeout(function () {
-				if (lastDeadSpacePos) {
-					headerHoverForwarded = false;
-					setHeaderHover(true, lastDeadSpacePos);
-				}
-			}, 30);
-		}, true);
-
-		// Flight Type dropdown
-		function displayProfileName(name) {
-			return String(name).replace(/\u2194/g, "<->");
-		}
-
-		function closeFlightTypeList() {
-			if (flightTypeList) flightTypeList.classList.add("hidden");
-		}
-
-		function selectFlightType(idx) {
-			suppressSyncUntil = Date.now() + 1500;
-			currentActiveIndex = idx;
-			if (flightTypeBtn && currentProfiles[idx] !== undefined) {
-				flightTypeBtn.textContent = displayProfileName(currentProfiles[idx]);
-			}
-			closeFlightTypeList();
-			fetch(FLIGHT_TYPE_URL, {
-				method: "POST",
-				cache: "no-store",
-				body: String(idx)
-			}).catch(function (err) {
-				statusEl.textContent = "Flight Type change failed";
-			});
-		}
-
-		function renderFlightTypeList(profiles) {
-			currentProfiles = profiles;
-			flightTypeList.textContent = "";
-			profiles.forEach(function (name, i) {
-				var item = document.createElement("div");
-				item.className = "custom-select-item";
-				item.textContent = displayProfileName(name);
-				item.dataset.index = String(i);
-				item.addEventListener("click", function () {
-					selectFlightType(i);
-				});
-				flightTypeList.appendChild(item);
-			});
-		}
-
-		function markActiveItem(idx) {
-			if (!flightTypeList) return;
-			var children = flightTypeList.children;
-			for (var i = 0; i < children.length; i++) {
-				children[i].classList.toggle("active", i === idx);
-			}
-		}
-
-		function closeAllLists() {
-			[flightTypeList, modeList, targetList, autoHideList].forEach(function (l) {
-				if (l) l.classList.add("hidden");
-			});
-		}
-
-		// Auto-Hide dropdown
-		var autoHideItems = ["Off", "Chase", "All Ext"];
-		var currentAutoHideIndex = 0;
-		var suppressAutoHideSyncUntil = 0;
-
-		function selectAutoHide(idx) {
-			suppressAutoHideSyncUntil = Date.now() + 1500;
-			currentAutoHideIndex = idx;
-			if (autoHideBtn && autoHideItems[idx] !== undefined) {
-				autoHideBtn.textContent = autoHideItems[idx];
-			}
-			markActive(autoHideList, idx);
-			closeAllLists();
-			fetch(AUTO_HIDE_URL, {
-				method: "POST",
-				cache: "no-store",
-				body: String(idx)
-			}).catch(function () { });
-		}
-
-		if (autoHideList) {
-			renderList(autoHideList, autoHideItems, selectAutoHide);
-		}
-
-		if (autoHideBtn && autoHideList) {
-			autoHideBtn.addEventListener("click", function (e) {
-				e.stopPropagation();
-				var wasHidden = autoHideList.classList.contains("hidden");
-				closeAllLists();
-				if (wasHidden) autoHideList.classList.remove("hidden");
-			});
-		}
-
-		if (flightTypeBtn && flightTypeList) {
-			flightTypeBtn.addEventListener("click", function (e) {
-				e.stopPropagation();
-				var wasHidden = flightTypeList.classList.contains("hidden");
-				closeAllLists();
-				if (wasHidden) flightTypeList.classList.remove("hidden");
-			});
-		}
-		document.addEventListener("click", function (e) {
-			if (e.target && e.target.closest && e.target.closest(".custom-select")) return;
-			closeAllLists();
+			var wasHidden = list.classList.contains("hidden");
+			closeAllSelects();
+			if (wasHidden && api.items.length) list.classList.remove("hidden");
 		});
 
-		// Mode dropdown
-		var lastModeKey = null;
-		var modeItems = [];
-		var currentModeIndex = -1;
-		var suppressModeSyncUntil = 0;
+		api.setItems = function (items) {
+			var key = JSON.stringify(items || []);
+			if (key === api.key) return;
+			api.key = key;
+			api.items = items || [];
+			list.textContent = "";
+			for (var i = 0; i < api.items.length; i++) {
+				(function (idx) {
+					var it = text("div", "select-item", api.items[idx]);
+					it.addEventListener("click", function (e) {
+						e.stopPropagation();
+						closeAllSelects();
+						onPick(idx);
+					});
+					list.appendChild(it);
+				})(i);
+			}
+			api.setIndex(api.index, true);
+		};
 
-		function pickMode(idx) {
-			flushFpsSend();
-			suppressModeSyncUntil = Date.now() + 1500;
-			currentModeIndex = idx;
-			if (modeBtn && modeItems[idx] !== undefined) modeBtn.textContent = modeItems[idx];
-			markActive(modeList, idx);
-			closeAllLists();
-			fetch(TARGET_MODE_URL, { method: "POST", cache: "no-store", body: String(idx) }).catch(function () { });
+		api.setIndex = function (idx, force) {
+			if (idx === api.index && !force) return;
+			api.index = idx;
+			label.textContent = (idx >= 0 && idx < api.items.length) ? api.items[idx] : "-";
+			var ch = list.children;
+			for (var i = 0; i < ch.length; i++) ch[i].classList.toggle("active", i === idx);
+		};
+
+		api.setWarn = function (on) { btn.classList.toggle("afps-warn", !!on); };
+		api.setEnabled = function (on) { btn.disabled = !on; };
+		return api;
+	}
+
+	/** Checkbox: {root, set(checked)} — onToggle(newValue) on click. */
+	function makeCheck(caption, onToggle) {
+		var root = el("label", "check");
+		root.appendChild(el("span", "box", SVG_CHECK));
+		var cap = text("span", "", caption);
+		root.appendChild(cap);
+		var api = { root: root, checked: false, enabled: true };
+		root.addEventListener("click", function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			if (!api.enabled) return;
+			api.set(!api.checked);
+			onToggle(api.checked);
+		});
+		api.set = function (v) { api.checked = !!v; root.classList.toggle("on", api.checked); };
+		api.setText = function (t) { cap.textContent = t; };
+		api.setEnabled = function (on) { api.enabled = !!on; root.classList.toggle("disabled", !api.enabled); };
+		return api;
+	}
+
+	// ------------------------------------------------------------------ build UI
+	function init() {
+		var main = document.getElementById("mainSection");
+		if (!main) { setTimeout(init, 100); return; }
+		var ingameUi = document.getElementById("HtmlWidgetPanel");
+		var IS_INGAME = !!ingameUi;
+		var MAX_SCALE = IS_INGAME ? MAX_SCALE_INGAME : MAX_SCALE_WEB;
+
+		// Top bar
+		var topbar = el("div", "topbar");
+		var logo = el("img", "logo");
+		logo.src = "img/AutoFPS.png";
+		logo.alt = "";
+		topbar.appendChild(logo);
+		topbar.appendChild(text("span", "app-name", "AutoFPS"));
+		var tabs = el("div", "tabs");
+		var tabNames = [["overview", "Overview"], ["tuning", "Tuning"], ["settings", "Settings"]];
+		var tabButtons = {};
+		for (var ti = 0; ti < tabNames.length; ti++) {
+			var tb = text("button", "tab", tabNames[ti][1]);
+			tb.type = "button";
+			tb.setAttribute("data-tab", tabNames[ti][0]);
+			tabs.appendChild(tb);
+			tabButtons[tabNames[ti][0]] = tb;
+		}
+		topbar.appendChild(tabs);
+		topbar.appendChild(el("span", "spacer"));
+		var closeBtn = null;
+		if (IS_INGAME) {
+			closeBtn = el("button", "icon-btn", SVG_CLOSE);
+			closeBtn.type = "button";
+			closeBtn.title = "Close";
+			topbar.appendChild(closeBtn);
+		}
+		main.appendChild(topbar);
+
+		var disconnected = text("div", "card disconnected muted", "Not connected. Start AutoFPS on this PC.");
+		main.appendChild(disconnected);
+
+		// ---- Overview page
+		var pageOverview = el("div", "page hidden");
+		main.appendChild(pageOverview);
+
+		var chips = null;
+		var chipEls = {};
+		if (!IS_INGAME) {
+			var connCard = el("div", "card");
+			connCard.appendChild(text("div", "card-title", "Connection status"));
+			chips = el("div", "chips");
+			var chipIds = ["connMSFS", "connSimConnect", "connSession"];
+			for (var ci = 0; ci < chipIds.length; ci++) {
+				var chip = el("span", "chip");
+				var dot = el("span", "dot");
+				var lab = text("span", "", "-");
+				chip.appendChild(dot);
+				chip.appendChild(lab);
+				chips.appendChild(chip);
+				chipEls[chipIds[ci]] = { dot: dot, label: lab };
+			}
+			connCard.appendChild(chips);
+			pageOverview.appendChild(connCard);
 		}
 
-		// Target dropdown
-		var lastTargetKey = null;
-		var targetListKind = "auto";
-		var targetItems = [];
-		var targetSwapIndex = -1;
-		var currentTargetIndex = -1;
-		var suppressTargetSyncUntil = 0;
+		var simCard = el("div", "card");
+		var simTitle = el("div", "card-title");
+		var imgSimHeaderFS = el("img", "hidden");
+		imgSimHeaderFS.src = "img/fps_msfs.png";
+		imgSimHeaderFS.title = "Default MSFS settings";
+		var imgSimHeaderApp = el("img", "hidden");
+		imgSimHeaderApp.src = "img/AutoFPS.png";
+		imgSimHeaderApp.title = "AutoFPS-controlled MSFS settings";
+		simTitle.appendChild(imgSimHeaderFS);
+		simTitle.appendChild(imgSimHeaderApp);
+		simTitle.appendChild(text("span", "", "Sim values"));
+		simCard.appendChild(simTitle);
+		var tilesEl = el("div", "tiles");
+		simCard.appendChild(tilesEl);
+		pageOverview.appendChild(simCard);
 
-		function pickTarget(idx) {
+		var tileDefs = [["lblFps", "valFps"], ["lblTlod", "valTlod"], ["lblOlod", "valOlod"], ["lblAgl", "valAgl"], ["lblFpm", "valFpm"], ["lblClouds", "valClouds"]];
+		var fieldEls = {};
+		var fpsIcon = el("img", "fps-source-icon hidden");
+		for (var tdi = 0; tdi < tileDefs.length; tdi++) {
+			var tile = el("div", "tile");
+			var inner = el("div", "tile-inner");
+			var cap = text("div", "tile-cap muted", "");
+			var valWrap = el("div", "tile-val");
+			var val = text("span", "", "n/a");
+			valWrap.appendChild(val);
+			if (tdi === 0) valWrap.appendChild(fpsIcon);
+			inner.appendChild(cap);
+			inner.appendChild(valWrap);
+			tile.appendChild(inner);
+			tilesEl.appendChild(tile);
+			fieldEls[tileDefs[tdi][0]] = cap;
+			fieldEls[tileDefs[tdi][1]] = val;
+		}
+
+		var flightCard = el("div", "card");
+		flightCard.appendChild(text("div", "card-title", "Flight"));
+		var row1 = el("div", "row");
+		var row2 = el("div", "row");
+		flightCard.appendChild(row1);
+		flightCard.appendChild(row2);
+		pageOverview.appendChild(flightCard);
+
+		var statusLine = el("div", "card status-line", SVG_INFO);
+		var statusText = el("span");
+		statusLine.appendChild(statusText);
+		pageOverview.appendChild(statusLine);
+
+		// ---- Tuning & Settings pages (rendered from the app's page description)
+		var pageTuning = el("div", "page hidden");
+		var tuningDyn = el("div");
+		pageTuning.appendChild(tuningDyn);
+		main.appendChild(pageTuning);
+
+		var pageSettings = el("div", "page hidden");
+		var settingsDyn = el("div");
+		pageSettings.appendChild(settingsDyn);
+		main.appendChild(pageSettings);
+
+		var pages = { overview: pageOverview, tuning: pageTuning, settings: pageSettings };
+		var activeTab = "overview";
+		try { activeTab = localStorage.getItem("afpsTab") || "overview"; } catch (e) { }
+		if (!pages[activeTab]) activeTab = "overview";
+
+		// Widget-only settings (in-game): camera auto-hide
+		var autoHideItems = ["Off", "Chase", "All Ext"];
+		var autoHideIndex = 0;
+		var suppressAutoHideUntil = 0;
+		var autoHideSel = null;
+		if (IS_INGAME) {
+			var widgetCard = el("div", "card");
+			widgetCard.appendChild(text("div", "card-title", "In-game widget"));
+			var whRow = el("div", "row");
+			whRow.appendChild(text("span", "lbl", "Auto-hide in external views"));
+			autoHideSel = makeSelect(function (idx) {
+				autoHideIndex = idx;
+				suppressAutoHideUntil = now() + SUPPRESS_MS;
+				autoHideSel.setIndex(idx);
+				post("/api/widgetautohide", String(idx));
+			});
+			autoHideSel.setItems(autoHideItems);
+			autoHideSel.setIndex(0);
+			whRow.appendChild(autoHideSel.root);
+			widgetCard.appendChild(whRow);
+			pageSettings.appendChild(widgetCard);
+		}
+
+		// ---------------------------------------------------------------- Overview controls
+		var modeSel, targetSel, profileSel, expertChk, resetBtn;
+		var suppressModeUntil = 0, suppressTargetUntil = 0, suppressProfileUntil = 0, suppressExpertUntil = 0;
+		var targetListKind = "auto", targetSwapIndex = -1;
+
+		modeSel = makeSelect(function (idx) {
 			flushFpsSend();
-			closeAllLists();
+			suppressModeUntil = now() + SUPPRESS_MS;
+			modeSel.setIndex(idx);
+			post("/api/targetmode", String(idx));
+		});
+		row1.appendChild(modeSel.root);
+		row1.appendChild(text("span", "lbl muted", "Target"));
+		targetSel = makeSelect(function (idx) {
+			flushFpsSend();
 			if (idx !== targetSwapIndex) {
-				suppressTargetSyncUntil = Date.now() + 1500;
-				currentTargetIndex = idx;
-				if (targetBtn && targetItems[idx] !== undefined) targetBtn.textContent = targetItems[idx];
-				markActive(targetList, idx);
+				suppressTargetUntil = now() + SUPPRESS_MS;
+				targetSel.setIndex(idx);
 			}
-			fetch(TARGET_URL, { method: "POST", cache: "no-store", body: targetListKind + ":" + idx }).catch(function () { });
-		}
+			post("/api/target", targetListKind + ":" + idx);
+		});
+		row1.appendChild(targetSel.root);
+		row1.appendChild(text("span", "lbl muted", "FPS"));
 
-		function renderList(listEl, items, onPick) {
-			listEl.textContent = "";
-			items.forEach(function (name, i) {
-				var item = document.createElement("div");
-				item.className = "custom-select-item";
-				item.textContent = String(name);
-				item.dataset.index = String(i);
-				item.addEventListener("click", function () {
-					onPick(i);
-				});
-				listEl.appendChild(item);
-			});
-		}
+		var stepper = el("div", "stepper");
+		var fpsDecBtn = el("button", "stepper-btn", SVG_MINUS);
+		fpsDecBtn.type = "button";
+		fpsDecBtn.title = "Decrease target FPS (hold to speed up)";
+		var fpsValEl = text("span", "stepper-val", "-");
+		var fpsIncBtn = el("button", "stepper-btn", SVG_PLUS);
+		fpsIncBtn.type = "button";
+		fpsIncBtn.title = "Increase target FPS (hold to speed up)";
+		stepper.appendChild(fpsDecBtn);
+		stepper.appendChild(fpsValEl);
+		stepper.appendChild(fpsIncBtn);
+		row1.appendChild(stepper);
 
-		function markActive(listEl, idx) {
-			if (!listEl) return;
-			var children = listEl.children;
-			for (var i = 0; i < children.length; i++) {
-				children[i].classList.toggle("active", i === idx);
-			}
-		}
+		row2.appendChild(text("span", "lbl muted", "Flight type"));
+		profileSel = makeSelect(function (idx) {
+			suppressProfileUntil = now() + SUPPRESS_MS;
+			profileSel.setIndex(idx);
+			post("/api/flighttype", String(idx));
+		});
+		row2.appendChild(profileSel.root);
+		expertChk = makeCheck("Expert", function () {
+			suppressExpertUntil = now() + SUPPRESS_MS;
+			post("/api/toggleexpert");
+		});
+		row2.appendChild(expertChk.root);
+		resetBtn = text("button", "btn hidden", "Reset");
+		resetBtn.type = "button";
+		resetBtn.title = "Reset TLOD, clouds, Auto Target FPS and graphics mode detection to their initial state";
+		resetBtn.addEventListener("click", function (e) {
+			e.stopPropagation();
+			resetBtn.disabled = true;
+			post("/api/reset").then(function () { setTimeout(function () { resetBtn.disabled = false; }, 1000); });
+		});
+		row2.appendChild(resetBtn);
 
-		if (modeBtn && modeList) {
-			modeBtn.addEventListener("click", function (e) {
-				e.stopPropagation();
-				var wasHidden = modeList.classList.contains("hidden");
-				closeAllLists();
-				if (wasHidden) modeList.classList.remove("hidden");
-			});
-		}
-		if (targetBtn && targetList) {
-			targetBtn.addEventListener("click", function (e) {
-				e.stopPropagation();
-				var wasHidden = targetList.classList.contains("hidden");
-				closeAllLists();
-				if (wasHidden) targetList.classList.remove("hidden");
-			});
-		}
+		// ---- Target FPS stepper with hold-to-repeat
+		var fpsValue = null, fpsDirty = false, fpsSendTimer = null, suppressFpsUntil = 0;
+		var holdDir = 0, holdStart = 0, holdDelayTimer = null, holdRepeatTimer = null;
 
-		// Target FPS stepper
-		var fpsValue = null;
-		var suppressFpsSyncUntil = 0;
-		var fpsDirty = false;
-		var fpsSendTimer = null;
-		var holdDir = 0;
-		var holdStart = 0;
-		var holdDelayTimer = null;
-		var holdRepeatTimer = null;
-
-		function formatFps(v) {
-			if (v === null || !isFinite(v)) return "-";
-			return String(Math.round(v * 10) / 10);
-		}
-
-		function showFps() {
-			if (fpsValEl) fpsValEl.textContent = formatFps(fpsValue);
-		}
-
+		function formatFps(v) { return (v === null || !isFinite(v)) ? "-" : String(Math.round(v * 10) / 10); }
+		function showFps() { fpsValEl.textContent = formatFps(fpsValue); }
 		function flushFpsSend() {
 			if (fpsSendTimer) { clearTimeout(fpsSendTimer); fpsSendTimer = null; }
 			if (!fpsDirty || fpsValue === null) return;
 			fpsDirty = false;
-			suppressFpsSyncUntil = Date.now() + 1500;
-			fetch(TARGET_FPS_URL, { method: "POST", cache: "no-store", body: String(fpsValue) }).catch(function () { });
+			suppressFpsUntil = now() + SUPPRESS_MS;
+			post("/api/targetfps", String(fpsValue));
 		}
-
 		function queueFpsSend() {
 			fpsDirty = true;
 			if (fpsSendTimer) clearTimeout(fpsSendTimer);
 			fpsSendTimer = setTimeout(flushFpsSend, FPS_SEND_DEBOUNCE_MS);
 		}
-
 		function stepFps(dir, step) {
 			if (fpsValue === null) return;
-			var v = fpsValue;
-			var nv;
+			var v = fpsValue, nv;
 			if (step <= 1) nv = v + dir;
 			else if (dir > 0) nv = (Math.floor(v / step) + 1) * step;
 			else nv = (Math.ceil(v / step) - 1) * step;
@@ -682,33 +440,28 @@ const DISCONNECTED_TEXT = "#F0F0F0";
 			if (nv === v) return;
 			fpsValue = nv;
 			showFps();
-			suppressFpsSyncUntil = Date.now() + 2500;
+			suppressFpsUntil = now() + 2500;
 			queueFpsSend();
 		}
-
 		function stopHold() {
 			if (holdDelayTimer) { clearTimeout(holdDelayTimer); holdDelayTimer = null; }
 			if (holdRepeatTimer) { clearInterval(holdRepeatTimer); holdRepeatTimer = null; }
 			holdDir = 0;
 		}
-
 		function startHold(dir) {
 			stopHold();
 			holdDir = dir;
-			holdStart = Date.now();
+			holdStart = now();
 			stepFps(dir, 1);
 			holdDelayTimer = setTimeout(function () {
 				holdDelayTimer = null;
 				holdRepeatTimer = setInterval(function () {
-					var held = Date.now() - holdStart;
-					var step = held >= FPS_STEP10_AFTER_MS ? 10 : (held >= FPS_STEP5_AFTER_MS ? 5 : 1);
-					stepFps(holdDir, step);
+					var held = now() - holdStart;
+					stepFps(holdDir, held >= FPS_STEP10_AFTER_MS ? 10 : (held >= FPS_STEP5_AFTER_MS ? 5 : 1));
 				}, FPS_REPEAT_MS);
 			}, FPS_HOLD_DELAY_MS);
 		}
-
-		function wireStepperButton(btn, dir) {
-			if (!btn) return;
+		function wireStepper(btn, dir) {
 			btn.addEventListener("mousedown", function (e) {
 				if (e.button !== 0) return;
 				e.stopPropagation();
@@ -716,473 +469,517 @@ const DISCONNECTED_TEXT = "#F0F0F0";
 			});
 			btn.addEventListener("mouseleave", stopHold);
 		}
-		wireStepperButton(fpsDecBtn, -1);
-		wireStepperButton(fpsIncBtn, 1);
+		wireStepper(fpsDecBtn, -1);
+		wireStepper(fpsIncBtn, 1);
 		window.addEventListener("mouseup", stopHold, true);
 		window.addEventListener("blur", stopHold);
 
+		fpsIcon.addEventListener("click", function (e) {
+			if (fpsIcon.getAttribute("data-clickable") !== "true") return;
+			e.stopPropagation();
+			post("/api/togglefpssource");
+		});
+
+		// ---------------------------------------------------------------- tabs
+		// Switching tabs must not flash the sim panel: the target page is rendered before it is shown
+		// (Tuning/Settings are prefetched in the background), and the panel height is adjusted in the
+		// same step as the swap instead of a debounced resize afterwards.
+		var tabRequest = 0;
+		function showTab(name) {
+			activeTab = name;
+			try { localStorage.setItem("afpsTab", name); } catch (e) { }
+			for (var k in tabButtons) tabButtons[k].classList.toggle("active", k === name);
+			if (!connected) return;
+			var req = ++tabRequest;
+			if (name !== "overview" && pageState[name].key === null) {
+				// Not loaded yet (first open): fetch, then swap once its content exists.
+				fetchPage(name, function () { if (req === tabRequest) applyTab(name); });
+				return;
+			}
+			applyTab(name);
+		}
+		function applyTab(name) {
+			for (var p in pages) pages[p].classList.toggle("hidden", p !== name);
+			snapNow();
+		}
+		for (var tk in tabButtons) {
+			(function (name) {
+				tabButtons[name].addEventListener("click", function (e) { e.stopPropagation(); showTab(name); });
+			})(tk);
+		}
+
+		if (closeBtn) {
+			closeBtn.addEventListener("click", function () {
+				if (window.Coherent && typeof Coherent.call === "function") {
+					Coherent.call("TOOLBAR_BUTTON_TOGGLE", "HTML_WIDGET_PANEL", false);
+				}
+			});
+		}
+
+		document.addEventListener("click", function (e) {
+			if (e.target && e.target.closest && e.target.closest(".select")) return;
+			closeAllSelects();
+		});
+
+		// ---------------------------------------------------------------- theme & connection
+		var connected = false;
+		var isDark = true;
+
+		function applyTheme(dark) {
+			if (dark === isDark) return;
+			isDark = dark;
+			main.classList.toggle("dark", dark);
+			main.classList.toggle("light", !dark);
+			document.body.classList.toggle("light", !dark);
+		}
+
+		function setConnected(on) {
+			if (on === connected) return;
+			connected = on;
+			disconnected.classList.toggle("hidden", on);
+			for (var p in pages) pages[p].classList.toggle("hidden", !on || p !== activeTab);
+			lastSnapHeight = -1;
+			scheduleSnap();
+			if (on) {
+				pollPage();
+				prefetchPages();
+			}
+		}
+
+		// ---------------------------------------------------------------- status polling (overview)
+		function applyStatus(data) {
+			setConnected(true);
+			if (data.theme && typeof data.theme.isDark === "boolean") applyTheme(data.theme.isDark);
+
+			for (var id in fieldEls) {
+				if (data[id]) applyField(fieldEls[id], data[id]);
+			}
+			if (data.statusMessage) {
+				applyField(statusText, data.statusMessage);
+				var first = String(data.statusMessage.text || "").split("\n")[0];
+				statusLine.classList.toggle("compact", first.length > 60);
+			}
+			if (chips) {
+				for (var cid in chipEls) {
+					if (!data[cid]) continue;
+					chipEls[cid].label.textContent = data[cid].text || "";
+					chipEls[cid].dot.style.background = meaningfulColor(data[cid].color) || "#E05050";
+				}
+			}
+
+			var iconMap = { 1: "img/fps_msfs.png", 2: "img/fps_rtss.png", 3: "img/fps_ofxr.png", 4: "img/fps_vxr.png" };
+			var src = iconMap[data.fpsIcon];
+			if (src) {
+				if (fpsIcon.getAttribute("src") !== src) fpsIcon.src = src;
+				var clickable = (data.fpsIcon === 1 || data.fpsIcon === 2);
+				fpsIcon.setAttribute("data-clickable", clickable ? "true" : "false");
+				fpsIcon.style.cursor = clickable ? "pointer" : "default";
+				fpsIcon.title = clickable ? "FPS source — click to toggle MSFS / RTSS" : "FPS source";
+				fpsIcon.classList.remove("hidden");
+			} else {
+				fpsIcon.classList.add("hidden");
+			}
+			imgSimHeaderFS.classList.toggle("hidden", !data.simHeaderFS);
+			imgSimHeaderApp.classList.toggle("hidden", !data.simHeaderDog);
+
+			if (Array.isArray(data.profiles)) {
+				profileSel.setItems(data.profiles.map(function (n) { return String(n).replace(/↔/g, "<->"); }));
+				if (now() >= suppressProfileUntil && typeof data.activeProfileIndex === "number") profileSel.setIndex(data.activeProfileIndex);
+			}
+			if (typeof data.resetVisible === "boolean") resetBtn.classList.toggle("hidden", !data.resetVisible);
+			if (typeof data.expertVisible === "boolean") expertChk.root.classList.toggle("hidden", !data.expertVisible);
+
+			if (data.widgetHotkey !== undefined) syncHotkey(data.widgetHotkey);
+			if (typeof data.hideTitleBar === "boolean") {
+				document.body.classList.toggle("hide-titlebar", data.hideTitleBar);
+			}
+
+			applyControls(data.autoFpsControls);
+		}
+
 		function applyControls(c) {
 			if (!c) return;
-
-			if (Date.now() >= suppressGeneralCollapsedSyncUntil && typeof c.generalCollapsed === "boolean") {
-				if (isControlsCollapsed !== c.generalCollapsed) {
-					isControlsCollapsed = c.generalCollapsed;
-					updateGeneralControlsVisibility();
-				}
+			if (Array.isArray(c.modeItems)) {
+				modeSel.setItems(c.modeItems);
+				if (now() >= suppressModeUntil && typeof c.mode === "number") modeSel.setIndex(c.mode);
+				modeSel.setWarn(!!c.modeOrange);
+			}
+			if (Array.isArray(c.targetItems)) {
+				var kind = String(c.targetList);
+				if (kind !== targetListKind) { targetListKind = kind; suppressTargetUntil = 0; }
+				targetSel.setItems(c.targetItems);
+				targetSwapIndex = typeof c.targetSwapIndex === "number" ? c.targetSwapIndex : -1;
+				if (now() >= suppressTargetUntil && typeof c.targetIndex === "number") targetSel.setIndex(c.targetIndex);
+				targetSel.setWarn(!!c.targetOrange);
 			}
 
-			// Mode
-			if (modeBtn && modeList && Array.isArray(c.modeItems)) {
-				var mk = JSON.stringify(c.modeItems);
-				if (mk !== lastModeKey) {
-					lastModeKey = mk;
-					modeItems = c.modeItems;
-					renderList(modeList, modeItems, pickMode);
-				}
-				if (Date.now() >= suppressModeSyncUntil && typeof c.mode === "number") {
-					currentModeIndex = c.mode;
-					if (modeItems[currentModeIndex] !== undefined) modeBtn.textContent = modeItems[currentModeIndex];
-				}
-				markActive(modeList, currentModeIndex);
-
-				if (c.modeOrange) {
-					modeBtn.style.backgroundColor = "#FFA500";
-					modeBtn.style.color = "#000000";
-				}
-			}
-
-			// Target
-			if (targetBtn && targetList && Array.isArray(c.targetItems)) {
-				var tk = String(c.targetList) + "|" + JSON.stringify(c.targetItems);
-				if (tk !== lastTargetKey) {
-					lastTargetKey = tk;
-					targetListKind = String(c.targetList);
-					targetItems = c.targetItems;
-					renderList(targetList, targetItems, pickTarget);
-					suppressTargetSyncUntil = 0;
-				}
-				targetSwapIndex = (typeof c.targetSwapIndex === "number") ? c.targetSwapIndex : -1;
-				if (Date.now() >= suppressTargetSyncUntil && typeof c.targetIndex === "number") {
-					currentTargetIndex = c.targetIndex;
-					if (targetItems[currentTargetIndex] !== undefined) targetBtn.textContent = targetItems[currentTargetIndex];
-				}
-				markActive(targetList, currentTargetIndex);
-
-				if (c.targetOrange) {
-					targetBtn.style.backgroundColor = "#FFA500";
-					targetBtn.style.color = "#000000";
-				}
-			}
-
-			// FPS
 			var editable = !!c.fpsEditable;
-			var btnVis = editable ? "visible" : "hidden";
-			if (fpsDecBtn) fpsDecBtn.style.visibility = btnVis;
-			if (fpsIncBtn) fpsIncBtn.style.visibility = btnVis;
-
+			fpsDecBtn.style.visibility = editable ? "visible" : "hidden";
+			fpsIncBtn.style.visibility = editable ? "visible" : "hidden";
 			if (!editable) {
 				stopHold();
 				fpsDirty = false;
 				if (fpsSendTimer) { clearTimeout(fpsSendTimer); fpsSendTimer = null; }
 				fpsValue = null;
-				if (fpsValEl) fpsValEl.textContent = (c.fpsText === undefined || c.fpsText === null || c.fpsText === "") ? "-" : String(c.fpsText);
-			} else if (holdDir === 0 && (fpsValue === null || Date.now() >= suppressFpsSyncUntil) && c.fps !== undefined && c.fps !== null && c.fps !== "") {
+				fpsValEl.textContent = (c.fpsText === undefined || c.fpsText === null || c.fpsText === "") ? "-" : String(c.fpsText);
+			} else if (holdDir === 0 && (fpsValue === null || now() >= suppressFpsUntil) && c.fps !== undefined && c.fps !== null && c.fps !== "") {
 				var f = parseFloat(String(c.fps).replace(",", "."));
-				if (isFinite(f)) {
-					fpsValue = f;
-					showFps();
-				}
+				if (isFinite(f)) { fpsValue = f; showFps(); }
 			}
+			fpsValEl.style.color = c.fpsOrange ? "#F59E0B" : "";
 
-			if (c.fpsOrange && fpsValEl) fpsValEl.style.color = "#FFA500";
+			if (typeof c.expert === "boolean" && now() >= suppressExpertUntil) expertChk.set(c.expert);
 
-			// Expert and Log+
-			if (expertChk && typeof c.expert === "boolean") {
-				expertChk.checked = c.expert;
-			}
-			if (logPlusChk && typeof c.logPlus === "boolean") {
-				logPlusChk.checked = c.logPlus;
-			}
-			if (logPlusLabel && typeof c.logPlusVisible === "boolean") {
-				logPlusLabel.style.display = c.logPlusVisible ? "inline-flex" : "none";
-			}
-
-			// Auto-Hide setting sync
-			if (Date.now() >= suppressAutoHideSyncUntil && typeof c.autoHide === "number") {
-				currentAutoHideIndex = c.autoHide;
-				if (autoHideBtn && autoHideItems[currentAutoHideIndex] !== undefined) {
-					autoHideBtn.textContent = autoHideItems[currentAutoHideIndex];
-				}
-				markActive(autoHideList, currentAutoHideIndex);
+			if (autoHideSel && typeof c.autoHide === "number" && now() >= suppressAutoHideUntil) {
+				autoHideIndex = c.autoHide;
+				autoHideSel.setIndex(autoHideIndex);
 			}
 		}
 
-		// Vertical-only auto height
-		var AUTO_HEIGHT_ENABLED = true;
-		var BOTTOM_MARGIN_ADJUST_PX = 0;
-		var MIN_PANEL_HEIGHT_PX = 48;
-		var SNAP_DEBOUNCE_MS = 200;
-		var SNAP_TOLERANCE_PX = 3;
-		var ingameUiEl = document.getElementById("HtmlWidgetPanel");
-		var lastSnapWidth = -1;
-		var lastSnapHeight = -1;
-		var snapTimer = null;
+		function pollStatus() {
+			fetch(API + "/api/status", { cache: "no-store" })
+				.then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
+				.then(applyStatus)
+				.catch(function () { setConnected(false); });
+		}
 
+		// ---------------------------------------------------------------- Tuning / Settings pages
+		var pageState = { tuning: { key: null, controls: {}, labels: [] }, settings: { key: null, controls: {}, labels: [] } };
+		var pendingUntil = {};   // control name -> time until which polled values are ignored
+
+		function structureKey(cards) {
+			return JSON.stringify(cards, function (k, v) {
+				if (k === "value" || k === "checked" || k === "index" || k === "warn" || k === "enabled" || k === "color" || k === "tip") return undefined;
+				return v;
+			});
+		}
+
+		function sendControl(name, value) {
+			pendingUntil[name] = now() + SUPPRESS_MS;
+			fetch(API + "/api/control", { method: "POST", cache: "no-store", body: JSON.stringify({ name: name, value: value }) })
+				.catch(function () { })
+				.then(function () { setTimeout(pollPage, 250); });
+		}
+
+		function buildControl(item, controls) {
+			var node = null;
+			switch (item.t) {
+				case "label":
+					node = el("span", "lbl");
+					setTextWithIcons(node, item.text);
+					controls.__labels.push({ kind: "label", node: node });
+					break;
+				case "note":
+					node = text("div", "note muted", item.text);
+					break;
+				case "check": {
+					var chk = makeCheck(item.text, function (v) { sendControl(item.name, v); });
+					node = chk.root;
+					controls[item.name] = { kind: "check", api: chk };
+					break;
+				}
+				case "combo": {
+					var sel = makeSelect(function (idx) { sel.setIndex(idx); sendControl(item.name, idx); });
+					sel.setItems(item.items || []);
+					node = sel.root;
+					controls[item.name] = { kind: "combo", api: sel };
+					break;
+				}
+				case "text": {
+					var input = el("input", "input");
+					input.type = "text";
+					var commit = function () {
+						var v = input.value.trim();
+						if (v !== "" && v !== input.getAttribute("data-server")) sendControl(item.name, v);
+					};
+					input.addEventListener("keydown", function (e) {
+						e.stopPropagation();
+						if (e.keyCode === 13) { commit(); input.blur(); }
+						if (e.keyCode === 27) { input.value = input.getAttribute("data-server") || ""; input.blur(); }
+					});
+					input.addEventListener("blur", commit);
+					input.addEventListener("mousedown", function (e) { e.stopPropagation(); });
+					node = input;
+					controls[item.name] = { kind: "text", node: input };
+					break;
+				}
+				case "button": {
+					var b = text("button", "btn", item.text);
+					b.type = "button";
+					b.addEventListener("click", function (e) { e.stopPropagation(); sendControl(item.name, null); });
+					node = b;
+					controls[item.name] = { kind: "button", node: b };
+					break;
+				}
+			}
+			if (node && item.tip) node.title = item.tip;
+			return node;
+		}
+
+		function updateControl(item, ctl) {
+			if (!ctl) return;
+			var pending = item.name && pendingUntil[item.name] && now() < pendingUntil[item.name];
+			var enabled = item.enabled !== false;
+			switch (ctl.kind) {
+				case "label":
+					setTextWithIcons(ctl.node, item.text);
+					ctl.node.style.color = meaningfulColor(item.color) || "";
+					break;
+				case "check":
+					if (!pending) ctl.api.set(item.checked);
+					ctl.api.setText(item.text);
+					ctl.api.setEnabled(enabled);
+					break;
+				case "combo":
+					ctl.api.setItems(item.items || []);
+					if (!pending) ctl.api.setIndex(item.index);
+					ctl.api.setWarn(!!item.warn);
+					ctl.api.setEnabled(enabled);
+					break;
+				case "text":
+					ctl.node.setAttribute("data-server", item.value || "");
+					if (!pending && document.activeElement !== ctl.node) ctl.node.value = item.value || "";
+					ctl.node.classList.toggle("afps-warn", !!item.warn);
+					ctl.node.disabled = !enabled;
+					ctl.node.classList.toggle("wide", String(item.value || "").length > 4);
+					break;
+				case "button":
+					ctl.node.textContent = item.text;
+					ctl.node.disabled = !enabled;
+					break;
+			}
+			if (item.tip) (ctl.node || (ctl.api && ctl.api.root)).title = item.tip;
+		}
+
+		function renderPage(name, data) {
+			var st = pageState[name];
+			var container = name === "tuning" ? tuningDyn : settingsDyn;
+			var cards = data.cards || [];
+			var key = structureKey(cards);
+			if (key !== st.key) {
+				// Structure changed (sections shown/hidden by the app): rebuild, unless the user is typing in it.
+				if (document.activeElement && container.contains(document.activeElement)) return;
+				st.key = key;
+				st.controls = { __labels: [] };
+				container.textContent = "";
+				for (var i = 0; i < cards.length; i++) {
+					var card = el("div", "card");
+					var rows = cards[i].rows || [];
+					for (var r = 0; r < rows.length; r++) {
+						var row = rows[r];
+						if (!Array.isArray(row)) {
+							if (row && row.t === "title") card.appendChild(text("div", "card-title", row.text));
+							continue;
+						}
+						var rowEl = el("div", "row");
+						for (var j = 0; j < row.length; j++) {
+							var node = buildControl(row[j], st.controls);
+							if (node) rowEl.appendChild(node);
+						}
+						card.appendChild(rowEl);
+					}
+					container.appendChild(card);
+				}
+				scheduleSnap();
+			}
+			// Values
+			var lblIndex = 0;
+			for (var ci2 = 0; ci2 < cards.length; ci2++) {
+				var rws = cards[ci2].rows || [];
+				for (var ri = 0; ri < rws.length; ri++) {
+					if (!Array.isArray(rws[ri])) continue;
+					for (var ii = 0; ii < rws[ri].length; ii++) {
+						var it = rws[ri][ii];
+						if (it.t === "label") { updateControl(it, st.controls.__labels ? st.controls.__labels[lblIndex++] : null); continue; }
+						if (it.name) updateControl(it, st.controls[it.name]);
+					}
+				}
+			}
+		}
+
+		var pageBusy = { tuning: false, settings: false };
+		function fetchPage(name, done) {
+			if (!connected || !pageState[name] || pageBusy[name]) return;
+			pageBusy[name] = true;
+			fetch(API + "/api/page/" + name, { cache: "no-store" })
+				.then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
+				.then(function (data) {
+					pageBusy[name] = false;
+					renderPage(name, data);
+					if (done) done();
+				})
+				.catch(function () { pageBusy[name] = false; if (done) done(); });
+		}
+		/** Active page refreshes every second. */
+		function pollPage() {
+			if (activeTab !== "overview") fetchPage(activeTab);
+		}
+		/** Hidden pages refresh slowly so they are ready (and the right size) before they are opened. */
+		function prefetchPages() {
+			for (var n in pageState) if (n !== activeTab) fetchPage(n);
+		}
+
+		// ---------------------------------------------------------------- show/hide hotkey (configured in the app config)
+		var hotkey = null, lastHotkeyStr = null;
+		function syncHotkey(raw) {
+			var str = typeof raw === "string" ? raw.trim() : JSON.stringify(raw || "");
+			if (str === lastHotkeyStr) return;
+			lastHotkeyStr = str;
+			if (!str || str === "None" || str === "null" || str === "{}" || str === '""') { hotkey = null; return; }
+			try { hotkey = typeof raw === "object" ? raw : JSON.parse(str); } catch (e) { hotkey = null; }
+		}
+
+		var isHotkeyHidden = false, isCameraHidden = false;
+		function updateWidgetVisibility() {
+			var hide = isHotkeyHidden || isCameraHidden;
+			document.body.classList.toggle("widget-hidden", hide);
+			if (ingameUi) ingameUi.classList.toggle("widget-hidden", hide);
+		}
+
+		window.addEventListener("keydown", function (e) {
+			if (!hotkey || e.repeat) return;
+			if (e.keyCode !== hotkey.keyCode) return;
+			if (!!e.altKey !== !!hotkey.alt || !!e.ctrlKey !== !!hotkey.ctrl || !!e.shiftKey !== !!hotkey.shift || !!e.metaKey !== !!hotkey.meta) return;
+			e.preventDefault();
+			e.stopPropagation();
+			isHotkeyHidden = !isHotkeyHidden;
+			updateWidgetVisibility();
+		}, true);
+
+		// ---------------------------------------------------------------- camera auto-hide (in-game)
+		function checkCameraAutoHide() {
+			if (!autoHideIndex) {
+				if (isCameraHidden) { isCameraHidden = false; updateWidgetVisibility(); }
+				return;
+			}
+			var camera = null;
+			try {
+				if (window.SimVar && typeof SimVar.GetSimVarValue === "function" && (typeof SimVar.IsReady !== "function" || SimVar.IsReady())) {
+					camera = SimVar.GetSimVarValue("CAMERA STATE", "Enum");
+				}
+			} catch (e) { }
+			var hide = false;
+			if (typeof camera === "number") {
+				if (autoHideIndex === 1) hide = (camera === 3);
+				else if (autoHideIndex === 2) hide = (camera >= 3 && camera <= 9);
+			}
+			if (hide !== isCameraHidden) { isCameraHidden = hide; updateWidgetVisibility(); }
+		}
+
+		// ---------------------------------------------------------------- in-game window behaviour
+		function isInteractive(e) {
+			if (!e.target || !e.target.closest) return false;
+			if (e.target.closest("button, input, .select, .check, .stepper, .tab")) return true;
+			var icon = e.target.closest(".fps-source-icon");
+			return !!(icon && icon.getAttribute("data-clickable") === "true");
+		}
+
+		if (IS_INGAME) {
+			// Double-click empty space: toggle the title bar (shared with the app setting)
+			var lastClick = 0, lastX = 0, lastY = 0;
+			var blockDbl = function (e) {
+				if (isInteractive(e)) return;
+				e.preventDefault();
+				e.stopPropagation();
+			};
+			window.addEventListener("dblclick", blockDbl, true);
+			document.addEventListener("dblclick", blockDbl, true);
+			document.addEventListener("click", function (e) {
+				if (isInteractive(e)) { lastClick = 0; return; }
+				var t = now(), dx = e.clientX - lastX, dy = e.clientY - lastY;
+				if (lastClick && t - lastClick <= 500 && dx * dx + dy * dy <= 1600) {
+					lastClick = 0;
+					post("/api/toggletitlebar");
+					return;
+				}
+				lastClick = t; lastX = e.clientX; lastY = e.clientY;
+			}, true);
+
+			// Drag the panel from any empty area by forwarding presses to the sim's header
+			var header = function () { return document.querySelector("ingame-ui-header"); };
+			var forward = function (type, e, bubbles) {
+				var h = header();
+				if (!h) return;
+				try {
+					h.dispatchEvent(new MouseEvent(type, {
+						bubbles: bubbles, cancelable: true, view: window,
+						clientX: e.clientX, clientY: e.clientY, screenX: e.screenX, screenY: e.screenY, button: 0, buttons: 1
+					}));
+				} catch (err) { }
+			};
+			var hoverFwd = false;
+			var setHover = function (on, e) {
+				if (on === hoverFwd) return;
+				hoverFwd = on;
+				forward(on ? "mouseover" : "mouseout", e, true);
+				forward(on ? "mouseenter" : "mouseleave", e, false);
+			};
+			document.addEventListener("mousedown", function (e) {
+				if (e.button !== 0 || isInteractive(e)) return;
+				if (e.target && e.target.closest && e.target.closest("ingame-ui-header")) return;
+				forward("mousedown", e, true);
+			}, true);
+			document.addEventListener("mousemove", function (e) {
+				if (e.target && e.target.closest && e.target.closest("ingame-ui-header")) { hoverFwd = false; return; }
+				setHover(!isInteractive(e), e);
+			}, true);
+			document.addEventListener("mouseout", function (e) {
+				if (!e.relatedTarget) setHover(false, e);
+			}, true);
+		}
+
+		// ---------------------------------------------------------------- height snap & scaling
+		var lastSnapHeight = -1, snapTimer = null;
 		function snapHeight() {
 			snapTimer = null;
-			if (!AUTO_HEIGHT_ENABLED || !ingameUiEl || typeof ingameUiEl.sendRect !== "function") return;
-			if (contentEl.classList.contains("hidden")) return;
-
-			var w = document.documentElement.clientWidth;
-			var lastEl = groupBoxes[groupBoxes.length - 1];
-			if (!lastEl) return;
-
-			var frameRect = ingameUiEl.getBoundingClientRect();
-			var lastRect = lastEl.getBoundingClientRect();
-			if (!frameRect.height || !lastRect.height) return;
-
-			var sideMargin = Math.max(4, Math.round(lastRect.left - frameRect.left));
-			var needed = Math.round(lastRect.bottom - frameRect.top + sideMargin + BOTTOM_MARGIN_ADJUST_PX);
-			if (needed < MIN_PANEL_HEIGHT_PX) needed = MIN_PANEL_HEIGHT_PX;
-			if (!isFinite(needed) || needed > 4000) return;
-
-			if (lastSnapHeight >= 0 && Math.abs(needed - lastSnapHeight) <= SNAP_TOLERANCE_PX) return;
-
-			lastSnapWidth = w;
+			if (!ingameUi || typeof ingameUi.sendRect !== "function") return;
+			var frame = ingameUi.getBoundingClientRect();
+			var last = null;
+			var kids = main.children;
+			for (var i = kids.length - 1; i >= 0; i--) {
+				if (!kids[i].classList.contains("hidden")) { last = kids[i]; break; }
+			}
+			if (!last || !frame.height) return;
+			var rect = last.getBoundingClientRect();
+			var needed = Math.round(rect.bottom - frame.top + 10);
+			if (needed < 48 || !isFinite(needed) || needed > 4000) return;
+			if (lastSnapHeight >= 0 && Math.abs(needed - lastSnapHeight) <= 3) return;
 			lastSnapHeight = needed;
-			ingameUiEl.style.height = needed + "px";
-			ingameUiEl.sendRect();
+			ingameUi.style.height = needed + "px";
+			ingameUi.sendRect();
 		}
-
 		function scheduleSnap() {
-			if (!AUTO_HEIGHT_ENABLED) return;
 			if (snapTimer) clearTimeout(snapTimer);
-			snapTimer = setTimeout(snapHeight, SNAP_DEBOUNCE_MS);
+			snapTimer = setTimeout(snapHeight, 200);
+		}
+		function snapNow() {
+			if (snapTimer) { clearTimeout(snapTimer); snapTimer = null; }
+			snapHeight();
 		}
 
-		// Scale
+		var lastWidth = -1;
 		function applyScale() {
-			const w = document.documentElement.clientWidth || mainSection.clientWidth;
-			if (!w) return;
+			var w = IS_INGAME ? (document.documentElement.clientWidth || main.clientWidth) : Math.min(document.documentElement.clientWidth || 440, 560);
+			if (!w || w === lastWidth) { scheduleSnap(); return; }
+			lastWidth = w;
 			var scale = w / BASE_WIDTH;
 			if (scale < MIN_SCALE) scale = MIN_SCALE;
 			if (scale > MAX_SCALE) scale = MAX_SCALE;
 			document.documentElement.style.fontSize = (14 * scale) + "px";
 			scheduleSnap();
 		}
-		applyScale();
 		window.addEventListener("resize", applyScale);
-		if (ingameUiEl) ingameUiEl.addEventListener("resize", applyScale);
+		if (ingameUi) ingameUi.addEventListener("resize", applyScale);
 		setInterval(applyScale, 250);
-		if (typeof requestAnimationFrame === "function") {
-			var watchedWidth = -1;
-			var watchWidth = function () {
-				var cw = document.documentElement.clientWidth;
-				if (cw !== watchedWidth) {
-					watchedWidth = cw;
-					applyScale();
-				}
-				requestAnimationFrame(watchWidth);
-			};
-			requestAnimationFrame(watchWidth);
-		}
 
-		// SVG icon glyph substitutions
-		var ICONS = {
-			"\u25B2": '<svg viewBox="0 0 10 10"><polygon points="5,1 9,9 1,9" fill="currentColor"/></svg>',
-			"\u25BC": '<svg viewBox="0 0 10 10"><polygon points="1,1 9,1 5,9" fill="currentColor"/></svg>',
-			"\u22A5": '<svg viewBox="0 0 10 10"><line x1="5" y1="1" x2="5" y2="7" stroke="currentColor" stroke-width="1.4"/><line x1="1" y1="9" x2="9" y2="9" stroke="currentColor" stroke-width="1.4"/></svg>',
-			"\u22A4": '<svg viewBox="0 0 10 10"><line x1="5" y1="3" x2="5" y2="9" stroke="currentColor" stroke-width="1.4"/><line x1="1" y1="1" x2="9" y2="1" stroke="currentColor" stroke-width="1.4"/></svg>',
-			"\u0394": '<svg viewBox="0 0 10 10"><polygon points="5,1 9,9 1,9" fill="none" stroke="currentColor" stroke-width="1"/></svg>',
-			"\u26A1": '<svg viewBox="0 0 10 10"><polygon points="6,0 1,6 4.5,6 3.5,10 9,4 5.5,4" fill="currentColor"/></svg>',
-			"\u23F8": '<svg viewBox="0 0 10 10"><rect x="1" y="1" width="2.5" height="8" fill="currentColor"/><rect x="6.5" y="1" width="2.5" height="8" fill="currentColor"/></svg>',
-			"\u2744\uFE0F": '<svg viewBox="0 0 10 10"><g stroke="currentColor" stroke-width="1" stroke-linecap="round"><line x1="5" y1="0.5" x2="5" y2="9.5"/><line x1="0.5" y1="5" x2="9.5" y2="5"/><line x1="1.9" y1="1.9" x2="8.1" y2="8.1"/><line x1="8.1" y1="1.9" x2="1.9" y2="8.1"/></g></svg>',
-			"\uD83D\uDD12": '<svg viewBox="0 0 10 10"><rect x="2" y="4.5" width="6" height="5" rx="0.6" fill="currentColor"/><path d="M3.3 4.5V3.2a1.7 1.7 0 0 1 3.4 0V4.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>'
-		};
-		var ICON_KEYS = Object.keys(ICONS).sort(function (a, b) { return b.length - a.length; });
-
-		function setTextWithIcons(el, text) {
-			el.textContent = "";
-			if (!text) return;
-			var i = 0;
-			while (i < text.length) {
-				var matched = null;
-				for (var k = 0; k < ICON_KEYS.length; k++) {
-					if (text.indexOf(ICON_KEYS[k], i) === i) { matched = ICON_KEYS[k]; break; }
-				}
-				if (matched) {
-					var span = document.createElement("span");
-					span.className = "icon-glyph";
-					span.innerHTML = ICONS[matched];
-					el.appendChild(span);
-					i += matched.length;
-				} else {
-					var start = i;
-					i++;
-					while (i < text.length) {
-						var isIconStart = false;
-						for (var k2 = 0; k2 < ICON_KEYS.length; k2++) {
-							if (text.indexOf(ICON_KEYS[k2], i) === i) { isIconStart = true; break; }
-						}
-						if (isIconStart) break;
-						i++;
-					}
-					el.appendChild(document.createTextNode(text.slice(start, i)));
-				}
-			}
-		}
-
-		function setDisconnected() {
-			contentEl.classList.add("hidden");
-			statusEl.textContent = "Not connected. Please start AutoFPS.";
-			if (titleEl) titleEl.classList.add("hidden");
-			if (hotkeyBtn) hotkeyBtn.parentElement.classList.add("hidden");
-			if (autoHideGroup) autoHideGroup.classList.add("hidden");
-			var fpsIconElem = document.getElementById("imgFpsSource");
-			if (fpsIconElem) fpsIconElem.style.display = "none";
-			var imgSimHeaderFS = document.getElementById("imgSimHeaderFS");
-			if (imgSimHeaderFS) imgSimHeaderFS.style.display = "none";
-			var imgSimHeaderDog = document.getElementById("imgSimHeaderDog");
-			if (imgSimHeaderDog) imgSimHeaderDog.style.display = "none";
-			mainSection.style.backgroundColor = DISCONNECTED_BG;
-			mainSection.style.color = DISCONNECTED_TEXT;
-		}
-
-		function applyData(data) {
-			var justConnected = contentEl.classList.contains("hidden");
-			contentEl.classList.remove("hidden");
-			if (justConnected) {
-				lastSnapWidth = -1;
-				lastSnapHeight = -1;
-				scheduleSnap();
-			}
-			statusEl.textContent = "";
-			if (hotkeyBtn) hotkeyBtn.parentElement.classList.remove("hidden");
-			if (autoHideGroup) autoHideGroup.classList.remove("hidden");
-
-			if (data.theme) {
-				var theme = data.theme;
-				var inputBg = theme.inputBg || theme.bg;
-				var btnBg = theme.btnBg || inputBg;
-
-				mainSection.style.backgroundColor = theme.bg || mainSection.style.backgroundColor;
-				mainSection.style.color = theme.text || mainSection.style.color;
-				groupBoxes.forEach(function (el) {
-					if (theme.border) el.style.borderColor = theme.border;
-				});
-				groupHeaders.forEach(function (el) {
-					if (theme.text) el.style.color = theme.text;
-				});
-				document.querySelectorAll(".controls-row .label, .chk-label").forEach(function (el) {
-					if (theme.text) el.style.color = theme.text;
-				});
-				[modeBtn, targetBtn, autoHideBtn].forEach(function (b) {
-					if (!b) return;
-					if (inputBg) b.style.backgroundColor = inputBg;
-					if (theme.text) b.style.color = theme.text;
-					if (theme.border) b.style.borderColor = theme.border;
-				});
-				[modeList, targetList, autoHideList].forEach(function (l) {
-					if (!l) return;
-					if (inputBg) l.style.backgroundColor = inputBg;
-					if (theme.text) l.style.color = theme.text;
-					if (theme.border) l.style.borderColor = theme.border;
-				});
-				[fpsDecBtn, fpsIncBtn].forEach(function (b) {
-					if (!b) return;
-					if (btnBg) b.style.backgroundColor = btnBg;
-					if (theme.text) b.style.color = theme.text;
-					if (theme.border) b.style.borderColor = theme.border;
-				});
-				if (fpsValEl && theme.text) fpsValEl.style.color = theme.text;
-
-				if (flightTypeBtn) {
-					if (inputBg) flightTypeBtn.style.backgroundColor = inputBg;
-					if (theme.text) flightTypeBtn.style.color = theme.text;
-					if (theme.border) flightTypeBtn.style.borderColor = theme.border;
-				}
-				if (flightTypeList) {
-					if (inputBg) flightTypeList.style.backgroundColor = inputBg;
-					if (theme.text) flightTypeList.style.color = theme.text;
-					if (theme.border) flightTypeList.style.borderColor = theme.border;
-				}
-				if (resetBtn) {
-					if (btnBg) resetBtn.style.backgroundColor = btnBg;
-					if (theme.text) resetBtn.style.color = theme.text;
-					if (theme.border) resetBtn.style.borderColor = theme.border;
-				}
-				if (hotkeyBtn && !hotkeyBtn.classList.contains("listening")) {
-					if (btnBg) hotkeyBtn.style.backgroundColor = btnBg;
-					if (theme.text) hotkeyBtn.style.color = theme.text;
-					if (theme.border) hotkeyBtn.style.borderColor = theme.border;
-				}
-
-				customCheckboxes.forEach(function (cb) {
-					if (inputBg) cb.style.backgroundColor = inputBg;
-					if (theme.border) cb.style.borderColor = theme.border;
-					if (theme.text) cb.style.color = theme.text;
-				});
-
-				if (titleEl && theme.text) titleEl.style.color = theme.text;
-			}
-
-			for (var id in data) {
-				if (id === "theme" || id === "widgetTitle" || id === "widgetHotkey" || id === "autoFpsControls" || id === "fpsIcon" || id === "simHeaderFS" || id === "simHeaderDog") continue;
-				if (!Object.prototype.hasOwnProperty.call(data, id)) continue;
-				var item = data[id];
-				var el = document.getElementById(id);
-				if (el && item) {
-					setTextWithIcons(el, (item.text === undefined || item.text === null) ? "" : item.text);
-					var fallbackColor = (data.theme && data.theme.text) ? data.theme.text : "#FFFFFF";
-					el.style.color = item.color || fallbackColor;
-
-					if (id === "statusMessage") {
-						var txt = (item.text === undefined || item.text === null) ? "" : String(item.text);
-						var firstLine = txt.split("\n")[0] || "";
-						if (firstLine.length > 60) {
-							el.classList.add("status-compact");
-						} else {
-							el.classList.remove("status-compact");
-						}
-					}
-				}
-			}
-
-			var fpsIconElem = document.getElementById("imgFpsSource");
-			if (fpsIconElem) {
-				var fpsIconMap = {
-					1: "img/fps_msfs.png",
-					2: "img/fps_rtss.png",
-					3: "img/fps_ofxr.png",
-					4: "img/fps_vxr.png"
-				};
-				var iconSrc = fpsIconMap[data.fpsIcon];
-				var isClickable = (data.fpsIcon === 1 || data.fpsIcon === 2);
-
-				if (iconSrc) {
-					fpsIconElem.src = iconSrc;
-					fpsIconElem.style.display = "inline-block";
-					fpsIconElem.style.cursor = isClickable ? "pointer" : "default";
-					fpsIconElem.title = isClickable ? "Click to toggle FPS source" : "";
-					fpsIconElem.dataset.clickable = isClickable ? "true" : "false";
-				} else {
-					fpsIconElem.style.display = "none";
-				}
-
-				if (!fpsIconElem.hasClickWire) {
-					fpsIconElem.hasClickWire = true;
-					fpsIconElem.addEventListener("click", function (e) {
-						if (fpsIconElem.dataset.clickable !== "true") return;
-						e.stopPropagation();
-						fetch("http://localhost:54321/api/togglefpssource", { method: "POST", cache: "no-store" }).catch(function () { });
-					});
-				}
-			}
-
-			var imgSimHeaderFS = document.getElementById("imgSimHeaderFS");
-			if (imgSimHeaderFS) {
-				imgSimHeaderFS.style.display = data.simHeaderFS ? "inline-block" : "none";
-			}
-
-			var imgSimHeaderDog = document.getElementById("imgSimHeaderDog");
-			if (imgSimHeaderDog) {
-				imgSimHeaderDog.style.display = data.simHeaderDog ? "inline-block" : "none";
-			}
-
-			if (titleEl) {
-				titleEl.classList.remove("hidden");
-				if (data.widgetTitle) titleEl.textContent = data.widgetTitle;
-			}
-
-			if (darkModeChk && data.theme && typeof data.theme.isDark === "boolean") {
-				darkModeChk.checked = data.theme.isDark;
-			}
-
-			if (data.widgetHotkey !== undefined) {
-				syncHotkeyFromServer(data.widgetHotkey);
-			}
-
-			if (typeof data.hideTitleBar === "boolean") {
-				document.body.classList.toggle("hide-titlebar", data.hideTitleBar);
-				var headerEl = document.querySelector("header, .ingameUiHeader, ingame-ui-header");
-				if (headerEl) {
-					headerEl.style.display = data.hideTitleBar ? "none" : "";
-				}
-			}
-
-			if (flightTypeBtn && flightTypeList && Array.isArray(data.profiles)) {
-				var profilesKey = JSON.stringify(data.profiles);
-				if (profilesKey !== lastProfilesKey) {
-					lastProfilesKey = profilesKey;
-					renderFlightTypeList(data.profiles);
-				}
-
-				if (Date.now() >= suppressSyncUntil && typeof data.activeProfileIndex === "number") {
-					if (currentActiveIndex !== data.activeProfileIndex) {
-						currentActiveIndex = data.activeProfileIndex;
-						if (currentProfiles[currentActiveIndex] !== undefined) {
-							flightTypeBtn.textContent = displayProfileName(currentProfiles[currentActiveIndex]);
-						}
-					}
-				}
-				markActiveItem(currentActiveIndex);
-			}
-
-			try {
-				applyControls(data.autoFpsControls);
-			} catch (err) { }
-		}
-
-		// Internal fast camera check (150ms)
-		function checkCameraAutoHide() {
-			if (!currentAutoHideIndex) {
-				if (isCameraHidden) {
-					isCameraHidden = false;
-					updateWidgetVisibility();
-				}
-				return;
-			}
-
-			var camera = null;
-			try {
-				if (window.SimVar && typeof SimVar.GetSimVarValue === "function" &&
-					(typeof SimVar.IsReady !== "function" || SimVar.IsReady())) {
-					camera = SimVar.GetSimVarValue("CAMERA STATE", "Enum");
-				}
-			} catch (e) { }
-
-			var hide = false;
-			if (typeof camera === "number") {
-				if (currentAutoHideIndex === 1) {
-					hide = (camera === 3);
-				} else if (currentAutoHideIndex === 2) {
-					hide = (camera >= 3 && camera <= 9);
-				}
-			}
-
-			if (hide !== isCameraHidden) {
-				isCameraHidden = hide;
-				updateWidgetVisibility();
-			}
-		}
-
+		// ---------------------------------------------------------------- start
+		for (var k in tabButtons) tabButtons[k].classList.toggle("active", k === activeTab);
+		applyScale();
+		pollStatus();
+		setInterval(pollStatus, POLL_STATUS_MS);
+		setInterval(pollPage, POLL_PAGE_MS);
+		setInterval(prefetchPages, POLL_PAGE_MS * 4);
 		setInterval(checkCameraAutoHide, 150);
-		checkCameraAutoHide();
-
-		function poll() {
-			fetch(STATUS_URL, { cache: "no-store" })
-				.then(function (res) {
-					if (!res.ok) throw new Error("HTTP " + res.status);
-					return res.json();
-				})
-				.then(applyData)
-				.catch(function () {
-					setDisconnected();
-				});
-		}
-
-		poll();
-		setInterval(poll, POLL_INTERVAL_MS);
 	}
 
 	init();

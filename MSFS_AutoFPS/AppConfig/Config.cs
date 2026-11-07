@@ -17,4 +17,14 @@ public static class Config
 	public const string AppNameFull = "MSFS_AutoFPS";
 
 	public const string AppNameShort = "AutoFPS";
+
+	// Fork: all update checks, downloads and help/issue links point at this repository.
+	// Upstream (ResetXPDR) releases are never downloaded or executed by this build.
+	public const string RepoOwner = "dankocrnkovic";
+
+	public const string RepoName = "MSFS_AutoFPS";
+
+	public const string RepoUrl = "https://github.com/" + RepoOwner + "/" + RepoName;
+
+	public const string ReleasesApiUrl = "https://api.github.com/repos/" + RepoOwner + "/" + RepoName + "/releases";
 }

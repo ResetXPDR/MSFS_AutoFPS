@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MSFS_AutoFPS;
 
-public class AutoFpsWebServer : IDisposable
+public partial class AutoFpsWebServer : IDisposable
 {
 	private TcpListener _tcpListener;
 
@@ -151,13 +151,13 @@ public class AutoFpsWebServer : IDisposable
 			try
 			{
 				using NetworkStream stream = client.GetStream();
-				byte[] buffer = new byte[4096];
-				int num = await stream.ReadAsync(buffer, 0, buffer.Length);
-				if (num == 0)
+				// Fork: read the full request (headers + Content-Length body); clients may send the body
+				// in a separate packet (e.g. after "Expect: 100-continue"), which a single read missed.
+				string text = await ReadRequestAsync(stream);
+				if (text == null)
 				{
 					return;
 				}
-				string text = Encoding.UTF8.GetString(buffer, 0, num);
 				string[] array = text.Split(new string[2] { "\r\n", "\n" }, StringSplitOptions.None)[0].Split(' ');
 				string text2 = ((array.Length != 0) ? array[0].ToUpper() : "");
 				string text3 = ((array.Length > 1) ? array[1].ToLower() : "/");
@@ -392,6 +392,10 @@ public class AutoFpsWebServer : IDisposable
 					}
 					bodyBytes = Encoding.UTF8.GetBytes("{\"ok\":true}");
 					text5 = "application/json";
+				}
+				else if (TryHandleFluentRequest(text2, text3, text4, out bodyBytes, out text5, out value, out value2))
+				{
+					// Fork: shared Fluent widget files, /api/page/* and /api/control (AutoFpsWebServer.Fluent.cs)
 				}
 				else if (text3 == "/" || text3 == "/index.html")
 				{

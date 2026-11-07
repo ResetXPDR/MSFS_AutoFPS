@@ -1,3 +1,11 @@
+/* ==========================================================================
+   AutoFPS widget — Fluent look matching the desktop app.
+   Shared by the in-game MSFS panel (.ingame) and the browser page (.web).
+   No CSS custom properties (MSFS Coherent support is uncertain): themes are
+   the .dark / .light classes set on #mainSection by HtmlWidgetPanel.js.
+   Sizes are rem; the script scales the root font-size with the panel width.
+   ========================================================================== */
+
 html, body {
 	margin: 0;
 	padding: 0;
@@ -11,450 +19,336 @@ ingamepanel-html-widget {
 	height: 100%;
 }
 
-#mainSection {
+.afps {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	background: #121418;
-	color: #F0F0F0;
-	padding: 0.6rem;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe UI Symbol", "Segoe UI Emoji", "Segoe MDL2 Assets", Roboto, sans-serif;
+	box-sizing: border-box;
+	padding: 0.7rem 0.8rem 0.4rem 0.8rem;
+	font-family: "Segoe UI Variable Text", "Segoe UI", "Segoe UI Symbol", Roboto, sans-serif;
+	font-size: 1rem;
+	line-height: 1.3;
+	overflow: hidden;
+}
+
+.afps * {
 	box-sizing: border-box;
 }
 
-/* Never let the sim squash these when the frame is a touch short; keeps the height measurement stable */
-#widget-toolbar,
-.group-box {
+.afps.dark { background: #202020; color: #FFFFFF; }
+.afps.light { background: #F3F3F3; color: #1B1B1B; }
+
+.hidden { display: none !important; }
+
+/* ---------- Top bar ---------- */
+.topbar {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	margin-bottom: 0.7rem;
+}
+
+.topbar .logo {
+	width: 1.3rem;
+	height: 1.3rem;
+	margin-right: 0.5rem;
+	border-radius: 0.25rem;
+}
+
+.topbar .app-name {
+	font-weight: 600;
+	font-size: 1rem;
+	margin-right: 0.8rem;
+	white-space: nowrap;
+}
+
+.tabs {
+	display: flex;
+	padding: 0.15rem;
+	border-radius: 0.45rem;
+}
+.dark .tabs { background: #1A1A1A; border: 1px solid #2E2E2E; }
+.light .tabs { background: #E9E9E9; border: 1px solid #DADADA; }
+
+.tab {
+	border: 0;
+	background: transparent;
+	font: inherit;
+	font-size: 0.9rem;
+	padding: 0.25rem 0.75rem;
+	border-radius: 0.35rem;
+	cursor: pointer;
+	white-space: nowrap;
+}
+.dark .tab { color: #C8C8C8; }
+.light .tab { color: #5A5A5A; }
+.dark .tab:hover { background: #2D2D2D; }
+.light .tab:hover { background: #F6F6F6; }
+.dark .tab.active { background: #2D2D2D; color: #FFFFFF; }
+.light .tab.active { background: #FFFFFF; color: #1B1B1B; }
+.tab.active { box-shadow: inset 0 -2px 0 #22D3EE; }
+.light .tab.active { box-shadow: inset 0 -2px 0 #0E7490; }
+
+.spacer { flex: 1 1 auto; }
+
+.icon-btn {
+	border: 0;
+	background: transparent;
+	font: inherit;
+	width: 1.8rem;
+	height: 1.8rem;
+	border-radius: 0.3rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.dark .icon-btn { color: #D0D0D0; }
+.light .icon-btn { color: #404040; }
+.dark .icon-btn:hover { background: #3A3A3A; }
+.light .icon-btn:hover { background: #E0E0E0; }
+.icon-btn svg { width: 0.8rem; height: 0.8rem; }
+
+/* ---------- Pages & cards ---------- */
+.page { flex-shrink: 0; }
+
+.card {
+	border-radius: 0.55rem;
+	padding: 0.75rem 0.85rem 0.35rem 0.85rem;
+	margin-bottom: 0.55rem;
 	flex-shrink: 0;
 }
+.dark .card { background: #2B2B2B; border: 1px solid #1D1D1D; }
+.light .card { background: #FBFBFB; border: 1px solid #E5E5E5; }
 
-.group-box {
-	box-sizing: border-box;
-	width: 100%;
-	border: 1px solid #50555E;
-	border-radius: 0.25rem;
-	padding: 0.5rem 0.6rem;
-	margin-bottom: 0.5rem;
-}
-
-.group-header {
-	font-size: 0.95rem;
+.card-title {
 	font-weight: 600;
-	color: #FFF;
-	padding: 0 0.25rem;
+	font-size: 0.95rem;
+	margin-bottom: 0.6rem;
+	display: flex;
+	align-items: center;
 }
 
-.header-icon {
-	height: 1.05rem;
+.card-title img {
+	height: 1rem;
 	width: auto;
-	vertical-align: -0.15rem;
-	margin-right: 0.35rem;
+	margin-right: 0.4rem;
 	border-radius: 0.15rem;
 }
 
-.conn-row {
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	margin-bottom: 0.45rem;
+}
+
+.row > * { margin-right: 0.5rem; margin-bottom: 0.2rem; }
+
+.lbl { white-space: nowrap; }
+.dark .muted { color: #C5C5C5; }
+.light .muted { color: #616161; }
+
+.note { font-size: 0.85rem; }
+
+.disconnected {
+	text-align: center;
+	padding: 1.2rem 0.5rem;
+	font-size: 0.95rem;
+}
+
+/* ---------- Metric tiles ---------- */
+.tiles {
+	display: flex;
+	flex-wrap: wrap;
+	margin-right: -0.45rem;
+}
+
+.tile {
+	width: 33.333%;
+	padding: 0 0.45rem 0.45rem 0;
+}
+
+.tile-inner {
+	border-radius: 0.4rem;
+	padding: 0.4rem 0.6rem 0.45rem 0.6rem;
+	height: 100%;
+}
+.dark .tile-inner { background: #323232; border: 1px solid #262626; }
+.light .tile-inner { background: #FFFFFF; border: 1px solid #E5E5E5; }
+
+.tile-cap { font-size: 0.78rem; white-space: nowrap; overflow: hidden; }
+.tile-val {
+	font-size: 1.45rem;
+	font-weight: 600;
+	white-space: nowrap;
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
-	font-size: 1rem;
-	padding: 0.25rem 0;
-}
-
-.status-badge {
-	font-weight: 600;
-}
-
-.status-red {
-	color: #EF4444;
-}
-
-.status-green {
-	color: #4ADE80;
-}
-
-.status-blue {
-	color: #60A5FA;
-}
-
-.sim-grid {
-	display: grid;
-	grid-template-columns: 4.3rem 1fr 4.3rem 1fr 4.3rem 1fr;
-	row-gap: 0.55rem;
-	column-gap: 0;
-	align-items: center;
-	font-size: 0.95rem;
-	padding: 0.25rem 0.6rem;
-}
-
-	.sim-grid .label {
-		color: #FFF;
-		font-weight: 500;
-		text-align: left;
-		white-space: nowrap;
-	}
-
-	.sim-grid .val {
-		color: #FFF;
-		font-weight: 600;
-		text-align: left;
-		padding-left: 0.2rem;
-		box-sizing: border-box;
-		white-space: nowrap;
-	}
-
-	.sim-grid > :nth-child(n+7) {
-		margin-top: 0.45rem;
-	}
-
-.fps-val-container {
-	display: inline-flex;
-	align-items: center;
-	justify-content: flex-start;
 }
 
 .fps-source-icon {
-	height: 1.1rem;
-	width: auto;
-	margin-left: 0.7rem;
-	border-radius: 0.15rem;
-}
-
-.status-msg {
-	font-size: 0.90rem;
-	font-weight: 500;
-	text-align: center;
-	width: 100%;
-	padding: 0.25rem 0.1rem 0 0.1rem;
-	margin-top: 0.25rem;
-	min-height: 1rem;
-	word-break: break-word;
-	white-space: pre-line;
-	color: #FFF;
-}
-
-	.status-msg.status-compact {
-		font-size: 0.80rem; /* Drops from 0.90rem only when line 1 is extra long */
-	}
-
-#widget-toolbar {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding-top: 0.2rem;
-	padding-bottom: 0.55rem;
-	font-size: 1rem;
-	font-weight: 600;
-	color: inherit;
-	text-align: left;
-}
-
-#widget-status {
-	color: #FFD166;
-	font-weight: 600;
-}
-
-#toolbar-left {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-}
-
-#widget-title {
-	display: inline-block;
-	font-size: 0.95rem;
-	font-weight: 700;
-	color: inherit;
-	white-space: nowrap;
-}
-
-body.hide-titlebar #widget-title {
-	display: inline-block;
-}
-
-#widget-title.hidden {
-	display: none !important;
-}
-
-.hotkey-group {
-	display: inline-flex;
-	align-items: center;
-	margin-right: 0.5rem;
-}
-
-.hotkey-label {
-	font-size: 0.85rem;
-	font-weight: 600;
-	color: inherit;
-	white-space: nowrap;
-	margin-right: 0.45rem;
-}
-
-.auto-hide-group {
-	display: inline-flex;
-	align-items: center;
-	margin-right: 0.5rem;
-}
-
-.auto-hide-label {
-	font-size: 0.85rem;
-	font-weight: 600;
-	color: inherit;
-	white-space: nowrap;
-	margin-right: 0.45rem;
-}
-
-#autoHideDropdown {
-	width: 5.4rem;
-	flex: 0 0 5.4rem;
-	margin-right: 0;
-}
-
-#widget-hotkey-btn {
-	background: #2a2a2a;
-	color: #ddd;
-	border: 1px solid #555;
-	border-radius: 0.2rem;
-	cursor: pointer;
-	padding: 0.1rem 0.45rem;
-	font-size: 0.85rem;
-	font-weight: 600;
-	line-height: 1.1;
-	white-space: nowrap;
-	min-width: 6.5rem;
-	text-align: center;
-}
-
-	#widget-hotkey-btn:hover {
-		opacity: 0.85;
-	}
-
-	#widget-hotkey-btn.listening {
-		background: #c0392b !important;
-		color: #fff !important;
-		border-color: #e74c3c !important;
-		animation: hotkey-pulse 1s ease-in-out infinite;
-	}
-
-@keyframes hotkey-pulse {
-	0%, 100% {
-		opacity: 1;
-	}
-
-	50% {
-		opacity: 0.6;
-	}
-}
-
-#widget-close-btn {
-	background: #2a2a2a;
-	color: #ddd;
-	border: 1px solid #555;
-	border-radius: 0.2rem;
-	cursor: pointer;
-	padding: 0.1rem 0.45rem;
-	font-size: 0.85rem;
-	font-weight: 700;
-	line-height: 1.1;
-}
-
-	#widget-close-btn:hover {
-		background: #c0392b;
-		color: #fff;
-	}
-
-#widget-content.hidden {
-	display: none;
-}
-
-.controls-row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 0.6rem;
-	padding: 0.15rem 0;
-}
-
-	.controls-row .label {
-		flex: 0 0 auto;
-		white-space: nowrap;
-		margin-right: 0.4rem;
-		font-size: 0.95rem;
-	}
-
-.custom-select {
-	position: relative;
-	flex: 1 1 auto;
-	margin-right: 0.4rem;
-}
-
-.custom-select-btn {
-	width: 100%;
-	text-align: left;
-	background: #1b1e22;
-	color: #F0F0F0;
-	border: 1px solid #50555E;
-	border-radius: 0.2rem;
-	padding: 0.2rem 0.35rem;
-	font-size: 0.9rem;
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-	.custom-select-btn:hover,
-	.stepper-btn:hover,
-	#resetBtn:hover,
-	#widget-hotkey-btn:not(.listening):hover,
-	.chk-label:hover .custom-checkbox {
-		border-color: #60A5FA !important;
-	}
-
-	.custom-select-btn::after {
-		content: "";
-		flex: 0 0 auto;
-		margin-left: 0.4rem;
-		border-left: 0.3rem solid transparent;
-		border-right: 0.3rem solid transparent;
-		border-top: 0.35rem solid currentColor;
-	}
-
-.custom-select-list {
-	position: absolute;
-	top: 100%;
-	left: 0;
-	right: 0;
-	z-index: 50;
-	margin-top: 0.15rem;
-	max-height: 6rem;
-	overflow-y: auto;
-	background: #1b1e22;
-	border: 1px solid #50555E;
-	border-radius: 0.2rem;
-}
-
-	.custom-select-list.hidden {
-		display: none;
-	}
-
-.custom-select-item {
-	padding: 0.2rem 0.4rem;
-	font-size: 0.9rem;
-	line-height: 1.2;
-	color: inherit;
-	cursor: pointer;
-}
-
-	.custom-select-item:hover {
-		background: rgba(128, 128, 128, 0.25);
-	}
-
-	.custom-select-item.active {
-		background: #3a4a5a;
-		color: #FFF;
-		font-weight: 600;
-	}
-
-#resetBtn {
-	flex: 0 0 auto;
-	background: #2a2a2a;
-	color: #ddd;
-	border: 1px solid #555;
-	border-radius: 0.2rem;
-	cursor: pointer;
-	padding: 0.25rem 0.75rem;
-	font-size: 0.9rem;
-	font-weight: 600;
-}
-
-	#resetBtn:hover {
-		opacity: 0.85;
-	}
-
-	#resetBtn:disabled {
-		opacity: 0.5;
-		cursor: default;
-	}
-
-.chk-label {
-	display: inline-flex;
-	align-items: center;
-	font-size: 0.95rem;
-	cursor: pointer;
-	user-select: none;
-	white-space: nowrap;
+	width: 1.05rem;
+	height: 1.05rem;
 	margin-left: 0.4rem;
 }
 
-	.chk-label input[type="checkbox"].chk-input-native {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		margin: -1px;
-		opacity: 0;
-	}
-
-.custom-checkbox {
-	flex: 0 0 auto;
-	position: relative;
-	box-sizing: border-box;
-	width: 1rem;
-	height: 1rem;
-	margin-right: 0.4rem;
-	border: 1px solid #50555E;
-	border-radius: 0.2rem;
-	background: #1b1e22;
+/* ---------- Status chips (browser only) ---------- */
+.chips { display: flex; flex-wrap: wrap; }
+.chip {
+	display: inline-flex;
+	align-items: center;
+	border-radius: 1rem;
+	padding: 0.2rem 0.7rem 0.2rem 0.55rem;
+	margin: 0 0.4rem 0.4rem 0;
+	font-size: 0.85rem;
 }
+.dark .chip { background: #323232; border: 1px solid #262626; }
+.light .chip { background: #FFFFFF; border: 1px solid #E5E5E5; }
+.chip .dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; margin-right: 0.45rem; background: #E05050; }
 
-	.custom-checkbox::after {
-		content: "";
-		position: absolute;
-		display: none;
-		left: 0.3rem;
-		top: 0.12rem;
-		width: 0.3rem;
-		height: 0.55rem;
-		border: solid currentColor;
-		border-width: 0 0.16rem 0.16rem 0;
-		transform: rotate(45deg);
-		color: #F0F0F0;
-	}
-
-.chk-input-native:checked ~ .custom-checkbox::after {
-	display: block;
+/* ---------- Controls ---------- */
+.btn, .select-btn, .input {
+	font: inherit;
+	font-size: 0.9rem;
+	border-radius: 0.3rem;
+	padding: 0.28rem 0.6rem;
+	min-height: 1.95rem;
 }
-
-.chk-input-native:checked ~ .custom-checkbox {
-	border-color: #7A8290;
+.dark .btn, .dark .select-btn, .dark .input {
+	background: #2D2D2D;
+	color: #FFFFFF;
+	border: 1px solid #3A3A3A;
+	border-bottom-color: #4A4A4A;
 }
-
-.chk-input-native:focus-visible ~ .custom-checkbox {
-	outline: 1px solid #7A8290;
-	outline-offset: 1px;
+.light .btn, .light .select-btn, .light .input {
+	background: #FFFFFF;
+	color: #1B1B1B;
+	border: 1px solid #E0E0E0;
+	border-bottom-color: #C4C4C4;
 }
+.btn { cursor: pointer; }
+.dark .btn:hover, .dark .select-btn:hover { background: #323232; }
+.light .btn:hover, .light .select-btn:hover { background: #F6F6F6; }
+.btn[disabled] { opacity: 0.45; cursor: default; }
 
-.icon-glyph {
-	display: inline-block;
-	width: 0.75em;
-	height: 0.75em;
-	vertical-align: -0.05em;
+.input {
+	width: 4.4rem;
+	text-align: center;
+	outline: none;
 }
+.input.wide { width: 5.4rem; }
+.dark .input:focus { border-bottom: 2px solid #22D3EE; background: #1F1F1F; }
+.light .input:focus { border-bottom: 2px solid #0E7490; background: #FFFFFF; }
 
-	.icon-glyph svg {
-		display: block;
-		width: 100%;
-		height: 100%;
-	}
+/* Custom select (native <select> popups are unreliable in the sim) */
+.select { position: relative; display: inline-block; }
+.select-btn {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-width: 5.2rem;
+	text-align: left;
+	white-space: nowrap;
+}
+.select-btn .chev { margin-left: 0.6rem; width: 0.6rem; height: 0.6rem; opacity: 0.8; }
+.select-list {
+	position: absolute;
+	left: 0;
+	top: 100%;
+	margin-top: 0.15rem;
+	min-width: 100%;
+	max-height: 16rem;
+	overflow-y: auto;
+	z-index: 50;
+	border-radius: 0.4rem;
+	padding: 0.2rem;
+}
+.dark .select-list { background: #2C2C2C; border: 1px solid #3F3F3F; }
+.light .select-list { background: #FFFFFF; border: 1px solid #D8D8D8; }
+.select-item {
+	padding: 0.3rem 0.6rem;
+	border-radius: 0.25rem;
+	cursor: pointer;
+	white-space: nowrap;
+	font-size: 0.9rem;
+}
+.dark .select-item:hover { background: #3A3A3A; }
+.light .select-item:hover { background: #F0F0F0; }
+.select-item.active { font-weight: 600; }
+.dark .select-item.active { box-shadow: inset 3px 0 0 #22D3EE; }
+.light .select-item.active { box-shadow: inset 3px 0 0 #0E7490; }
 
-/* Hides MSFS In-Game Panel Title Bar */
+/* Warning highlight (orange in the app) */
+/* Prefixed: MSFS's own common.css already styles a generic ".warn" class (yellow), which leaked into the widget */
+.afps .afps-warn, .afps .afps-warn span { background: #FFA500 !important; color: #1B1B1B !important; }
+
+/* Checkbox */
+.check {
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+	white-space: nowrap;
+}
+.check .box {
+	width: 1.15rem;
+	height: 1.15rem;
+	border-radius: 0.25rem;
+	margin-right: 0.45rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.dark .check .box { border: 1px solid #8A8A8A; background: #272727; }
+.light .check .box { border: 1px solid #8A8A8A; background: #FFFFFF; }
+.check .box svg { width: 0.75rem; height: 0.75rem; display: none; }
+.check.on .box svg { display: block; }
+.dark .check.on .box { background: #22D3EE; border-color: #22D3EE; color: #0E1A2B; }
+.light .check.on .box { background: #0E7490; border-color: #0E7490; color: #FFFFFF; }
+.check.disabled { opacity: 0.45; cursor: default; }
+
+/* Target FPS stepper */
+.stepper { display: inline-flex; align-items: center; border-radius: 0.3rem; }
+.dark .stepper { background: #2D2D2D; border: 1px solid #3A3A3A; }
+.light .stepper { background: #FFFFFF; border: 1px solid #E0E0E0; }
+.stepper-btn {
+	border: 0;
+	background: transparent;
+	color: inherit;
+	width: 1.9rem;
+	height: 1.9rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.stepper-btn svg { width: 0.65rem; height: 0.65rem; }
+.dark .stepper-btn:hover { background: #3A3A3A; }
+.light .stepper-btn:hover { background: #F0F0F0; }
+.stepper-val { min-width: 2.6rem; text-align: center; font-weight: 600; font-size: 1.05rem; }
+
+/* Status line */
+.status-line {
+	display: flex;
+	align-items: center;
+	font-size: 0.88rem;
+	padding: 0.45rem 0.85rem;
+}
+.status-line svg { width: 0.95rem; height: 0.95rem; margin-right: 0.55rem; flex-shrink: 0; opacity: 0.75; }
+.status-line.compact { font-size: 0.76rem; }
+
+/* Inline glyph icons substituted into status text */
+.icon-glyph { display: inline-block; width: 0.75em; height: 0.75em; vertical-align: -0.05em; }
+.icon-glyph svg { display: block; width: 100%; height: 100%; }
+
+/* ---------- MSFS panel integration ---------- */
 body.hide-titlebar header,
 body.hide-titlebar .ingameUiHeader,
 body.hide-titlebar ingame-ui-header {
 	display: none !important;
 }
 
-/* Hotkey Hide/Show */
 body.widget-hidden,
 ingame-ui.widget-hidden {
 	opacity: 0 !important;
@@ -462,179 +356,13 @@ ingame-ui.widget-hidden {
 	visibility: hidden !important;
 }
 
-/* ---- Mode / Target / FPS row ---- */
-.controls-row.target-row {
-	position: relative;
-	justify-content: flex-start;
-	margin-top: 0.2rem;
-	gap: 0;
-}
-
-	.controls-row.target-row .label {
-		margin-right: 0.35rem;
-	}
-
-	.controls-row.target-row .custom-select {
-		flex: 0 0 5.2rem;
-		width: 5.2rem;
-		min-width: 0;
-		margin-right: 0.4rem;
-	}
-
-	.controls-row.target-row #targetDropdown {
-		position: static;
-		margin-right: 0.4rem;
-	}
-
-	.controls-row.target-row .custom-select-btn {
-		white-space: nowrap;
-		overflow: hidden;
-	}
-
-.custom-select-list.target-list {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	left: 0;
-	right: 0;
-	max-height: none;
+/* ---------- Browser page ---------- */
+body.web-body { background: #1A1A1A; }
+body.web-body.light { background: #E8E8E8; }
+.afps.web {
+	max-width: 36rem;
+	height: auto;
+	min-height: 100%;
+	margin: 0 auto;
 	overflow: visible;
 }
-
-	.custom-select-list.target-list.hidden {
-		display: none;
-	}
-
-	.custom-select-list.target-list .custom-select-item {
-		text-align: center;
-		white-space: nowrap;
-		padding: 0.35rem 0.2rem;
-	}
-
-.fps-group {
-	display: flex;
-	align-items: center;
-	flex: 0 0 auto;
-	margin-left: auto;
-	margin-right: 0.4rem;
-}
-
-	.fps-group .label {
-		margin-right: 0.35rem;
-	}
-
-.stepper {
-	display: flex;
-	align-items: center;
-	flex: 0 0 auto;
-}
-
-.stepper-btn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex: 0 0 auto;
-	width: 1.7rem;
-	height: 1.6rem;
-	padding: 0;
-	background: #2a2a2a;
-	color: #ddd;
-	border: 1px solid #555;
-	border-radius: 0.2rem;
-	cursor: pointer;
-}
-
-	.stepper-btn:hover {
-		opacity: 0.85;
-	}
-
-	.stepper-btn:active {
-		opacity: 0.6;
-	}
-
-	.stepper-btn svg {
-		display: block;
-		width: 0.85rem;
-		height: 0.85rem;
-	}
-
-.stepper-val {
-	margin: 0 0.2rem;
-	min-width: 2.1rem;
-	text-align: center;
-	font-size: 0.95rem;
-	font-weight: 600;
-	white-space: nowrap;
-}
-
-/* ---- General Row 2 (Expert, Log+, Reset, Flight Type) ---- */
-.controls-row.general-row-2 {
-	margin-top: 0.55rem;
-	justify-content: flex-start;
-}
-
-	.controls-row.general-row-2 .chk-label {
-		margin: 0;
-		margin-right: 0.85rem;
-	}
-
-	.controls-row.general-row-2 #resetBtn {
-		margin: 0;
-		margin-right: 0.85rem;
-		padding: 0 0.65rem; /* <-- Changed padding to 0 vertical */
-		height: 1.6rem; /* <-- ADD THIS (matches stepper & dropdown height) */
-		display: inline-flex; /* <-- ADD THIS (vertically centers the text) */
-		align-items: center; /* <-- ADD THIS */
-		box-sizing: border-box; /* <-- ADD THIS */
-	}
-
-.flight-type-group {
-	display: flex;
-	align-items: center;
-	flex: 0 0 auto;
-	margin-left: auto;
-}
-
-	.flight-type-group .label {
-		margin: 0;
-		margin-right: 0.4rem;
-		white-space: nowrap;
-	}
-
-	.flight-type-group .custom-select {
-		flex: 0 0 8.6rem;
-		width: 8.6rem;
-		min-width: 0;
-		margin: 0;
-	}
-
-/* Flight Type list opens UPWARDS from Row 2 so it is never clipped by the window bottom */
-#flightTypeList {
-	top: auto;
-	bottom: 100%;
-	margin-top: 0;
-	margin-bottom: 0.15rem;
-}
-
-/* Collapsible General Header */
-.collapsible-header {
-	cursor: pointer;
-	user-select: none;
-}
-
-	.collapsible-header:hover {
-		filter: brightness(1.25);
-	}
-
-.chevron {
-	display: inline-block;
-	width: 0.85em; /* Increased from 0.6em */
-	height: 0.85em; /* Increased from 0.6em */
-	margin-left: 0.35em;
-	vertical-align: -0.08em; /* Centers it nicely with the font baseline */
-}
-
-	.chevron svg {
-		width: 100%;
-		height: 100%;
-		display: block;
-	}

@@ -2,63 +2,63 @@
   "content": [
     {
       "path": "contentinfo/autofps-html-widget-panel/thumbnail.jpg",
-      "size": 7542,
-      "date": 134360963600000000
+      "size": 10346,
+      "date": 134385654224747486
     },
     {
       "path": "html_ui/icons/toolbar/icon_toolbar_html_widget.svg",
-      "size": 359,
-      "date": 134379077060000000
+      "size": 587,
+      "date": 134385654224476118
     },
     {
       "path": "html_ui/ingamepanels/htmlwidgetpanel/htmlwidgetpanel.css",
-      "size": 10901,
-      "date": 134379077060000000
+      "size": 9546,
+      "date": 134385656928266229
     },
     {
       "path": "html_ui/ingamepanels/htmlwidgetpanel/htmlwidgetpanel.html",
-      "size": 7244,
-      "date": 134379077060000000
+      "size": 1531,
+      "date": 134385634168191641
     },
     {
       "path": "html_ui/ingamepanels/htmlwidgetpanel/htmlwidgetpanel.js",
-      "size": 40181,
-      "date": 134379077060000000
+      "size": 38583,
+      "date": 134385656927932767
     },
     {
       "path": "html_ui/ingamepanels/htmlwidgetpanel/img/autofps.png",
-      "size": 110051,
-      "date": 134379077060000000
+      "size": 2283,
+      "date": 134385654224471140
     },
     {
       "path": "html_ui/ingamepanels/htmlwidgetpanel/img/fps_msfs.png",
       "size": 4091,
-      "date": 134379077060000000
+      "date": 134379437060000000
     },
     {
       "path": "html_ui/ingamepanels/htmlwidgetpanel/img/fps_ofxr.png",
       "size": 8059,
-      "date": 134379077060000000
+      "date": 134379437060000000
     },
     {
       "path": "html_ui/ingamepanels/htmlwidgetpanel/img/fps_rtss.png",
       "size": 996,
-      "date": 134379077060000000
+      "date": 134379437060000000
     },
     {
       "path": "html_ui/ingamepanels/htmlwidgetpanel/img/fps_vxr.png",
       "size": 15044,
-      "date": 134379077060000000
+      "date": 134379437060000000
     },
     {
       "path": "html_ui/textures/menu/toolbar/icon_toolbar_html_widget.svg",
-      "size": 359,
-      "date": 134379077060000000
+      "size": 587,
+      "date": 134385654224476118
     },
     {
       "path": "ingamepanels/ingamepanel_htmlwidgetpanel.spb",
       "size": 720,
-      "date": 134363189300000002
+      "date": 134363513300000000
     }
   ]
 }

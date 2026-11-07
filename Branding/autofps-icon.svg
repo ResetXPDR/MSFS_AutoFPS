@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+	<title>AutoFPS</title>
+	<rect width="64" height="64" rx="14" fill="#0E1A2B"/>
+	<polyline points="8,47 13,41 17,51 22,38 27,45 33,43 42,44 56,44" fill="none" stroke="#22D3EE" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+	<polygon points="40,8 42.2,16 53,22.5 53,25.5 42.2,22.5 41.6,30 46,33.5 46,35.5 40,34 34,35.5 34,33.5 38.4,30 37.8,22.5 27,25.5 27,22.5 37.8,16" fill="#FFFFFF" transform="rotate(45 40 22)"/>
+</svg>

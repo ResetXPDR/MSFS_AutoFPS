@@ -23,12 +23,12 @@ namespace Installer
 
         public static readonly Regex netDesktop = new Regex(@"Microsoft.WindowsDesktop.App ((\d+)\.(\d+)\.(\d+)).+", RegexOptions.Compiled);
 
-        public static readonly int netMajor = 7;
+        public static readonly int netMajor = 10;
         public static readonly int netMinor = 0;
-        public static readonly int netPatch = 20;
+        public static readonly int netPatch = 0;
         public static readonly string netVersion = $"{netMajor}.{netMinor}.{netPatch}";
-        public static readonly string netUrl = "https://download.visualstudio.microsoft.com/download/pr/08bbfe8f-812d-479f-803b-23ea0bffce47/c320e4b037f3e92ab7ea92c3d7ea3ca1/windowsdesktop-runtime-7.0.20-win-x64.exe";
-        public static readonly string netUrlFile = "windowsdesktop-runtime-7.0.20-win-x64.exe";
+        public static readonly string netUrl = "https://aka.ms/dotnet/10.0/windowsdesktop-runtime-win-x64.exe";
+        public static readonly string netUrlFile = "windowsdesktop-runtime-10.0-win-x64.exe";
 
         public static readonly string ipcRegPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\FSUIPC7";
         public static readonly string ipcRegInstallDirValue = "InstallDir";

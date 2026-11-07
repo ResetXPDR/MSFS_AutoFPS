@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
     <StartupObject>MSFS_AutoFPS.App</StartupObject>
@@ -26,6 +26,8 @@
   <ItemGroup>
     <None Remove="icon.ico" />
     <EmbeddedResource Include="icon.ico" />
+    <!-- Also a WPF resource so the window/taskbar icon does not fall back to dotnet.exe when launched via "dotnet MSFS_AutoFPS.dll" -->
+    <Resource Include="icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +39,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Widget UI served at http://localhost:54321 — the very same CSS/JS/images as the in-game MSFS panel -->
+    <EmbeddedResource Include="..\Widget\autofps-html-widget-panel\html_ui\InGamePanels\HtmlWidgetPanel\**\*" Exclude="..\Widget\autofps-html-widget-panel\html_ui\InGamePanels\HtmlWidgetPanel\HtmlWidgetPanel.html" LogicalName="web/%(RecursiveDir)%(Filename)%(Extension)" Link="Web\Shared\%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Web\index.html" LogicalName="web/index.html" />
+    <None Remove="Web\index.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- Versions taken from the v0.5.5.0 release MSFS_AutoFPS.deps.json -->
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="H.NotifyIcon.Wpf" Version="2.0.124" />
@@ -44,7 +53,7 @@
     <PackageReference Include="Serilog" Version="4.2.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="SharpDX.DXGI" Version="4.2.0" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>

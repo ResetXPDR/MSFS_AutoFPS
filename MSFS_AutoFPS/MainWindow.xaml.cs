@@ -29,7 +29,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MSFS_AutoFPS;
 
-public partial class MainWindow : Window, IComponentConnector
+public partial class MainWindow : Wpf.Ui.Controls.FluentWindow, IComponentConnector
 {
 	public enum KnownFolder
 	{
@@ -340,6 +340,7 @@ public partial class MainWindow : Window, IComponentConnector
 				}
 			}));
 		});
+		ConfigureFluentWebApi();
 		_webServer.Start();
 		if (serviceModel.UseSysTrayIcon)
 		{
@@ -765,14 +766,17 @@ public partial class MainWindow : Window, IComponentConnector
 				statusMessage = Field(lblStatusMessage.Content?.ToString(), GetLabelHexColor(lblStatusMessage, text)),
 				profiles = (from object i in cbActiveProfile.Items
 					select (!(i is ComboBoxItem { Content: var content })) ? i?.ToString() : content?.ToString()).ToArray(),
-				activeProfileIndex = cbActiveProfile.SelectedIndex
+				activeProfileIndex = cbActiveProfile.SelectedIndex,
+				resetVisible = (btnReset.Visibility == Visibility.Visible),
+				expertVisible = (chkUseExpertOptions.Visibility == Visibility.Visible)
 			}, JsonOpts);
 		}));
 	}
 
 	private void SetWindowTitle()
 	{
-		Title = "MSFS_AutoFPS" + (serviceModel.LogPlus ? "" : " by ResetXPDR") + " (" + assemblyVersion + (serviceModel.DevTesting ? "-dev)" : ")") + (serviceModel.MonitorMode ? " Monitor Mode" : (serviceModel.LogPlus ? " Log+" : "")) + (serviceModel.ExperimentalFeatures ? " EXP" : "") + (App.IsRunningAsAdmin() ? " Admin" : "");
+		// Fork: short title; version and credits are on Settings > About. Only states worth noticing are appended.
+		Title = "AutoFPS" + (serviceModel.MonitorMode ? " · Monitor Mode" : "") + (App.IsRunningAsAdmin() ? " · Admin" : "");
 	}
 
 	public void CheckForUpdates()
@@ -795,7 +799,7 @@ public partial class MainWindow : Window, IComponentConnector
 		if (serviceModel.TestUpdates && text2 != null && !text2.Contains("0.5.5.0"))
 		{
 			string value = Regex.Match(text2, "v([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-(test|RC|exp)(\\d+))").Groups[1].Value;
-			string uriString = "https://github.com/ResetXPDR/MSFS_AutoFPS/releases/tag/v" + Regex.Match(text2, "v([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-(test|RC|exp))").Groups[1].Value;
+			string uriString = global::AppConfig.Config.RepoUrl + "/releases/tag/v" +Regex.Match(text2, "v([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+-(test|RC|exp))").Groups[1].Value;
 			if (lblappUrlTestVersion.Inlines.FirstInline is Hyperlink hyperlink && Uri.TryCreate(uriString, UriKind.Absolute, out Uri result))
 			{
 				hyperlink.NavigateUri = result;
@@ -983,7 +987,7 @@ public partial class MainWindow : Window, IComponentConnector
 
 	private static bool DownloadLatestReleaseJson()
 	{
-		string url = "https://api.github.com/repos/ResetXPDR/" + appName + "/releases";
+		string url = global::AppConfig.Config.ReleasesApiUrl;
 		string text = "releases.json";
 		if (File.Exists(text))
 		{
@@ -1218,9 +1222,16 @@ public partial class MainWindow : Window, IComponentConnector
 		return null;
 	}
 
+	// Fork: a "mandatory" update the user declined is not offered again during this session.
+	private static string declinedMandatoryUpdateVersion;
+
 	public void AutoUpdate(string AppVersionStr, bool Mandatory = false, bool UpdateForCompat = false, bool isExplicit = false)
 	{
 		AppVersionStr = AppVersionStr.TrimStart('v', 'V');
+		if (Mandatory && declinedMandatoryUpdateVersion == AppVersionStr)
+		{
+			return;
+		}
 		if (!serviceModel.deferredUpdate | Mandatory | UpdateForCompat)
 		{
 			WindowState = WindowState.Normal;
@@ -1242,8 +1253,26 @@ public partial class MainWindow : Window, IComponentConnector
 			string versionLabel = GetVersionLabel(AppVersionStr);
 			if (Mandatory)
 			{
-				MessageBox.Show(this, "New mandatory " + appName + " " + versionLabel + "version " + AppVersionStr + " will now be auto installed.", "New mandatory " + appName + " " + versionLabel + "version", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-				Logger.Log(LogLevel.Information, "MainWindow:AutoUpdate", "Mandatory " + appName + " " + versionLabel + "version " + AppVersionStr + " detected and will be auto installed.");
+				// Fork: mandatory updates are never installed without explicit user consent.
+				if (MessageBox.Show(this, "New mandatory " + appName + " " + versionLabel + "version " + AppVersionStr + " is available.\n\nDownload and install it now?", "New mandatory " + appName + " " + versionLabel + "version", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
+				{
+					declinedMandatoryUpdateVersion = AppVersionStr;
+					Logger.Log(LogLevel.Information, "MainWindow:AutoUpdate", "User declined mandatory " + appName + " " + versionLabel + "version " + AppVersionStr + ". It will not be offered again this session.");
+					if (!serviceModel.windowIsVisible)
+					{
+						if (serviceModel.UseSysTrayIcon)
+						{
+							Hide();
+						}
+						else
+						{
+							WindowState = WindowState.Minimized;
+						}
+					}
+					serviceModel.AutoUpdateInProgress = false;
+					return;
+				}
+				Logger.Log(LogLevel.Information, "MainWindow:AutoUpdate", "User agreed to install mandatory " + appName + " " + versionLabel + "version " + AppVersionStr + ".");
 			}
 			else
 			{
@@ -1280,16 +1309,11 @@ public partial class MainWindow : Window, IComponentConnector
 					text = text + ", which is " + text3 + " compatible with MSFS version " + serviceModel.DetectedSimVersion + text4;
 				}
 				text += "?";
-				if ((serviceModel.SilentUpdates && !UpdateForCompat && !serviceModel.AutoRevertToReleaseVersion) || (UpdateForCompat & isExplicit))
+				// Fork: only the user's own "Silent Updates" choice skips the prompt; compatibility
+				// updates (even explicitly compatible ones) always ask first.
+				if (serviceModel.SilentUpdates && !UpdateForCompat && !serviceModel.AutoRevertToReleaseVersion)
 				{
-					if (UpdateForCompat)
-					{
-						Logger.Log(LogLevel.Information, "MainWindow:AutoUpdate", "Explicitly compatible app version " + AppVersionStr + " will be auto installed after MSFS compatibility test failure.");
-					}
-					else
-					{
-						Logger.Log(LogLevel.Information, "MainWindow:AutoUpdate", "User silently agreed to auto update app to " + AppVersionStr + ".");
-					}
+					Logger.Log(LogLevel.Information, "MainWindow:AutoUpdate", "User silently agreed to auto update app to " + AppVersionStr + ".");
 					serviceModel.AutoRevertToReleaseVersion = false;
 				}
 				else
@@ -1386,9 +1410,25 @@ public partial class MainWindow : Window, IComponentConnector
 			serviceModel.deferredUpdate = false;
 			Logger.Log(LogLevel.Information, "MainWindow:AutoUpdate", "Executing deferred auto update to " + AppVersionStr + ".");
 		}
-		string text5 = Path.Combine(KnownFolders.GetPath(KnownFolder.Downloads), appName + "-installer-v" + AppVersionStr + ".exe");
-		string url = "https://github.com/ResetXPDR/" + appName + "/releases/download/" + (Mandatory ? "m-" : "") + "v" + (AppVersionStr.Contains("test") ? AppVersionStr.Substring(0, AppVersionStr.IndexOf("test") + 4) : (AppVersionStr.Contains("RC") ? AppVersionStr.Substring(0, AppVersionStr.IndexOf("RC") + 2) : (AppVersionStr.Contains("exp") ? AppVersionStr.Substring(0, AppVersionStr.IndexOf("exp") + 3) : AppVersionStr))) + "/" + appName + "-installer-v" + AppVersionStr + ".exe";
-		if (File.Exists(text5) || DownloadFile(url, text5))
+		string installerName = appName + "-installer-v" + AppVersionStr + ".exe";
+		string text5 = Path.Combine(KnownFolders.GetPath(KnownFolder.Downloads), installerName);
+		string url = global::AppConfig.Config.RepoUrl + "/releases/download/" + (Mandatory ? "m-" : "") + "v" + (AppVersionStr.Contains("test") ? AppVersionStr.Substring(0, AppVersionStr.IndexOf("test") + 4) : (AppVersionStr.Contains("RC") ? AppVersionStr.Substring(0, AppVersionStr.IndexOf("RC") + 2) : (AppVersionStr.Contains("exp") ? AppVersionStr.Substring(0, AppVersionStr.IndexOf("exp") + 3) : AppVersionStr))) + "/" + installerName;
+		// Fork: never run an installer that is already lying in Downloads; always fetch a fresh copy
+		// from the configured repository and verify it against the release asset's SHA-256 digest.
+		bool installerReady = false;
+		try
+		{
+			if (File.Exists(text5))
+			{
+				File.Delete(text5);
+			}
+			installerReady = DownloadFile(url, text5) && VerifyInstallerDigest(text5, installerName);
+		}
+		catch (Exception ex)
+		{
+			Logger.Log(LogLevel.Error, "MainWindow:AutoUpdate", $"Exception preparing installer {installerName}: {ex.Message}");
+		}
+		if (installerReady)
 		{
 			Process process = new Process();
 			process.StartInfo.FileName = text5;
@@ -1695,6 +1735,67 @@ public partial class MainWindow : Window, IComponentConnector
 		return result;
 	}
 
+	// Fork: compares the downloaded installer with the "digest" (sha256:...) that the GitHub
+	// releases API reports for the matching asset in releases.json. Deletes the file on failure.
+	private static bool VerifyInstallerDigest(string file, string assetName)
+	{
+		string expected = null;
+		try
+		{
+			if (File.Exists("releases.json"))
+			{
+				foreach (JObject release in JArray.Parse(File.ReadAllText("releases.json")))
+				{
+					if (release["assets"] is not JArray assets)
+					{
+						continue;
+					}
+					foreach (JToken asset in assets)
+					{
+						if (string.Equals((string?)asset["name"], assetName, StringComparison.OrdinalIgnoreCase))
+						{
+							string digest = (string?)asset["digest"];
+							if (!string.IsNullOrEmpty(digest) && digest.StartsWith("sha256:", StringComparison.OrdinalIgnoreCase))
+							{
+								expected = digest.Substring(7);
+							}
+							break;
+						}
+					}
+					if (expected != null)
+					{
+						break;
+					}
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			Logger.Log(LogLevel.Error, "MainWindow:VerifyInstallerDigest", "Exception reading releases.json: " + ex.Message);
+		}
+		string actual;
+		using (FileStream stream = File.OpenRead(file))
+		{
+			actual = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(stream));
+		}
+		if (expected != null && string.Equals(expected, actual, StringComparison.OrdinalIgnoreCase))
+		{
+			Logger.Log(LogLevel.Information, "MainWindow:VerifyInstallerDigest", $"Installer {assetName} SHA-256 verified: {actual}");
+			return true;
+		}
+		string reason = (expected == null) ? "no SHA-256 digest is published for this release asset" : $"SHA-256 mismatch (expected {expected}, got {actual})";
+		Logger.Log(LogLevel.Error, "MainWindow:VerifyInstallerDigest", $"Installer {assetName} rejected: {reason}.");
+		try
+		{
+			File.Delete(file);
+		}
+		catch
+		{
+		}
+		MessageBox.Show($"The downloaded update {assetName} could not be verified and was not installed:\n\n{reason}.", "Update Verification Failed", MessageBoxButton.OK, MessageBoxImage.Hand);
+		return false;
+	}
+
 	public static string GetFinalRedirect(string url)
 	{
 		if (string.IsNullOrWhiteSpace(url))
@@ -1762,6 +1863,7 @@ public partial class MainWindow : Window, IComponentConnector
 		};
 		Resources.MergedDictionaries.Clear();
 		Resources.MergedDictionaries.Add(item);
+		ApplyFluentTheme();
 	}
 
 	protected void LoadSettings(bool noLogging = false)
@@ -1922,17 +2024,18 @@ public partial class MainWindow : Window, IComponentConnector
 			Top = serviceModel.windowTop;
 			Left = serviceModel.windowLeft;
 		}
-		WindowStyle = ((serviceModel.windowPanelState != 3) ? WindowStyle.SingleBorderWindow : WindowStyle.None);
-		stkpnlGeneral.Visibility = ((serviceModel.windowPanelState > 1) ? Visibility.Collapsed : Visibility.Visible);
-		stkpnlExpertSettings.Visibility = ((serviceModel.windowPanelState != 0 || !serviceModel.UseExpertOptions || serviceModel.MonitorMode) ? Visibility.Collapsed : Visibility.Visible);
-		WindowStyle = ((!serviceModel.hideTitleBar) ? WindowStyle.SingleBorderWindow : WindowStyle.None);
+		// Fluent UI: pages replace the old double-click panel collapsing (windowPanelState), the custom
+		// title bar replaces WindowStyle toggling, and the window keeps its own size (no SizeToContent).
+		stkpnlGeneral.Visibility = Visibility.Visible;
+		stkpnlExpertSettings.Visibility = ((!serviceModel.UseExpertOptions || serviceModel.MonitorMode) ? Visibility.Collapsed : Visibility.Visible);
+		// The app's own title bar (with minimise/maximise/close) is always shown; hideTitleBar now only
+		// applies to the in-game widget panel header.
+		titleBar.Visibility = Visibility.Visible;
 		if (mnuToggleTitleBar != null)
 		{
-			mnuToggleTitleBar.Header = (serviceModel.hideTitleBar ? "Show Title Bar" : "Hide Title Bar");
+			mnuToggleTitleBar.Header = (serviceModel.hideTitleBar ? "Show Widget Title Bar" : "Hide Widget Title Bar");
 		}
-		SizeToContent = SizeToContent.Manual;
-		SizeToContent = SizeToContent.WidthAndHeight;
-		gpboxConnectionStatus.Header = (serviceModel.hideTitleBar ? (Title + ": Connection Status") : "Connection Status");
+		gpboxConnectionStatus.Header = "Connection status";
 		if (serviceModel.TLODAutoMethod[serviceModel.activeProfile] == 3)
 		{
 			chkTLODExtraMtns.Visibility = Visibility.Collapsed;
@@ -2663,8 +2766,8 @@ public partial class MainWindow : Window, IComponentConnector
 		}
 		if (!serviceModel.IsSimRunning)
 		{
-			btnReset.Content = (serviceModel.isMSFS2024 ? "24>20" : "20>24");
-			btnReset.ToolTip = "Switch config settings from MSFS " + (serviceModel.isMSFS2024 ? "2024 to " : "2020 to ") + (serviceModel.isMSFS2024 ? "2020" : "2024");
+			// Fork: the offline "24>20 / 20>24" config switch was removed from the UI; Reset only exists while MSFS runs.
+			btnReset.Visibility = Visibility.Collapsed;
 		}
 		else
 		{
@@ -2683,7 +2786,7 @@ public partial class MainWindow : Window, IComponentConnector
 				}
 				else
 				{
-					btnReset.Visibility = Visibility.Hidden;
+					btnReset.Visibility = Visibility.Collapsed;
 				}
 			}
 		}
@@ -3921,7 +4024,7 @@ public partial class MainWindow : Window, IComponentConnector
 					{
 						lblStatusMessage.Content = "MSFS compatibility test failed - app disabled.";
 						string text2 = ((!((text != null && appVersionStr != null && CompareAppVersions(appVersionStr, "0.5.5.0") <= 0) & isExplicit)) ? "This app version is not explicitly compatible with the current MSFS version, and no newer potentially compatible version was found. Compatibility is therefore indeterminate.\n\n" : "This app version is explicitly compatible with the current MSFS version, so the compatibility test should pass. Please try the following after closing this app.\n\n");
-						switch (CustomMessageBox.Show("MSFS compatibility test failed - app disabled.\n\n" + text2 + "1. Go to the MSFS settings menu, toggle any simple setting (e.g. VSync), save changes, then restart this app.\n\n2. Exit MSFS completely, start MSFS, then start this app when in the MSFS main menu.\n\n3. Reboot your system and try again.\n\n4. If still unresolved, click Report to raise an issue if one doesn't already exist.\n\n5. More solutions can be found in the readme.", "https://github.com/ResetXPDR/" + appName + "/issues", "Critical", "Report Issue"))
+						switch (CustomMessageBox.Show("MSFS compatibility test failed - app disabled.\n\n" + text2 + "1. Go to the MSFS settings menu, toggle any simple setting (e.g. VSync), save changes, then restart this app.\n\n2. Exit MSFS completely, start MSFS, then start this app when in the MSFS main menu.\n\n3. Reboot your system and try again.\n\n4. If still unresolved, click Report to raise an issue if one doesn't already exist.\n\n5. More solutions can be found in the readme.", global::AppConfig.Config.RepoUrl + "/issues", "Critical", "Report Issue"))
 						{
 						case CustomMessageBoxResult.Action:
 							Logger.Log(LogLevel.Information, "MainWindow:OnTick", "User selected 'Report Issue' after compatibility test failure.");
@@ -4477,8 +4580,6 @@ public partial class MainWindow : Window, IComponentConnector
 		Logger.Log(LogLevel.Information, "MainWindow:chkLOGPlus_Click :", "Log+ " + (serviceModel.LogPlus ? "Enabled" : "Disabled"));
 		UpdateLiveValues();
 		UpdateLayout();
-		SizeToContent = SizeToContent.Manual;
-		SizeToContent = SizeToContent.WidthAndHeight;
 		if (serviceModel.UseExpertOptions || serviceModel.LogPlus)
 		{
 			chkUseExpertOptions.Content = "Expert";
@@ -5485,9 +5586,8 @@ public partial class MainWindow : Window, IComponentConnector
 
 	private void ToggleTitleBar()
 	{
-		bool flag = WindowStyle == WindowStyle.None;
-		WindowStyle = (flag ? WindowStyle.SingleBorderWindow : WindowStyle.None);
-		serviceModel.ConfigurationFileCommon.SetSetting("hideTitleBar", (serviceModel.hideTitleBar = !flag).ToString().ToLower());
+		// Toggles the in-game widget title bar setting (the app window keeps its title bar).
+		serviceModel.ConfigurationFileCommon.SetSetting("hideTitleBar", (serviceModel.hideTitleBar = !serviceModel.hideTitleBar).ToString().ToLower());
 		Logger.Log(LogLevel.Information, "MainWindow:mnuToggleTitleBar_Click", "Title Bar " + (serviceModel.hideTitleBar ? "hidden" : "shown"));
 		LoadSettings(noLogging: true);
 	}
@@ -5505,12 +5605,8 @@ public partial class MainWindow : Window, IComponentConnector
 
 	private nint WndProc(nint hwnd, int msg, nint wParam, nint lParam, ref bool handled)
 	{
-		if (msg == 163 && ((IntPtr)wParam).ToInt32() == 2)
-		{
-			ToggleTitleBar();
-			handled = true;
-		}
-		else if (msg == 274 && ((int)wParam & 0xFFF0) == 61536)
+		// Fork: caption double-click no longer hides the title bar (Fluent title bar handles maximise).
+		if (msg == 274 && ((int)wParam & 0xFFF0) == 61536)
 		{
 			_isTitleBarCloseClick = lParam != IntPtr.Zero;
 		}
@@ -5606,6 +5702,22 @@ public partial class MainWindow : Window, IComponentConnector
 
 	private void Window_Closing(object sender, CancelEventArgs e)
 	{
+		// Fork: the title bar X only hides the window (to the tray, or minimised when the tray icon is off);
+		// exiting is done with Exit in the window or tray menu.
+		if (_isTitleBarCloseClick && !serviceModel.ServiceExited && !_isExplicitExit)
+		{
+			_isTitleBarCloseClick = false;
+			e.Cancel = true;
+			if (serviceModel.UseSysTrayIcon)
+			{
+				Hide();
+			}
+			else
+			{
+				WindowState = WindowState.Minimized;
+			}
+			return;
+		}
 		if (serviceModel.ServiceExited || _isExplicitExit || (!serviceModel.UseSysTrayIcon && WindowState == WindowState.Minimized))
 		{
 			if (ShouldCancelExitForPendingUpdate())
