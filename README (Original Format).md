@@ -3,6 +3,12 @@
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with negligible, or preferably no, UI impact, and if I have the available time to do it.
 
+## Licence
+- Versions released before 8 November 2026, up to and including v0.5.5.0, were released under the MIT Licence (with an exception for the app icon image and associated files, and a requirement to attribute previous authors) and remain under it.
+- Versions released on or after 8 November 2026 are released under the MSFS_AutoFPS Licence in [LICENSE.txt](LICENSE.txt). In short: free personal use, no redistribution of the app or derivative works without my written permission, no decompiling or reverse engineering, credit to the original author where permission is given, and the app name and icon are not licensed. This is source-available, not open source. Please read the full terms.
+- This app builds on earlier work by other authors, credited in the Summary below. Their original licences continue to apply to their parts.
+- The only official source of this app is [github.com/ResetXPDR/MSFS_AutoFPS](https://github.com/ResetXPDR/MSFS_AutoFPS). Copies, forks or rebuilds published elsewhere, including any rebuilt from decompiled binaries, are not made, endorsed or supported by me. Please download only from the official [Releases](https://github.com/ResetXPDR/MSFS_AutoFPS/releases/latest) page.
+
 ## Summary
 Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS.<br/><br/>
 

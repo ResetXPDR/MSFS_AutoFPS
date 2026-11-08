@@ -1,3 +1,68 @@
+MSFS_AutoFPS Licence
+
+Copyright (c) 2024-2026 ResetXPDR. All rights reserved except as granted below.
+
+EFFECTIVE 8 NOVEMBER 2026. This licence applies to every version of
+MSFS_AutoFPS released on or after 8 November 2026, including its source code,
+binaries, installer, in-game widget, documentation and branding (the
+"Software"). Versions released before that date, up to and including
+v0.5.5.0, remain under the MIT Licence reproduced in the Appendix below, and
+copies already obtained under that licence stay under it.
+
+1. Use
+You may use the Software free of charge for personal, non-commercial purposes.
+
+2. Source code
+Where source code is published, you may read it, build it for your own use,
+and modify it for your own use. You may submit changes to the official
+repository (github.com/ResetXPDR/MSFS_AutoFPS) as pull requests. By doing so
+you grant the author the right to use your contribution in the Software.
+
+3. Redistribution and derivative works
+You may not distribute the Software, or any modified version or derivative
+work of it, in source or binary form, without the author's prior written
+permission. The one exception is a public GitHub fork kept only for preparing
+pull requests to the official repository.
+
+4. No reverse engineering
+You may not decompile, disassemble, or otherwise derive source code from any
+binary form of the Software, or publish any such derived code, except to the
+extent that applicable law expressly permits it despite this restriction.
+
+5. Attribution
+Where the author has given written permission to distribute or build on the
+Software, you must keep this notice, credit the original author by name with
+a link to the official repository in all documentation, release notes, and
+website and repository descriptions, and state clearly what you changed.
+All previous authors' efforts must also remain appropriately attributed.
+
+6. Name and branding
+The names "MSFS_AutoFPS" and "AutoFPS", and the app icon image and all
+associated files, are not licensed under this licence. You may not use them
+without written permission, and you must not suggest that a derivative work is
+made or endorsed by the author.
+
+7. Earlier works by others
+Parts of the Software build on earlier works by other authors, credited in the
+README. Those parts remain under their original licences, and nothing in this
+licence reduces the rights those licences give in those parts.
+
+8. Termination
+Your rights under this licence end automatically if you breach it. The author
+may also withdraw permission given under section 3 or 5 by written notice.
+
+9. No warranty
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+APPENDIX: MIT Licence for versions released before 8 November 2026
+(up to and including v0.5.5.0), reproduced unchanged
+
 MIT License
 
 Copyright (c) [2024] [ResetXPDR]
