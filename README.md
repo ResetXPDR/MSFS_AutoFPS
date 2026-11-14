@@ -64,7 +64,7 @@ Basically: run the installer to install, update or uninstall the app. If anythin
 - MobiFlight WASM Module (managed by the installer)
 
 ### Installing
-1. Download the latest installer (`MSFS_AutoFPS-Installer-vXYZ.exe`, about 1.5 MB) from [GitHub Releases](https://github.com/ResetXPDR/MSFS_AutoFPS/releases/latest).
+1. Download the latest installer (`MSFS_AutoFPS-installer-vX.X.X.X.exe`, about 3 MB) from [GitHub Releases](https://github.com/ResetXPDR/MSFS_AutoFPS/releases/latest).
 2. Make sure MSFS_AutoFPS and/or MSFS2020_AutoFPS are not running. If the MobiFlight module is missing or outdated, MSFS must be closed too.
 3. Run the installer, choose your options and install. Do not run it as Admin unless it will not install because of a permissions issue.
 4. Start AutoFPS, ideally just after MSFS has loaded to the main menu, then follow the [Quick Start](#quick-start--non-expert-guide).
@@ -436,7 +436,7 @@ This covers SimConnect staying red, TLOD and OLOD showing zero, "Critical Except
 4. Reinstall the simulator, launch once to the main menu, and then restore your Community folder.
 
 ### Installer Problems
-- **Installer did not download or is zero size:** It should be about 1.5 MB. Try another browser, or temporarily disable your AV.
+- **Installer did not download or is zero size:** It should be about 3 MB. Try another browser, or temporarily disable your AV.
 - **Installer will not run, or is flagged as untrusted:** Windows SmartScreen may block it because the app is new. Right-click the installer, choose Properties, tick **Unblock**, then Apply and OK, and try again. Otherwise create an exception for the installer in your AV program, or disable the AV temporarily while running it.
 - **Cannot run the installer at all:** Follow the manual installation steps below.
 - **Previously removed MSFS2020_AutoFPS without using its installer:** You may have problems installing MSFS_AutoFPS. Run the MSFS_AutoFPS installer and select remove, install [MSFS2020_AutoFPS 0.4.3.1](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/download/v0.4.3.1/MSFS_AutoFPS-installer-v0.4.3.1.exe) with no autostart options, then rerun the MSFS_AutoFPS installer and choose your autostart option.
@@ -1125,7 +1125,7 @@ Some Notes:
     - Click 'Yes' to close AutoFPS immediately and postpone the update until the next launch with MSFS closed.
   - Minimizing to the system tray is unaffected and leaves the update queued for when MSFS exits.
   - Updates that do not contain widget changes continue to install immediately while MSFS is running.
-- If the installer did not download or is zero size, try redownloading again with a different browser and possibly with AV temporarily disabled if required. It should be about 1.5Mb in size. 
+- If the installer did not download or is zero size, try redownloading again with a different browser and possibly with AV temporarily disabled if required. It should be about 3 MB in size. 
 - If the installer will not run at all:
   - Windows SmartScreen is potentially blocking it because the app is so new. The solution to try is:
     - Right-click on the Installer and select properties
