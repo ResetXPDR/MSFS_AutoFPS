@@ -1,4 +1,4 @@
-# MSFS_AutoFPS v0.5.5.0
+# MSFS_AutoFPS v0.5.5.1
 
 ## Notice
 My future development efforts on this app are mainly limited to maintenance, resilience improvements and streamlining of existing functionality only. I do add new functionality at times, mainly from my existing wishlist. I occasionally accept user requests for new functionality, however these will only be accepted if I judge it to be a great idea and it is technically achievable, useful to the majority of users, consistent with AutoFPS's existing design philosophy, with negligible, or preferably no, UI impact, and if I have the available time to do it.
@@ -17,22 +17,24 @@ My future development efforts on this app are mainly limited to maintenance, res
 ---
 
 ## Table of Contents
+This readme goes from the basics to the full detail. Sections 1 to 3 get you installed and running, sections 4 to 7 explain how to use and read the app, sections 8 and 9 cover Expert mode and the companion apps, section 10 helps when something goes wrong, and section 11 holds the complete technical detail.
+
 1. [Summary](#summary)
-2. [Quick Start & Non-Expert Guide](#quick-start--non-expert-guide)
-3. [In-Game Toolbar Widget & Web Interface](#in-game-toolbar-widget--web-interface)
+2. [Installation & Updates](#installation--updates)
+3. [Quick Start & Non-Expert Guide](#quick-start--non-expert-guide)
 4. [Desktop App Window & Controls](#desktop-app-window--controls)
 5. [Reading the Display: Colours and Symbols](#reading-the-display-colours-and-symbols)
-6. [Graphics Modes & Frame Generation](#graphics-modes--frame-generation)
-7. [Expert Mode Reference Guide](#expert-mode-reference-guide)
-8. [Companion Apps & Advanced Features](#companion-apps--advanced-features)
-9. [Installation, Updates & Maintenance](#installation-updates--maintenance)
-10. [Frequently Asked Questions & Troubleshooting](#frequently-asked-questions--troubleshooting)
+6. [In-Game Toolbar Widget & Web Interface](#in-game-toolbar-widget--web-interface)
+7. [Graphics Modes & Frame Generation](#graphics-modes--frame-generation)
+8. [Expert Mode Reference Guide](#expert-mode-reference-guide)
+9. [Companion Apps & Advanced Features](#companion-apps--advanced-features)
+10. [Troubleshooting & FAQ](#troubleshooting--faq)
 11. [Detailed Reference](#detailed-reference)
 
 ---
 
 ## Summary
-Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS.
+Based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself in DynamicLOD_ResetEdition and MSFS2020_AutoFPS and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS and by dankocrnkovic from his fork of MSFS_AutoFPS.
 
 Now fully compatible with MSFS 2020 and 2024 in a single application, AutoFPS improves simulator smoothness and framerate consistency by automatically changing key graphics settings on the fly. Key features include:
 
@@ -41,11 +43,65 @@ Now fully compatible with MSFS 2020 and 2024 in a single application, AutoFPS im
 - In-Game Toolbar Widget and local web interface (`http://localhost:54321`) with real-time telemetry, camera-based auto-hiding, and cockpit controls.
 - Dynamic graphics mode architecture supporting native rendering, VR, native Frame Generation, and external mods (MSM, VectorXR, OFXR, Lossless Scaling) with dual-layer VR conflict protection.
 - Simplified Non-Expert mode with automated guardrails suited to most user setups.
-- Deep Expert Mode customisation covering sensitivity models, altitude bands, night optimisations, multi-profile pairing, and CPU thread optimisation.
+- Deep Expert Mode customisation covering sensitivity models, altitude bands, night optimisations with configurable day/night switching, multi-profile pairing (VR, sim rate and Day/Night), and CPU thread optimisation.
+- A **Monitor only** flight type that stops AutoFPS changing any simulator setting and simply monitors performance.
 - Native Dark Mode theme, resizable fluid layout, and automatic restoration of simulator settings upon exit, enhanced to withstand MSFS CTDs.
 - Auto future MSFS version compatibility, provided MSFS memory changes are minor, plus detection of and protection from known similar apps already running or incompatibilities with newer MSFS versions.
-- Intelligent auto-update system that defers widget updates until MSFS exits, and custom Community folder and Addons Linker management that persists across updates.
+- Intelligent auto-update system that verifies each downloaded installer (SHA-256), defers widget updates until MSFS exits, and supports custom Community folder and Addons Linker management that persists across updates.
 - Optional MSFS Performance Optimiser, which selects the best CPU core affinity, process priority and power plan for MSFS.
+
+---
+
+## Installation & Updates
+
+Basically: run the installer to install, update or uninstall the app. If anything goes wrong, see [Troubleshooting & FAQ](#troubleshooting--faq).
+
+### Requirements
+- Microsoft Flight Simulator 2020 or 2024
+- Windows 10 / 11 (64-bit)
+- .NET 8 Desktop Runtime (x64)
+- Visual C++ 2015–2022 Redistributable (x64)
+- MobiFlight WASM Module (managed by the installer)
+
+### Installing
+1. Download the latest installer (`MSFS_AutoFPS-installer-vX.X.X.X.exe`, about 3 MB) from [GitHub Releases](https://github.com/ResetXPDR/MSFS_AutoFPS/releases/latest).
+2. Make sure MSFS_AutoFPS and/or MSFS2020_AutoFPS are not running. If the MobiFlight module is missing or outdated, MSFS must be closed too.
+3. Run the installer, choose your options and install. Do not run it as Admin unless it will not install because of a permissions issue.
+4. Start AutoFPS, ideally just after MSFS has loaded to the main menu, then follow the [Quick Start](#quick-start--non-expert-guide).
+
+### Installer Options
+- **Desktop Icon:** Creates a desktop icon for the app.
+- **MSFS Widget:** Deploys the AutoFPS In-Game Toolbar Widget to the Community folder of any installed MSFS versions.
+- **Close to Tray:** The app closes to the system tray.
+- **Reset Configs:** Resets the app Common, MSFS 2020 and MSFS 2024 config files. When upgrading from 0.5.5.0 or earlier, the config files are first backed up to a `ConfigBackup_<version>` folder.
+- **Repair:** Reinstalls core files, including the latest Visual C++ Redistributable and .NET 8 runtime, MobiFlight and the In-Game Widget (if enabled), keeping your app config intact.
+- **Auto Start Options:** Remove, Retain, FSUIPC (via `FSUIPC.ini`) or MSFS (via `EXE.xml`).
+- **Custom Community Folders:** Use `2020 Folder...` or `2024 Folder...` to point to custom Community paths (such as Addons Linker locations). Custom paths persist across updates in `Install.log`. Right-click either button to reset to the auto-detected simulator defaults.
+
+### Updating, Upgrading and Uninstalling
+- **Updating:** Just run the installer and select update. Do **not** uninstall first, because that deletes all app files including your config.
+- **Upgrading from MSFS2020_AutoFPS:** No need to uninstall it first. The installer removes it and preserves its MSFS 2020 config for use in this app.
+- **Uninstalling:** Exit the app completely (not hiding in the system tray), run the installer and select **Remove** on the first window. This removes the desktop icon, any MSFS or FSUIPC autostart entries, and the entire app folder including your config file and the in-game widget.
+
+### Update Modes & Channels
+- **Silent Updates:** Installs updates automatically without prompts, displaying release notes in Notepad afterwards.
+- **Prompted Updates (Default):** Prompts for confirmation before installing optional updates.
+- **Show Updates:** Displays notifications when updates are available without downloading.
+- **Mandatory Updates Only:** Notifies and installs only mandatory builds.
+- **Update Channels (Expert mode):**
+  - **Release:** Standard stable release baseline.
+  - **RC+ (Release Candidate), Test+, Exp+ (Experimental):** Accesses pre-release builds. Returning from a test channel to Release offers a one-time automatic rollback to the latest formal release. Test versions require all app update notifications to remain active to maintain a consistent test baseline.
+
+### Safe Updates
+- **Verified:** Before launching a downloaded installer, auto-update checks its SHA-256 against the digest GitHub publishes for the release. On a mismatch it downloads the installer again, and if no digest is available the update is refused.
+- **Deferred:** When an auto-update contains an in-game widget update while MSFS is running, the installer defers installation until MSFS closes, preventing flight interruptions and locked-file errors.
+
+### File Locations
+The installation location is fixed to `%appdata%\MSFS_AutoFPS`.
+- Binaries: `%appdata%\MSFS_AutoFPS\bin`
+- Logs: `%appdata%\MSFS_AutoFPS\log`
+- Installation Log: `%appdata%\MSFS_AutoFPS\Install.log`
+- Configs: `%appdata%\MSFS_AutoFPS\MSFS_AutoFPS.config` (common), `MSFS2020_AutoFPS.config` and `MSFS2024_AutoFPS.config`
 
 ---
 
@@ -53,13 +109,14 @@ Now fully compatible with MSFS 2020 and 2024 in a single application, AutoFPS im
 
 If you are new to the application or prefer an automated set-and-forget experience, Non-Expert mode provides reliable performance management without complex tuning.
 
-### 5-Step Quick Start
+### Quick Start Steps
 1. Configure your general graphics settings inside MSFS as you normally would.
 2. Launch AutoFPS before loading into a flight.
 3. Ensure **Expert** (Use Expert Options) is left unchecked.
 4. Select your **Flight Type**:
    - **VFR:** Tuned for lower altitudes, GA aircraft, and higher visual expectations.
    - **IFR:** Tuned for airliners, higher climb rates, and complex airport performance.
+   - **Monitor only:** Choose this to watch performance without AutoFPS changing any settings (see [Monitor Only](#monitor-only)).
 5. Set your **Target FPS**:
    - **Auto:** Recommended if you want the app to establish a realistic target based on your system headroom.
    - **Manual:** Set to a framerate your hardware can comfortably sustain in moderate conditions.
@@ -73,34 +130,11 @@ In Non-Expert mode, AutoFPS manages LOD and visual settings using conservative, 
 - **Base TLOD Altitude:** 100 ft AGL for VFR, 1,000 ft AGL for IFR.
 - **Top Max TLOD:** 250% of baseline for VFR (capped at 400), 200% for IFR (capped at 400).
 - **Ground OLOD:** Capped at 200 (VFR runs at 150% of baseline up to 200; IFR runs at 100%).
-- **Night Optimisation:** Automatically uses `TLOD÷2` at night (capped at 200) to shed distant scenery workload in the dark.
+- **Night Optimisation:** Automatically uses `TLOD÷2` at night (capped at 200) to shed distant scenery workload in the dark. By default, night starts at about the end of civil twilight.
 - **MSFS 2020 Specifics:** Decreases cloud quality if performance cannot be recovered at Base Min TLOD or if GPU load exceeds 98% (when GPU-Z is running).
 - **MSFS 2024 Specifics:** Engages automated settings reduction under marginal conditions and supports VRAM+ overflow mitigation when GPU-Z is active.
 
 *Note: Do not manually change graphics settings in the MSFS menu while in an active flight with AutoFPS running, as the app will overwrite them or restore original values when the session ends.*
-
----
-
-## In-Game Toolbar Widget & Web Interface
-
-The companion In-Game Toolbar Widget and local web server allow in-cockpit monitoring and adjustments without switching out of the simulator.
-
-### Installation & Access
-- Select the **MSFS Widget** option during the installer setup to deploy the widget to your Community folder.
-- In-cockpit: Open the MSFS top toolbar and click the **AutoFPS** icon.
-- Web browser / tablet: Navigate to `http://localhost:54321/` on any device on your local network while AutoFPS is running.
-
-### Key Widget Features
-- **Live Telemetry & Balanced Layout:** Mirrors the desktop application across three clean columns displaying real-time FPS, TLOD, OLOD, AGL, vertical speed, reduction states, and connection status with matching glyphs.
-- **Interactive Target FPS Controls:** Adjust Target FPS directly in the cockpit using responsive `–` and `+` stepper buttons (with accelerating hold), toggle modes (Manual, Auto, Fixed), and switch target graphics profiles.
-- **Camera-Based Auto-Hide:** Automatically conceals the in-game toolbar panel when leaving cockpit view to keep external views and screenshots uncluttered:
-  - **Off:** Widget remains visible in all camera views.
-  - **Chase:** Automatically hides only in standard chase exterior view.
-  - **All Ext:** Automatically hides across all external views (chase, drone, showcase, and exterior fixed cameras) with sub-150 ms SimVar response.
-- **Click-to-Toggle FPS Source:** Click the FPS source badge on the panel to toggle capture between MSFS and RTSS (read-only during active OFXR or VectorXR sessions).
-- **Show/Hide Hotkey:** The previous on-screen hotkey button has been replaced by the Auto-Hide dropdown. Any previously configured hotkeys continue to work in the background. To set, change, or clear a manual toggle hotkey, edit the `WidgetHotkey` key in `MSFS2020_AutoFPS.config` or `MSFS2024_AutoFPS.config` located in `%appdata%\MSFS_AutoFPS` (set to `"None"` to disable).
-- **Collapsible General Controls:** Click the General section header to collapse controls during flight, synchronised two-way with the desktop application.
-- **Title Bar Hiding & Dragging:** Double-click empty space on the widget header to toggle the title bar. Move the widget by dragging anywhere on its background. Text and elements dynamically scale when resized horizontally to prevent clipping in VR.
 
 ---
 
@@ -128,8 +162,9 @@ The companion In-Game Toolbar Widget and local web server allow in-cockpit monit
   - The confirmation prompt only triggers when clicking the window close `[X]` button. Deliberate multi-step exits (`Alt + F4`, right-clicking the Taskbar icon and selecting *Close window*, or using the context menu) exit immediately.
 - **Main Controls:**
   - **Use Expert Options (Expert):** Unchecked (default) uses the built-in guardrails. Checked reveals the additional settings. If you do not understand these settings and their impact on MSFS performance and graphics quality, it is strongly recommended that you leave this unchecked.
-  - **Flight Type:** VFR or IFR in any mode, plus six additional user profiles in Expert mode.
+  - **Flight Type:** VFR or IFR in any mode, plus six additional user profiles in Expert mode, and **Monitor only** in any mode, which stops AutoFPS changing any sim settings (see [Monitor Only](#monitor-only)).
   - **Target FPS:** The most important setting in the app (range 10–500, fractional values of 0.5 supported). Set it to the FPS you want after any frame generation has been applied.
+  - **Target FPS option (Manual, Auto, Fixed):** How the Target FPS is applied (see [Graphics Modes & Frame Generation](#graphics-modes--frame-generation)). The choice is saved separately for each graphics mode in each profile.
   - **On Top:** Lets the app overlay your MSFS session, with MSFS keeping the focus. Useful for adjusting settings and watching the result as the flight progresses, and for single monitor users with frame generation, who then see the true FG FPS the app is reading.
   - **Dark Mode:** Toggles between the default Light theme and a native Dark theme.
   - **Reset button:** Resets TLOD, Clouds, Auto Target FPS and graphics mode detection to their initial state, which is useful to restart the TLOD Extra seek if conditions change a lot. In Expert mode, outside a flight session, it restores the active flight profile to defaults after confirmation. Press **ALT-R** while the app has the focus, so it can be assigned as a VR-friendly voice command with an app like VoiceAttack.
@@ -150,9 +185,10 @@ The companion In-Game Toolbar Widget and local web server allow in-cockpit monit
 - **Orange with arrows (TLOD or OLOD):** the value is auto-adjusting.
 - **Orange (FPS and TLOD):** adjustment is limited because FG is inactive and TLOD increases are disabled.
 - **Black:** none of the above.
-- Other symbols: 🔒 value locked, ▲ increasing, ▼ decreasing, ⊤ upper limit reached, ⊥ lower limit reached.
+- Other symbols: 🔒 value locked, ▲ increasing, ▼ decreasing, ⊤ upper limit reached (also shown beside TLOD while VRAM+ is limiting it, with an explanatory tooltip), ⊥ lower limit reached.
 - The Sim Values header shows an **MSFS icon** when default MSFS values are being displayed (not in a flight session), and an **AutoFPS icon** when the values are being actively controlled by AutoFPS in a flight. Both icons show when hybrid dynamic settings is active.
 - Mouse over the **Reduce** value to see the additional reduction settings when auto reduction or VRAM+ is at Level 1 or greater.
+- The **Reduce** label shows `DynSet XX` or `Inactive` for only 15 seconds after a flight starts, a full reset, or MSFS dynamic settings being switched on or off (Expert), then returns to the normal cloud state unless settings reduction is active.
 
 **FPS display**
 - **FPS** shows the unfiltered raw FPS when a Fixed FPS is set or detected. **FPS+** shows the average FPS, filtered for spikes and dips, so brief changes (view changes, panning, scenery loading) do not cause unwanted setting changes.
@@ -164,12 +200,37 @@ The companion In-Game Toolbar Widget and local web server allow in-cockpit monit
 
 **Status line**
 - The sim rate shows at the start of the line for any value except 1X.
-- Shows the detected graphics mode, app pause, FPS settle, TLOD+ seek, Mtns+, app priority and the TLOD range as applicable. A **+** next to TLOD means TLOD Extra is active, so expect a higher TLOD Base Min. A **+** next to FPSCap means a higher TLOD offset across the whole altitude schedule.
-- **Day**, **Night** or **Δ** shows the Night Mode state, with Δ while transitioning between day and night.
+- Shows the detected graphics mode, app pause, FPS settle, Mtns+, app priority and the TLOD range as applicable. A **+** next to TLOD means TLOD Extra is active, so expect a higher TLOD Base Min.
+- **Day**, **Night** or **Δ** shows the day/night state, with Δ while transitioning between day and night. The same state selects the Night profile in a Day/Night profile pair.
 - A 🔒 next to the TLOD range means the delayed base TLOD reduction (`DelayLG`) is active and waiting for the landing gear.
 - A **lightning symbol** next to the FPS reading means periodic frame time spikes have been detected, and next to the TLOD range means spike protection is currently reducing TLOD.
 - When VRAM+ is reducing settings, the **Reduce** label changes to **VRAM+** in red, and the status line appends **HLD** (hold) or **RED** (reduction).
 - A **D** prefix on the TLOD and OLOD labels means MSFS dynamic settings is active and controls the LOD reductions.
+
+---
+
+## In-Game Toolbar Widget & Web Interface
+
+The companion In-Game Toolbar Widget and local web server allow in-cockpit monitoring and adjustments without switching out of the simulator.
+
+### Installation & Access
+- Select the **MSFS Widget** option during the installer setup to deploy the widget to your Community folder.
+- In-cockpit: Open the MSFS top toolbar and click the **AutoFPS** icon.
+- Web browser: Navigate to `http://localhost:54321/` in a browser on the PC running AutoFPS while it is running. The web server only accepts requests addressed to localhost / 127.0.0.1.
+
+### Key Widget Features
+- **Live Telemetry & Balanced Layout:** Mirrors the desktop application across three clean columns displaying real-time FPS, TLOD, OLOD, AGL, vertical speed, reduction states, and connection status with matching glyphs.
+- **Interactive Target FPS Controls:** Adjust Target FPS directly in the cockpit using responsive `–` and `+` stepper buttons (with accelerating hold), toggle modes (Manual, Auto, Fixed), and switch target graphics profiles.
+- **Camera-Based Auto-Hide:** Automatically conceals the in-game toolbar panel when leaving cockpit view to keep external views and screenshots uncluttered:
+  - **Off:** Widget remains visible in all camera views.
+  - **Chase:** Automatically hides only in standard chase exterior view.
+  - **All Ext:** Automatically hides across all external views (chase, drone, showcase, and exterior fixed cameras) with sub-150 ms SimVar response.
+- **Click-to-Toggle FPS Source:** Click the FPS source badge on the panel to toggle capture between MSFS and RTSS (read-only during active OFXR or VectorXR sessions).
+- **Show/Hide Hotkey:** The previous on-screen hotkey button has been replaced by the Auto-Hide dropdown. Any previously configured hotkeys continue to work in the background. To set, change, or clear a manual toggle hotkey, edit the `WidgetHotkey` key in `MSFS2020_AutoFPS.config` or `MSFS2024_AutoFPS.config` located in `%appdata%\MSFS_AutoFPS` (set to `"None"` to disable).
+- **Collapsible General Controls:** Click the General section header to collapse controls during flight, synchronised two-way with the desktop application.
+- **Title Bar Hiding & Dragging:** Double-click empty space on the widget header to toggle the title bar. Move the widget by dragging anywhere on its background. Text and elements dynamically scale when resized horizontally to prevent clipping in VR.
+- **Monitor Only Layout:** When the Flight Type is **Monitor only**, the widget (and web interface) hides Target FPS, Expert and Reset, moves Dark to the Flight Type line, and shows Log+ locked on and dimmed. Target FPS, mode, Target, Expert and Log+ changes made from the widget are ignored while in Monitor only.
+- **Flight Type List:** The list is rebuilt each time it is opened with the selected item scrolled into view, scrolls with the mouse wheel and has a wide scrollbar that can also be clicked or dragged.
 
 ---
 
@@ -185,7 +246,7 @@ AutoFPS incorporates a dynamic graphics mode architecture. Standard native modes
 - **NTE FPS (Not-To-Exceed Cap):**
   - Use when a ceiling cap exists but framerate still fluctuates below it.
   - Select **Manual Target FPS**.
-  - Target FPS must be set at least 5% below the cap when Settings Reduction is disabled, or at least 5% plus your profile FPS tolerance percentage below the cap when Settings Reduction is enabled, ensuring reduced settings have sufficient headroom to recover.
+  - Target FPS must be set at least 5% below the cap, ensuring settings reduction has sufficient headroom to recover.
 - **Auto Target FPS:**
   - Use when you don't know what target to choose, or your flights are so varied that one target is not always right.
   - It calculates a target after the initial FPS settling, when stationary on the ground or any time you are in the air, and recalculates if performance becomes too low, after arriving at a new destination, when changing graphics mode, pressing Reset, or toggling the option off and on.
@@ -209,7 +270,7 @@ AutoFPS incorporates a dynamic graphics mode architecture. Standard native modes
 ### Using the Graphics Modes
 - Core modes (NFR, VR, FG, FSR, Man FG) are always present. External mods (OFXR, VXR, LSFG, MSM) only appear when detected, and AutoFPS falls back to NFR if they close.
 - The app starts in the last-used mode and switches to the detected mode when a flight loads. **Man FG** is a forced mode: it stays selected across restarts until you choose Auto to return to detection.
-- Each graphics mode and flight type has its own Target FPS. You can edit an inactive mode's target in the dropdown, which is handy for VR because you can set it in 2D before putting the headset on.
+- Each graphics mode and flight type has its own Target FPS and its own Manual, Auto or Fixed option. You can edit an inactive mode's target and option in the dropdowns, which is handy for VR because you can set it in 2D before putting the headset on.
 - Dynamic or adaptive FG set outside MSFS should be configured under **Man FG** (DynFG). With MSFS as the FPS source, Target FPS is the NFR (1×) value. With RTSS as the FPS source, Target FPS is a post-FG value, the active multiplier is shown in the status line, and TLOD automation is disabled because pre-FG frametimes cannot be derived reliably.
 - **nVidia FG** only works while MSFS has the focus (driver behaviour), so use the app's **On Top** option to keep MSFS focused.
 - **Lossless Scaling** needs v2.13.2 or later, is detected whenever LS is running, and uses a profile named `MSFS2020` or `MSFS2024`, falling back to the first profile. Press Reset after changing LS settings mid-flight, and use only one FG type at a time.
@@ -223,9 +284,8 @@ Enable **Expert** (Use Expert Options) to reveal deep customisation controls acr
 
 ### TLOD Automation Methods
 - **FPS Sensitivity (Default & Recommended):** Adjusts TLOD in smaller, more frequent increments proportional to the variance between current and target FPS. Lower sensitivity values (e.g. 2–3) produce smaller steps, ideal for resolving visual stutters. Step size equals double the sensitivity value.
-- **FPS Tolerance (Legacy):** Requires FPS to deviate beyond a set percentage tolerance before adjusting settings in larger, less frequent steps.
 - **Auto TLOD:** Disregards FPS targets and automates TLOD strictly according to aircraft altitude (AGL), interpolating between Base Min and Top Max.
-- **FPS Cap (Legacy):** Specialised configuration of Auto TLOD designed for locked framerates with TLOD Extra headroom seeking. Superseded by FPS Sensitivity with Fixed Target FPS.
+- **Retired methods:** FPS Tolerance and FPS Cap were retired in 0.5.5.1. Profiles using them are converted automatically, with a message: FPS Tolerance profiles become FPS Sensitivity, and FPS Cap profiles become FPS Sensitivity with Fixed Target FPS for every graphics mode. Use FPS Sensitivity with Fixed Target FPS for locked framerates.
 
 ### TLOD Altitude & Range Settings
 - **TLOD Base Min:** Minimum TLOD applied at or below Alt TLOD Base (Range: 10 to Top Max - 10).
@@ -236,14 +296,18 @@ Enable **Expert** (Use Expert Options) to reveal deep customisation controls acr
   - **Fixed:** Disables extra ground seeking.
   - **Extra:** Progressively seeks higher base TLOD when parked or taxiing (≤ 5 knots) under favourable headroom, freezing or reducing during takeoff rolls and low flight.
   - **Free:** Allows free-ranging TLOD between Base Min and Top Max at all altitudes based on real-time headroom (recommended only for rural VFR).
-  - **Start Max:** Begins flight sessions with maximum extra TLOD rather than ramping up from base.
+  - **Start Max:** Begins flight sessions with maximum extra TLOD rather than ramping up from base. It is skipped when VRAM is already above the VRAM+ recovery threshold at session start, and cancelled if VRAM reaches the VRAM+ reduce threshold during the FPS settle.
+- **Taxiing and Takeoff:** TLOD changes are allowed while taxiing at up to 20 knots, but not during a takeoff roll (above 20 knots, or above 5 knots while accelerating). The same rule gates cloud quality increases and settings reduction recovery.
 - **Mountains+ (Mtns):** Expands Top Max TLOD by a set offset when terrain elevation exceeds a defined threshold (e.g. 1,000 ft AGL).
-- **Night Mode (Unified Per-Profile):** Replaces binary switches with a flexible dropdown:
+- **Night Mode (Per-Profile):** A dropdown in each profile:
   - **Off:** Maintains standard daytime settings around the clock.
   - **TLOD÷2:** Halves Top Max TLOD at night to eliminate distant rendering that cannot be seen in the dark.
-  - **Clds-X:** Steps down volumetric clouds by a configured number of levels (default 2, floor Low), keeping full draw distance for night city lights and runways while reducing cloud load.
+  - **Clds-X:** Steps down volumetric clouds by the Night cloud reduction levels (never below Low), keeping full draw distance for night city lights and runways while reducing cloud load.
   - **Both:** Applies both TLOD halving and cloud reduction simultaneously.
-  - *Behaviour:* Automatically clears active daytime cloud boost (`IncCloudQ`) upon entering night mode and restores it at sunrise. Transitions occur progressively based on solar position.
+  - *Night cloud reduction levels:* One global setting per sim config file (`NightCloudReduceLevelsGlobal`, 1 to 3, default 2) used by all profiles, Non-Expert included. VR has its own value (`NightCloudReduceLevelsGlobalVR`, 1 to 3, default 1), because VR cloud quality is usually lower than 2D on the same system. The Clds-X label shows the value for the graphics mode selected in Target. Night cloud reduction and its daytime restore apply straight away, not after the FPS settle.
+  - *Switching:* Day or night is detected from the sim's automatic brightness, so timing follows the actual light level including latitude, season and cloud cover. `DayNightSwitchLevel` (0 to 10, default 5) in `MSFS2020_AutoFPS.config` / `MSFS2024_AutoFPS.config` moves the switch earlier or later: 0 is about sunrise / sunset, 5 is about the end of civil twilight and 10 is near total darkness. Set it to 0 for the pre-0.5.5.1 timing.
+  - *Hold:* After each flip, further flips are held for 5 minutes of sim time (`DayNightSwitchHoldMinutes`, 1 to 30), so flying in and out of broken cloud does not flip night settings on and off. The hold ends early if brightness moves `DayNightSwitchHoldLevels` levels (0 to 2, default 2) past the switch level. A manual sim time change ends any hold and day/night is not decided until 3 seconds after the last change.
+  - *Behaviour:* Automatically clears any active daytime cloud boost (`IncCloudQ`) upon entering night mode and restores it at sunrise. Active (or disabled) settings reduction takes priority over night cloud reduction in the Clouds / Reduce display, with the night reduction shown in the tooltip.
 
 ### Auto OLOD
 - Adjusts Objects LOD based on an altitude band independent of FPS to avoid automation contention.
@@ -254,6 +318,8 @@ Enable **Expert** (Use Expert Options) to reveal deep customisation controls acr
 - **Profile Renaming:** Double-click the profile dropdown to rename. Press Enter or click away to save.
 - **VR Auto-Switching:** Append `" VR"` to a profile name matching a 2D profile (e.g. `IFR` and `IFR VR`). AutoFPS switches profiles automatically when entering or exiting VR (`↔` symbol displayed).
 - **Sim Rate Switching:** Append `" xX"` (e.g. `IFR 1X` and `IFR 4X`) to trigger automatic profile switching when acceleration rates change.
+- **Day/Night Pairing:** Name two profiles the same, with one ending in `" Night"` (e.g. `IFR` and `IFR Night`), and AutoFPS uses the Night profile at night and the other during the day (Day or Night shows on the status line). See the Detailed Reference for how the two profiles interact.
+- **Name Matching:** VR, Night and sim rate pairing ignores capitalisation and unusual spacing (e.g. `IFR night` or `IFR  2x` still pair). Profile names are cleaned on load and when renamed.
 - **Landing Gear Delay (`DelayLG`):** Include `"DelayLG"` in a profile name to lock TLOD at Top Max during descent until the landing gear is lowered.
 - **Command Line Switches:** Launch the application with predefined profiles:
   - `-ifr` and `-vfr`: Launches AutoFPS with the default IFR or VFR profile (even if renamed).
@@ -282,41 +348,53 @@ Enabled via the `+` checkbox beside the Sim Version label. Directs thread affini
 
 ## Companion Apps & Advanced Features
 
-<details>
-<summary><strong>GPU-Z Companion App & VRAM+ Protection</strong></summary>
+### GPU-Z Companion App & VRAM+ Protection
+MSFS 2024 and MSFS 2020 in DX12 mode are very demanding on VRAM. When VRAM overflows into much slower system RAM, performance can drop to single digit FPS and MSFS becomes more prone to CTDs. VRAM+ monitors usage via GPU-Z shared memory and proactively holds or sheds settings to prevent the overflow.
 
-### Overview
-MSFS 2024 and DX12 MSFS 2020 are prone to exhausting GPU memory, causing severe framerate degradation when VRAM overflows into system RAM. VRAM+ monitors usage via GPU-Z shared memory and proactively sheds settings to prevent overflow.
-
-### Setup
+#### Setup
 1. Download and install [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/).
 2. In GPU-Z settings: enable *Minimise on close*, *Load at Windows startup (minimised)*, *Minimise to system tray*, and *Refresh sensors while in background*.
-3. Verify that the GPU displayed in GPU-Z matches the GPU driving MSFS.
+3. Make sure the card selected in the GPU-Z GPU dropdown is the GPU driving MSFS. GPU-Z shares the sensors of its selected card and AutoFPS cannot choose a different one.
+4. VRAM+ is on by default, including in Non-Expert mode, and only works while GPU-Z is running.
 
-### Automation Thresholds (`MSFS_AutoFPS.config`)
-- `VRAMOverflowHoldTLOD` (Default `96`%): Caps TLOD to its current value, preventing further upward seeking.
-- `VRAMOverflowReduceTLOD` (Default `98`%): Progressively invokes settings reduction (or reduces LODs by up to 50%) until memory pressure stabilises.
-- `VRAMOverflowSettingsRecovery` (Default `93`%): Requires at least a 5% safety margin below the reduction threshold before settings are permitted to recover.
-</details>
+#### VRAM+ Option (Expert mode)
+- **MSFS 2020:** Enabling uses the LODs-only setting, providing up to a 50% reduction.
+- **MSFS 2024:** **Off** disables the feature. **Max** (default) uses the full settings reduction suite minus clouds. **Set** uses the shared auto settings reduction options, whether or not auto settings reduction is enabled.
+- Hover over the VRAM+ dropdown for a tooltip built from your live hold, reduce and recovery thresholds.
 
-<details>
-<summary><strong>RTSS Companion App & Periodic Spike Protection</strong></summary>
+#### How it behaves
+- **Hold** (default 96% VRAM in use): TLOD is capped at its current value, even if favourable performance conditions exist. The limit symbol (⊤) shows beside TLOD in Sim Values, with a tooltip.
+- **Reduce** (default 98%): settings are progressively reduced (LODs by up to 50%, other settings down by up to 2 levels) until VRAM falls back below the Hold threshold. The **Reduce** label changes to **VRAM+** in red, and the status line appends **HLD** or **RED**.
+- **Recovery** (default 93%, at least 5% below Reduce): settings progressively recover once VRAM has enough headroom, potentially back to their defaults.
+- **Start Max:** is skipped when VRAM at session start is already above the recovery threshold, and cancelled if VRAM reaches the reduce threshold during the FPS settle. VRAM is monitored throughout the settle.
+- If VRAM+ keeps activating, reduce your TLOD settings and/or other MSFS graphics settings.
 
-### Overview
+#### Automation Thresholds
+The three thresholds are changed in `MSFS2020_AutoFPS.config` / `MSFS2024_AutoFPS.config` (in `%appdata%\MSFS_AutoFPS`) after running the app once following an update:
+- `VRAMOverflowHoldTLOD` (default `96`%): caps TLOD to its current value, preventing further upward seeking.
+- `VRAMOverflowReduceTLOD` (default `98`%): progressively invokes settings reduction (or reduces LODs by up to 50%) until memory pressure stabilises.
+- `VRAMOverflowSettingsRecovery` (default `93`%): must be at least 5% below the reduction threshold before settings are permitted to recover.
+
+See *VRAM+ in full* in the Detailed Reference for every behaviour.
+
+### RTSS Companion App & Periodic Spike Protection
 RivaTuner Statistics Server ([RTSS](https://www.guru3d.com/download/rtss-rivatuner-statistics-server-download/)) provides external frame timing metrics and enables detection of cyclic frame time stutter often encountered over dense photogrammetry.
 
-### Spike Protection
-- Requires RTSS to be installed and running.
-- Detects periodic frame time spikes (cadence of 0.3–1.8 seconds) matching photogrammetry reload stutters.
+- Spike Protection requires RTSS to be installed and running.
+- It detects periodic frame time spikes (cadence of 0.3–1.8 seconds) matching photogrammetry reload stutters.
 - When protection is active, AutoFPS applies temporary TLOD reductions, smoothly restoring values over time and distance once the spike train subsides.
 - Logging is streamlined to record events only when 4 or more spikes occur outside a 1.8-second cadence window, minimising log file growth.
 - `SpikeThresholdMultiplier` in `MSFS_AutoFPS.config` (default `2.0`) controls the multiple of the frame time median at which a spike is counted.
-</details>
 
-<details>
-<summary><strong>Log+ Diagnostic Mode & Performance Logging</strong></summary>
+### Monitor Only
+Choose **Monitor only** at the end of the Flight Type list (Expert or Non-Expert mode) to run AutoFPS purely as a performance monitor and logger:
+- AutoFPS stops changing any sim settings (the status line shows Monitor Mode). On selecting it, the sim is first returned to your own default TLOD, OLOD, cloud quality and key settings.
+- It is remembered between sessions until you choose another flight type, which reloads that profile and does a full reset. It is not a profile, and your profiles are untouched.
+- The layout is simplified across the desktop app, widget and web interface. Log+ is forced on and locked while you are in Monitor only.
+- You can change TLOD, OLOD and cloud quality in the MSFS options at any time, in or out of a flight. The readings update immediately once you save, and nothing is restored or reapplied.
+- VR, sim rate and Night profile auto-switching are suspended.
 
-### Features & Configuration
+### Log+ Diagnostic Mode & Performance Logging
 Enable **Log+** in Expert mode to access advanced diagnostics:
 - **Detailed FPS Logging:** Click the live FPS readout during flight to record raw and averaged FPS to the log file every second for a defined duration (indicated by alternating purple text). Default duration is 30 seconds, changeable via `logFPSDetailsCountMax` in `MSFS_AutoFPS.config`.
 - **Camera State Logging:** Logs simulator camera transitions to help diagnose view-change stutters.
@@ -326,125 +404,95 @@ Enable **Log+** in Expert mode to access advanced diagnostics:
   - `PerfLogBufferSize` (default `15`): Pre-breach and post-recovery sample buffer.
   - `PerfLoggingAlways` (default `false`): Forces continuous logging when Log+ is active.
   - `EwmaAlpha` (default `0.1`): Smoothing coefficient for scheduler jitter.
-  - `MonitorMode` (default `false`): Disables all graphics adjustments, running AutoFPS purely as a background performance logger.
-</details>
+  - `MonitorMode`: no longer enables monitoring. It only stores the Monitor only Flight Type selection, so choose **Monitor only** in the Flight Type list instead (see [Monitor Only](#monitor-only)).
 
 ---
 
-## Installation, Updates & Maintenance
+## Troubleshooting & FAQ
 
-### Requirements
-- Microsoft Flight Simulator 2020 or 2024
-- Windows 10 / 11 (64-bit)
-- .NET 8 Desktop Runtime (x64)
-- Visual C++ 2015–2022 Redistributable (x64)
-- MobiFlight WASM Module (managed by the installer)
+### Start here
+- Installer will not download or run, or is flagged as unsafe: see [Installer Problems](#installer-problems).
+- SimConnect stays red, TLOD and OLOD show zero, or a WASM exception is in the log: see [SimConnect stays red, values show zero or a WASM exception](#simconnect-stays-red-values-show-zero-or-a-wasm-exception).
+- Need a clean MSFS reinstall: see [MSFS Clean Reinstallation Instructions](#msfs-clean-reinstallation-instructions).
+- "Unable to attach MSFS" or "MSFS compatibility test failed": see [App Messages](#app-messages).
+- Stutters, changing settings or VRAM+ questions: see the [FAQ](#frequently-asked-questions).
 
-### Installation Options
-- Download the latest installer (`MSFS_AutoFPS-Installer-vXYZ.exe`) from [GitHub Releases](https://github.com/ResetXPDR/MSFS_AutoFPS/releases/latest).
-- **MSFS Widget:** Installs the toolbar companion to your Community folder.
-- **Repair:** Reinstalls runtime libraries, MobiFlight modules, and the widget without altering custom configurations.
-- **Custom Community Folders:** Use `2020 Folder...` or `2024 Folder...` to point to custom Community paths (such as Addons Linker locations). Custom paths persist across updates in `Install.log`. Right-click either button to reset to auto-detected simulator defaults.
-- **Smart Deferred Updates:** When an auto-update contains an in-game widget update while MSFS is running, the installer defers installation until MSFS closes, preventing flight interruptions and locked-file errors.
-- **File Locations:**
-  - Binaries: `%appdata%\MSFS_AutoFPS\bin`
-  - Logs: `%appdata%\MSFS_AutoFPS\log`
-  - Installation Log: `%appdata%\MSFS_AutoFPS\Install.log`
-  - Configs: `%appdata%\MSFS_AutoFPS\MSFS_AutoFPS.config`, `MSFS2020_AutoFPS.config`, `MSFS2024_AutoFPS.config`
+### SimConnect stays red, values show zero or a WASM exception
+This covers SimConnect staying red, TLOD and OLOD showing zero, "Critical Exception occurred: MSFS_AutoFPS - Unable to load DLL 'GpuzShMem.x64.dll' or one of its dependencies" in the log file, and a SimConnect / WASM exception such as Exception 31 or Exception 25. Work through these in order and stop as soon as it works:
+1. **Repair.** Close MSFS, run the **MSFS_AutoFPS installer** (the one downloaded from the Releases page, not an MSFS installer), choose **Repair** and reboot. If a redistributable fails to install, install or repair these yourself:
+   - Microsoft Visual C++ 2015 - 2022 Redistributable: [x86](https://aka.ms/vs/17/release/vc_redist.x86.exe) and [x64](https://aka.ms/vs/17/release/vc_redist.x64.exe).
+   - The .NET Desktop Runtime x64 from the [Microsoft .NET 8.0 download page](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
+2. **Remove duplicate MobiFlight modules.** Duplicates in both your Official and Community folders cause Sim Values to read zero. Remove the older copies, rerun the installer and start the app again.
+3. **Delete the MSFS WASM folder** (when the log shows an exception such as 31 or 25, the WASM installation is most likely corrupt). It is located under the Microsoft Flight Simulator directory in either `%appdata%` (Steam) or `%localappdata%` (MS Store) and MSFS rebuilds it next time it runs. Rebooting is also recommended.
+4. **Clean reinstall MSFS.** If that does not fix it, a full clean reinstall of MSFS is required: see [MSFS Clean Reinstallation Instructions](#msfs-clean-reinstallation-instructions).
 
-### Install, Update and Uninstall Notes
-- **Install options:** Desktop Icon, MSFS Widget, Close to Tray, Reset Configs (recreates the app Common, MSFS 2020 and MSFS 2024 config files), Repair, Custom Community Folders, and Auto Start Options (Remove, Retain, FSUIPC via FSUIPC.ini, or MSFS via EXE.xml).
-- **Updating:** Just run the installer and select update. Do **not** uninstall first, because that deletes all app files including your config. MSFS_AutoFPS and/or MSFS2020_AutoFPS must not be running.
-- **Admin:** Do not run the installer as Admin unless it will not install because of a permissions issue.
-- **Uninstalling:** Exit the app completely (not hiding in the system tray), run the installer and select **Remove** on the first window. This removes the desktop icon, any MSFS or FSUIPC autostart entries, and the entire app folder including your config file and the in-game widget.
-- **Upgrading from MSFS2020_AutoFPS:** No need to uninstall it first. The installer removes it and preserves its MSFS 2020 config for use in this app.
-- **Download problems:** The installer is about 1.5 MB. If it did not download or is zero size, try another browser, or temporarily disable your AV.
-- **SmartScreen:** Right-click the installer, choose Properties, tick **Unblock**, then Apply and OK. Or create an exception in your AV program.
-- **Error "Unable to load DLL 'GpuzShMem.x64.dll'", simconnect stays red or TLOD and OLOD show zero:** Reinstall with the **Repair** option and reboot. See the FAQ and the Detailed Reference for more.
-- **Compatibility problems with a new MSFS version:** If the app cannot adapt, I am likely already aware and working on it. If you may be among the first to hit it (for example on an MSFS beta), please raise a new issue on GitHub or add to an existing one.
+### MSFS Clean Reinstallation Instructions
+*A clean reinstallation takes under 15 minutes in MSFS 2024, but several hours in MSFS 2020. Only undertake this if troubleshooting persistent WASM or core simulator crashes.*
 
-### Update Channels & Management
-- **Silent Updates:** Installs updates automatically without prompts, displaying release notes in Notepad afterwards.
-- **Prompted Updates (Default):** Prompts for user confirmation before installing optional updates.
-- **Show Updates:** Displays notifications when updates are available without downloading.
-- **Mandatory Updates Only:** Notifies and installs only mandatory builds.
-- **Update Channels:** Configurable in Expert mode:
-  - **Release:** Standard stable release baseline.
-  - **RC+ (Release Candidate), Test+, Exp+ (Experimental):** Accesses pre-release builds. Returning from a test channel to Release offers a one-time automatic rollback to the latest formal release. Test versions require all app update notifications to remain active to maintain a consistent test baseline.
+1. Back up or relocate your Community folder.
+2. Follow the official Zendesk clean install instructions exactly:
+   https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC
+3. **Crucial:** Manually delete leftover simulator AppData/LocalState directories as specified in the guide. Controller profiles, logbooks, and cloud saves are retained on Xbox Live servers.
+4. Reinstall the simulator, launch once to the main menu, and then restore your Community folder.
 
-<details>
-<summary><strong>Manual Installation Instructions (Without Installer)</strong></summary>
+### Installer Problems
+- **Installer did not download or is zero size:** It should be about 3 MB. Try another browser, or temporarily disable your AV.
+- **Installer will not run, or is flagged as untrusted:** Windows SmartScreen may block it because the app is new. Right-click the installer, choose Properties, tick **Unblock**, then Apply and OK, and try again. Otherwise create an exception for the installer in your AV program, or disable the AV temporarily while running it.
+- **Cannot run the installer at all:** Follow the manual installation steps below.
+- **Previously removed MSFS2020_AutoFPS without using its installer:** You may have problems installing MSFS_AutoFPS. Run the MSFS_AutoFPS installer and select remove, install [MSFS2020_AutoFPS 0.4.3.1](https://github.com/ResetXPDR/MSFS2020_AutoFPS/releases/download/v0.4.3.1/MSFS_AutoFPS-installer-v0.4.3.1.exe) with no autostart options, then rerun the MSFS_AutoFPS installer and choose your autostart option.
+- **Bypass MobiFlight check:** If the installer fails during the MobiFlight check despite the module being current, create a shortcut to the installer, append `-bypassmobiflight` to the Target field, and run the shortcut.
+- **Unable to locate Community folder:** Often caused by leftover simulator userdata following an MSFS uninstall. AutoFPS checks for `UserCfg.opt` to verify simulator presence, so removing orphan userdata folders resolves the false detection. Alternatively use the `2020 Folder...` or `2024 Folder...` button in the installer.
+- **XML Exception during autostart:** "XML Exception: Unexpected XML declaration" indicates corruption in your `EXE.xml` file. Paste the file content into an XML validator or AI tool to correct the structure, save, and rerun the installer.
+- **Installer error:** An unexpected installer error now shows the reason and next steps instead of leaving the installer stuck.
 
-If the executable installer cannot be run:
-1. Download the [MobiFlight WASM Module](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and extract it into your MSFS Community folder.
+### Manual Installation (Without Installer)
+If the installer cannot be run:
+1. Download the [MobiFlight WASM Module](https://github.com/MobiFlight/MobiFlight-WASM-Module/releases) and extract it into your MSFS Community folder (without MSFS running).
 2. Install the Visual C++ Redistributable ([x86](https://aka.ms/vs/17/release/vc_redist.x86.exe) and [x64](https://aka.ms/vs/17/release/vc_redist.x64.exe)).
 3. Download and install the latest [.NET 8 Desktop Runtime (x64)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
 4. Create the folder `%appdata%\MSFS_AutoFPS\bin`.
 5. Download [MSFS_AutoFPS.zip](https://github.com/ResetXPDR/MSFS_AutoFPS/blob/main/MSFS_AutoFPS.zip) and extract its contents into the newly created `bin` folder.
 6. Create a shortcut to `MSFS_AutoFPS.exe` on your desktop.
-</details>
 
-<details>
-<summary><strong>Advanced Installation Troubleshooting & Error Codes</strong></summary>
+### App Messages
+- **"Unable to attach MSFS - app disabled":** The most likely causes are MSFS loading very slowly so the attachment times out, MSFS and AutoFPS running at different permission levels (e.g. MSFS running as Admin while AutoFPS is not), or your anti-virus blocking the app. Restart AutoFPS after MSFS has loaded to the main menu, check that the elevation levels match, set an anti-virus exclusion for the app, and as a last resort run AutoFPS as administrator.
+- **"MSFS compatibility test failed - app disabled":**
+  - You started MSFS, changed MSFS settings and then started AutoFPS. Exit AutoFPS, toggle any simple setting (e.g. VSync) in the MSFS settings menu, save, and restart AutoFPS. If that does not work, exit both completely, start AutoFPS, then start MSFS.
+  - `UserCfg.opt` contains values beyond what the MSFS menu allows. Reset the graphics settings to default (F12) in the MSFS main menu settings for both PC (MSFS 2020) or General (MSFS 2024) and VR, then make all changes within the MSFS settings menu.
+  - A new MSFS version may have moved the memory map. AutoFPS will first auto-install an explicitly compatible update if one is available, otherwise it offers the update most likely to be compatible, which may be a test build. If none is found or it does not help, I am likely already aware and working on it. If you may be among the first to hit it (for example on an MSFS beta), please raise a new issue on GitHub or add to an existing one.
+  - There may be a permissions issue and you may need to run the app as Administrator.
 
-- **Bypass MobiFlight Check:** If the installer fails during the MobiFlight check despite the module being current, create a shortcut to the installer, append `-bypassmobiflight` to the Target field, and run the shortcut.
-- **Unable to Locate Community Folder:** Often caused by leftover simulator userdata following an uninstall. AutoFPS checks for `UserCfg.opt` to verify simulator presence. Removing orphan userdata folders resolves the false detection.
-- **Duplicate MobiFlight Modules:** Having duplicate modules in both Official and Community folders causes Sim Values to read zero. Remove older copies.
-- **XML Exception During Autostart:** "XML Exception: Unexpected XML declaration" indicates corruption in your `EXE.xml` file. Paste the file content into an XML validator or AI tool to correct structural syntax, save, and rerun the installer.
-- **Unable to Attach MSFS - App Disabled:** Caused by attachment timeouts during slow simulator loading, elevation mismatches (e.g. MSFS running as Admin while AutoFPS is not), or antivirus blocking. Restart AutoFPS after reaching the main menu, verify elevation parity, or set antivirus exceptions.
-- **MSFS Compatibility Test Failed - App Disabled:**
-  - Triggered if simulator settings were modified while the sim was running before AutoFPS launched. Rectify by toggling a simple setting (like VSync) in the MSFS menu, saving, and restarting AutoFPS.
-  - Triggered if `UserCfg.opt` contains values beyond menu boundaries. Reset graphics settings to default (F12) in the MSFS menu to restore valid configurations.
-  - Triggered by new simulator versions introducing relocated memory maps. AutoFPS will attempt to download a compatible update automatically.
-</details>
+### Frequently Asked Questions
 
-<details>
-<summary><strong>MSFS Clean Reinstallation Instructions</strong></summary>
-
-*A clean reinstallation takes under 15 minutes in MSFS 2024, but several hours in MSFS 2020. Only undertake this if troubleshooting persistent WASM or core simulator crashes.*
-
-1. Back up or relocate your Community folder.
-2. Follow the official Zendesk clean install instructions exactly:  
-   https://flightsimulator.zendesk.com/hc/en-us/articles/17335196046108-How-to-clean-install-the-simulator-on-PC
-3. **Crucial:** Manually delete leftover simulator AppData/LocalState directories as specified in the guide. Controller profiles, logbooks, and cloud saves are retained on Xbox Live servers.
-4. Reinstall the simulator, launch once to the main menu, and then restore your Community folder.
-</details>
-
----
-
-## Frequently Asked Questions & Troubleshooting
-
-### How does AutoFPS compare to the in-built Dynamic Setting feature in MSFS 2024?
+#### How does AutoFPS compare to the in-built Dynamic Setting feature in MSFS 2024?
 - **Independent Adjustment:** MSFS Dynamic Settings adjusts TLOD first and then OLOD if performance remains poor. AutoFPS manages TLOD and OLOD independently, with OLOD adjusting inversely proportional to altitude by default. AutoFPS can also manage a wider suite of visual settings when Settings Reduction and VRAM+ are active.
 - **Adjustment Range:** MSFS Dynamic Settings only reduces down to 50% of your configured setting. AutoFPS in Non-Expert mode uses defaults as a midpoint, and in Expert mode can be set to any range, including beyond the in-game menu maximum of 400.
 - **Response Speed:** MSFS Dynamic Settings responds faster due to internal metric access, but tends to overreact to brief stutters. AutoFPS filters short-term spikes to maintain visual stability.
 - **Frame Generation Awareness:** MSFS Dynamic Settings bases its target on native framerate rather than delivered framerate when frame generation is active. AutoFPS accommodates all mainstream frame generation technologies with post-FG targets.
 - **Hybrid Automation:** In Expert Mode, AutoFPS can work alongside MSFS Dynamic Settings: MSFS handles rapid micro-adjustments while AutoFPS manages base LOD ranges and external settings reductions.
 
-### Why does my antivirus or browser flag the installer as untrusted?
-AutoFPS is a hobbyist project. Code signing certificates carry prohibitive costs, so new releases may occasionally trigger false positives (Windows SmartScreen, Kaspersky, or browser download warnings) until community reputation builds. If blocked, right-click the installer, select **Properties**, check **Unblock**, and click **Apply**.
+#### Why does my antivirus or browser flag the installer as untrusted?
+AutoFPS is a hobbyist project. Code signing certificates carry prohibitive costs, so new releases may occasionally trigger false positives (Windows SmartScreen, Kaspersky, or browser download warnings) until community reputation builds. If blocked, right-click the installer, select **Properties**, check **Unblock**, and click **Apply**. Downloaded updates are also verified by AutoFPS against the SHA-256 digest published by GitHub before they are launched.
 
-### Why are my simulator settings restoring to unexpected values?
-AutoFPS records your default settings when a flight begins and restores them when returning to the main menu or exiting the app. If you alter graphics settings in the MSFS menu while in an active flight with AutoFPS running, those changes will be overwritten. To change baseline settings, do so from the MSFS main menu or with AutoFPS closed.
+#### Why are my simulator settings restoring to unexpected values?
+AutoFPS records your default settings when a flight begins and restores them when returning to the main menu or exiting the app. If you alter graphics settings in the MSFS menu while in an active flight with AutoFPS running, those changes will be overwritten. To change baseline settings, do so from the MSFS main menu or with AutoFPS closed, or choose **Monitor only**, where AutoFPS does not change or restore anything.
 
-### Can you tell me the best settings for me to use?
+#### Can you tell me the best settings for me to use?
 - The best settings depend on your system, the other addons and apps you use, and what you mean by "best": higher FPS, better visuals or a smoother experience. Some of these are mutually exclusive.
 - There are now thousands of users of this app and I don't have the time to give individual settings advice.
 - Start with Non-Expert mode to see what the app does and when. When you are comfortable, enable Expert and read the tooltip and README for each setting.
 - Make small changes to only a few settings at a time so you can see the effect of each.
 
-### How do I eliminate visual or audio stutters when using the app?
+#### How do I eliminate visual or audio stutters when using the app?
 1. Revert to the default configuration using the installer's **Reset Configs** option.
 2. Begin in Non-Expert mode with the IFR profile and Auto Target FPS.
 3. If the MSFS Performance Optimiser is enabled, try disabling it, as core affinity changes can cause audio crackling on certain hardware.
 4. In Expert mode, lower **FPS Sensitivity** to 2 or 3 to enforce smaller, gradual TLOD adjustments.
 
-### What should I do if SimConnect stays red or values show zero?
-- Rerun the installer with the **Repair** option to ensure .NET 8, VC++ runtimes, and MobiFlight are properly installed.
-- Check for duplicate MobiFlight WASM modules in both your Official and Community folders and remove older copies.
-- If the log indicates WASM Exception 31, your simulator WASM cache may be corrupted. Delete the `WASM` cache folder located in your MSFS AppData directory and restart the simulator.
+#### What does VRAM+ do and why does it show the wrong GPU or not work?
+VRAM+ holds or reduces key settings when VRAM is about to overflow (see [GPU-Z Companion App & VRAM+ Protection](#gpu-z-companion-app--vram-protection)). It only works while GPU-Z is running. GPU-Z shares the sensors of the card selected in its own GPU dropdown, and AutoFPS cannot choose a different card, so on a system with more than one GPU select the card that drives MSFS in GPU-Z.
 
-### Why does RTSS framerate telemetry freeze?
+#### Why does RTSS framerate telemetry freeze?
 Switching between 2D Frame Generation and VR can latch the swapchain in shared memory. Clicking the FPS source icon on the app or widget toggles capture back to MSFS. If RTSS remains frozen, restarting RTSS or MSFS clears the shared memory handle.
 
 ---
@@ -456,9 +504,11 @@ The sections below hold the full technical detail from the original README. Clic
 <details>
 <summary><strong>Credits and licence history</strong></summary>
 
-AutoFPS is based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself (ResetXPDR) in DynamicLOD_ResetEdition and MSFS2020_AutoFPS, and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS. My thanks to all of them.
+AutoFPS is based on muumimorko's idea and code in MSFS_AdaptiveLOD, as further developed by Fragtality in DynamicLOD, myself (ResetXPDR) in DynamicLOD_ResetEdition and MSFS2020_AutoFPS, and with inspiration from changes suggested by kayjay1c6b from his MSFS2024_AutoFPS and by dankocrnkovic from his fork of MSFS_AutoFPS. My thanks to all of them.
 
 Versions up to and including v0.5.5.0 were released under the MIT Licence, which requires all previous authors' efforts to be appropriately attributed in the documentation and website descriptions of any derivative software. Later versions use the MSFS_AutoFPS Licence in [LICENSE.txt](LICENSE.txt), which keeps that requirement. Parts built on the earlier authors' work remain under their original licences.
+
+My thanks also to dankocrnkovic on GitHub for the idea of verifying downloaded installers against the SHA-256 digest published by GitHub, from their fork of this project.
 
 </details>
 
@@ -583,7 +633,7 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
       - Raw FPS is shown because the fixed FPS value is the most relevant for automation and performance decisions.
     - FPS+ (averaged) - shows the average FPS, filtered for spikes and dips, for the current graphics mode.
       - Smooths out any transient FPS spikes or dips experienced - such as those caused by sudden changes in view, panning, scenery loading or other transient events - so that undesired automated MSFS setting changes are minimised.
-      - FPS values within 15% (FPS Sensitivity and Tolerance automation modes) or 10% (AutoTLOD and FPS Cap automation modes) of the current average are averaged over a 5 second rolling window of FPS values.
+      - FPS values within 15% (FPS Sensitivity automation) or 10% (Auto TLOD automation) of the current average are averaged over a 5 second rolling window of FPS values.
       - FPS values outside of this range are considered outliers and are not included in the average until a sustained change over 3 seconds in the same direction is detected.
       - The average will recover more quickly if the very recent trend is detected to have minimal variance.
       - Averaging period is 5 seconds.
@@ -630,24 +680,9 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
       - Users on the **Exp+** channel can auto-update directly from release versions to experimental builds.
     - **Compatibility Updates** may be auto‑installed if the app fails its compatibility check and a matching update is available, which may be a test build if no stable version exists.
     - **Smart Deferred Updates:** If an update contains an In-Game Widget update while MSFS is running, the update is deferred automatically until MSFS closes. A status message indicates when an update is waiting.
+    - **Verified Updates:** Before launching a downloaded installer, auto-update compares its SHA-256 with the digest GitHub publishes for the release asset (case ignored). An installer already in your Downloads folder is verified in place. On a mismatch it is deleted, downloaded again and verified again; if the release has no digest the update is refused and the file is left alone. Silent updates only write a failure to the log, otherwise an "Update Verification Failed" message is shown. Update downloads now time out instead of hanging.
     - App startup sequence ensures update check is completed before connecting to MSFS.
-  - VRAM+ - detects an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
-    - **Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running to work**.
-      - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
-      - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
-      - The feature will be disabled if GPU-Z is not found running.
-    - Uses three thresholds for VRAM usage, all changeable in the app root directory config file (not the one in the bin subdirectory) after running the app once after updating:
-      - VRAMOverflowHoldTLOD threshold, defaults to >= 96% VRAM in use and will cap TLOD to its current value, even if favourable performance conditions exist.
-      - VRAMOverflowReduceTLOD threshold, defaults to >= 98% VRAM in use and will progressively activate auto settings reduction until the Hold threshold is achieved.
-      - VRAMOverflowSettingsRecovery threshold, must be at least 5% less than VRAMOverflowReduceTLOD (ie. 93% by default) and will allow settings to progressively increase with favourable performance conditions until the feature disengages. 
-    - VRAM+ option - only available to change in Expert mode, and defaults to enabled for either mode:
-      - MSFS 2020:
-        - Enabling uses the LODs-only setting, providing up to a 50% reduction.
-      - MSFS 2024:
-        - Off: disables the feature completely.
-        - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
-        - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
-    - If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
+  - VRAM+ - protects against VRAM overflow using GPU-Z. See the [GPU-Z & VRAM+](#gpu-z-companion-app--vram-protection) section and *VRAM+ in full* below.
   - Hybrid Dynamic Settings/AutoFPS-controlled Automation in Expert mode with MSFS 2024:
     - Uses MSFS dynamic settings, if enabled in MSFS, for auto-LOD reduction; otherwise it reverts to AutoFPS-controlled LOD reduction if active.
     - A one-time message will appear when the app is first launched with MSFS 2024, explaining how to enable and disable the feature.
@@ -657,7 +692,7 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
     - `DynSet` and the MSFS target frame rate can be changed at any time, including mid-flight, with changes reflected in the Reduce status display.
     - DynSet enable/disable and increase/decrease buttons are available when Log+ is enabled to allow instant changes to these settings without needing to open MSFS settings. 
     - Unlike AutoFPS-controlled LOD reduction, actual reduction amounts are not reflected in the TLOD and OLOD display values, as these are internal to MSFS and currently only visible via Developer Mode FPS view.
-    - Works best when using MSFS-set FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS, and the FPS Cap automation mode in AutoFPS.
+    - Works best when using MSFS-set FPS cap, with Max and Dynamic Settings Target Frame Rates in MSFS settings set to the native frame rate equivalent of the AutoFPS target FPS, and a Fixed Target FPS in AutoFPS.
     - If not using an FPS cap, it is recommended to set the MSFS dynamic settings target frame rate to at least 10 FPS lower than the native frame rate equivalent of the AutoFPS target FPS for best results.
     - Since Dynamic Settings Target Frame Rate is only configurable in 5 FPS increments, choose the next lowest value if your desired setting is not a direct multiple of 5.
   - Status Message - Displays key system messages, such as:
@@ -666,11 +701,56 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
     - Loading in to a flight - whether MSFS memory integrity tests have failed, and
     - Flight is loaded
       - Shows current sim rate with a range of 0.125X to 16X, which will display at the start of the app status line for any value except 1X.
-      - Displays a centred two-line status message showing detected Graphics Mode (NFR, FG, LSFG, MFG, MSM, FSR, OFXR, VXR or VR) and DX version (MSFS 2020 only), app pause, FPS settle, TLOD+ seek, Mtns+, app priority mode and/or TLOD range as applicable.
+      - Displays a centred two-line status message showing detected Graphics Mode (NFR, FG, LSFG, MFG, MSM, FSR, OFXR, VXR or VR) and DX version (MSFS 2020 only), app pause, FPS settle, Mtns+, app priority mode and/or TLOD range as applicable.
       - The FPS settle timer runs for up to 30 seconds to allow FPS to settle between pausing/unpausing, auto target FPS calibration, TLOD Extra transitions and VR/OFXR/NFR/FG/LSFG mode transitions. This allows the FPS to stabilise before engaging automatic functions and should lead to much smaller TLOD changes when seeking the target FPS on such transitions.
-      - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. Similarly, a + next to FPSCap indicates that TLOD Extra has been activated and that a higher TLOD offset across the entire altitude schedule should be expected. 
+      - App priority shows whether FPS or TLOD are the current automation priority. A + next to TLOD indicates that TLOD Extra has been activated and that a higher TLOD Base Min should be expected. 
       - Bonus GPU load display if the optional [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app is installed and detected running when starting any flight session. Note, the GPU-Z companion app is required to be running if the Decrease Cloud Quality option is selected in conjunction with the GPU Load activation method, as GPU-Z provides the necessary GPU load information to the app for this method to function.
       - Auto pause will activate if in flight and either MSFS is in active pause or the MSFS settings menu is being accessed.
+
+</details>
+
+<details>
+<summary><strong>VRAM+ in full</strong></summary>
+
+- What it does
+  - MSFS 2024 and MSFS 2020 in DX12 mode are very demanding on VRAM use, which can result in situations where its VRAM usage completely fills all available VRAM on your GPU and overflows into much slower system RAM.
+  - VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and make MSFS much more prone to CTD.
+  - While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM still regularly encounter VRAM overflow situations, even with modest settings.
+  - VRAM+ mitigates these potential overflow events by detecting an impending VRAM overflow and either holding or, if close enough, reducing key settings known to free up VRAM.
+  - Settings reduce by up to 50% for LODs (no further for MSFS 2020) and down by 2 quality levels for other settings, but only as far as required to avert the VRAM overflow. When VRAM usage reduces to an acceptable level, these settings automatically increase again, potentially back to their default values if sufficient VRAM headroom exists.
+- Requirements
+  - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running. The feature is disabled if GPU-Z is not found running. If it is not running, a message suggesting you start it is displayed during the initial 30 second settle timer of each session.
+  - Recommended GPU-Z settings are to minimise on close, load at Windows startup (minimised), and minimise to the system tray on the General tab, and refresh sensors while GPU-Z is in the background on the Sensors tab.
+  - Ensure the GPU shown in the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS. GPU-Z shares the sensors of its selected card and AutoFPS cannot choose another.
+- Thresholds
+  - Three thresholds for VRAM usage, all changeable in `MSFS2020_AutoFPS.config` / `MSFS2024_AutoFPS.config` after running the app once after updating:
+    - `VRAMOverflowHoldTLOD`, defaults to >= 96% VRAM in use and caps TLOD to its current value, even if favourable performance conditions exist.
+    - `VRAMOverflowReduceTLOD`, defaults to >= 98% VRAM in use and progressively activates settings reduction until the Hold threshold is achieved.
+    - `VRAMOverflowSettingsRecovery`, must be at least 5% less than `VRAMOverflowReduceTLOD` (i.e. 93% by default) and allows settings to progressively increase with favourable performance conditions until the feature disengages.
+- VRAM+ option (Expert mode only; enabled by default in either mode)
+  - MSFS 2020: enabling uses the LODs-only setting, providing up to a 50% reduction.
+  - MSFS 2024:
+    - Off: disables the feature completely.
+    - Max: (default) uses the full settings reduction suite minus clouds (to minimise impact on user experience), max levels 2, floor lowest and recovery altitude ground.
+    - Set: uses the shared auto settings reduction options that will now be shown, regardless of whether auto settings reduction is enabled or not.
+  - The tooltip on the VRAM+ dropdown is built from your live hold, reduce and recovery thresholds, and explains Max and Set, including that Auto Reduce Settings need not be ticked.
+- Reduction behaviour
+  - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is no longer exceeded, regardless of whether auto settings reduction is enabled or not.
+  - With MSFS 2024, user auto reduce settings are overridden while VRAM reduction is active to the maximum possible reduction, namely max reduction steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
+  - VRAM LOD reductions occur proportionally based on how far VRAM usage exceeds the reduce threshold until TLOD Min is reached, after which reductions occur at twice the normal rate to more quickly address VRAM overflow.
+  - VRAM LOD recovery rate is half the normal LOD recovery rate to more gently recover from VRAM overflow.
+  - VRAM protection limits LOD reductions to 50% max, aligning it with normal settings reduction.
+  - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
+  - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use below the VRAM reduce threshold being required before recovery is allowed. Each VRAM+ recovery increases the recovery altitude setting by one, up to Alt TLOD Top, to reduce instances of VRAM+ cycling too often.
+  - TLOD Base Extra seeking is cancelled while VRAM+ limiting is active and may fully reset if severe.
+- Display
+  - The "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active. The app status line appends HLD or RED to VRAM+ to indicate hold and reduction events respectively.
+  - The VRAM+ padlock beside TLOD in Sim Values has been replaced by the limit symbol (⊤) already used when the sim's maximum TLOD is reached, as VRAM+ limits TLOD rather than locking it. The TLOD value has a tooltip explaining this while the symbol is shown.
+- Start Max
+  - Start Max is skipped when VRAM at session start is above the VRAM+ recovery threshold (VRAM+ users with GPU-Z running), so the profile starts at Base Min TLOD with the normal FPS settle. There is no change when VRAM+ is off or no GPU-Z reading is available.
+  - Start Max is cancelled automatically if VRAM reaches the VRAM+ reduce threshold while the FPS settle after it is still running. The Start Max extra is cleared and TLOD is dropped straight to Base Min.
+  - VRAM is now monitored throughout the settle, where previously VRAM+ did not run during it and an overflow at the start could continue unchecked.
+- If you are continually experiencing VRAM+ activating, consider reducing your app TLOD settings and/or reducing other MSFS graphics settings.
 
 </details>
 
@@ -679,13 +759,12 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
 
 - Target FPS — the most important setting in the app (range 10–500, fractional values of 0.5 supported)
     - Set this to the FPS you want the app to target after any frame‑generation technology has been applied.
-    - Target FPS option (FPS Sensitivity and Tolerance mode only)
+    - Target FPS option (FPS Sensitivity mode only), saved separately for each graphics mode in each profile
       - Manual
-        - Automates proportionally above and below the user‑set value: smaller, more frequent adjustments in FPS Sensitivity mode; larger, less frequent adjustments in FPS Tolerance mode.
+        - Automates proportionally above and below the user‑set value in smaller, more frequent adjustments.
         - Requires FPS headroom above the target. If FPS rarely exceeds the target, TLOD increases may be slow or may not occur.
         - When an FPS cap is in place:
-          - Target FPS must be set at least 5% below the cap when Settings Reduction is disabled.
-          - Target FPS must be set at least 5% plus your profile FPS tolerance percentage below the cap when Settings Reduction is enabled, ensuring reduced settings have sufficient headroom to recover.
+          - Target FPS must be set at least 5% below the cap, ensuring settings reduction has sufficient headroom to recover.
           - Setting Target FPS strictly higher than a detected cap triggers an orange mismatch warning (buffered by 0.5 FPS to prevent frame jitter false alarms).
         - If you are using a true fixed FPS (FPS holding the same value with minimal variation) or VSync for that purpose, use the Fixed option instead of Manual.
       - Auto
@@ -696,7 +775,7 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
         - With VFR, each percentage is reduced by 5% to better suit higher performance expectations.
         - Auto settings reduction and TLOD Base Extra and Free are mutually exclusive with Auto Target FPS, hence are not selectable. Fixed TLOD must be used.
       - Fixed
-        - Designed for true locked framerates (e.g. driver locks, monitor refresh divisors, or Reflex caps). Maintains a fixed FPS more responsively and achieves higher average TLOD than FPS Cap mode, and enables the FreeTLOD option.
+        - Designed for true locked framerates (e.g. driver locks, monitor refresh divisors, or Reflex caps). Maintains a fixed FPS responsively and enables the FreeTLOD option.
         - Set Target FPS to match your locked rate, or between 0% and 5% below a detected cap without warning to accommodate standard G-Sync, FreeSync, and Reflex frame-rate caps.
         - Setting Target FPS more than 5% below a detected lock advises switching to Manual mode or raising the target to match the cap.
         - Setting Target FPS higher than a detected cap triggers an orange mismatch warning with recommendations to resolve.
@@ -705,7 +784,11 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
         - Recovers at twice the normal increase rate when below the last stable TLOD peak, improving responsiveness within previously safe ranges while avoiding overshoot above them.
         - Uses fixed timing guards (5 s since last decrease, 10 s since last increase) to minimise oscillation.
         - Halves maximum TLOD reduction in non‑cockpit camera states to account for larger transient FPS drops typical of these views.
-        - A one‑off per‑profile migration prompt converts existing FPS Cap settings to the recommended Sensitivity + Fixed Target FPS mode while preserving equivalent tuning.
+        - Profiles that previously used FPS Cap are converted automatically to FPS Sensitivity with Fixed Target FPS for every graphics mode, with a message. The old one-off conversion prompt has been removed.
+      - Saving the option per graphics mode
+        - The Manual, Auto or Fixed option is saved for each graphics mode in each profile. Existing settings are migrated from the profile's previous Auto and Fixed settings, which are kept in step so older versions still work if you roll back.
+        - The option dropdown applies to the mode shown in the Target FPS type dropdown. For a mode that is not active it is saved for later.
+        - Changing graphics mode outside a flight, or Man FG in a flight, loads the option for the new mode, with a reset when in a flight. Resetting a profile to defaults sets every mode to Manual.
     - Target FPS graphics mode
       - A separate Target FPS setting exists for each graphics mode (NFR, FG, LSFG, MSM, VXR, Man FG, FSR, OFXR and VR) and each flight type (VFR, IFR, and six user profiles in Expert mode).
       - On startup, the app defaults to the graphics mode last used.
@@ -726,7 +809,16 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
     - In Expert Mode (outside a flight session), restores the active flight profile to defaults following user confirmation.
     - Useful to reinitialise and recommence the seek process for TLOD Extra should conditions change significantly from what they were on initial start-up.
     - Can be activated by pressing ALT-R while the app has the focus, making it suitable to be assigned as a VR-friendly voice command with an app like VoiceAttack.
-  - Flight type - VFR or IFR (any mode), and six additional user profiles (Expert mode)
+  - Flight type - VFR or IFR (any mode), six additional user profiles (Expert mode), and Monitor only (any mode)
+    - Monitor only (any mode):
+      - The last entry in the Flight Type list. AutoFPS stops changing any sim settings and only monitors (the status line shows Monitor Mode). On selecting it, the sim is first returned to your own default TLOD, OLOD, cloud quality and key settings.
+      - It is a global state remembered between sessions until another flight type is chosen, which reloads that profile and does a full reset. It is not a profile and cannot be renamed, and the active profile and its settings are left untouched underneath.
+      - VR, sim rate and Night profile auto-switching are suspended while in Monitor only.
+      - The Expert panel is hidden and the General panel becomes a single line: On top, Dark, Log+ and Flight Type. Target FPS controls and the Expert checkbox are hidden. Reset is hidden too, except when no sim is running, where it still switches the MSFS 2020 / 2024 view.
+      - Log+ is forced on and locked (ticked and greyed out) while in Monitor only, and your saved Log+ setting is restored when you leave.
+      - Changes to TLOD, OLOD (PC and VR) and cloud quality made in the MSFS options update the stored defaults and the readings in the app, widget and web interface immediately once saved, in or out of a flight session. Nothing is logged and nothing is restored or reapplied.
+      - Clouds show green while they match the sim default (white if they ever differ), as TLOD and OLOD do. The Reduce readout is not shown.
+      - The previous `MonitorMode` config file method of enabling it has been removed.
     - Non-Expert mode:
       - VFR will use higher minimum and maximum TLODs and a lower TLOD base altitude than IFR.
       - Accounts for the greater performance expectation that GA flights in rural areas will have.
@@ -746,6 +838,14 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
         - A warning message will show when an edited profile name matches a VR/non-VR counterpart, indicating it will auto-switch between them; prompts user to rename if unintended.
       - Sim Rate pairing for automatic flight type profile switching:
         - Activates when the sim rate changes based on matching profile names with " xX" suffixes, where x is the new sim rate. eg. IFR 1X and IFR 4X.
+      - Day/Night pairing for automatic flight type profile switching (Expert):
+        - Name two profiles the same, with one ending in " Night" (e.g. IFR and IFR Night). AutoFPS uses the Night profile at night and the other profile during the day, checked every tick in a flight, including at flight start, after a manual profile change and after a reset.
+        - Outside a flight either profile can be selected to edit its settings. In a flight, selecting the inactive profile of a pair switches straight back, so exit the flight first or temporarily rename the Night profile (e.g. IFR Nite) to edit it.
+        - A profile can have only one auto-switch partner: if either profile is also part of a VR pair, the VR pair takes priority and there is no Night pairing.
+        - Night mode is not used on the day profile of a pair (shown greyed out), and the Night profile can only use its cloud reduction (Clds), as TLOD halving is not needed on a dedicated night profile. Saved Night mode settings are kept and return if the profiles are unpaired.
+        - The switch carries current settings over to the new profile (no reset) when both profiles use the same auto method and Manual / Auto / Fixed option, and either it is turning to night, no settings reduction is active, or the new profile can recover any active reductions itself. Otherwise a full reset is done, as for VR and sim rate profile switching.
+        - Paired profiles show the ↔ marker in the Flight Type list, renaming a profile into a pair shows an auto-switch warning, and the status line and log show Day or Night. The switch follows the same hold as day/night settings switching.
+      - Matching of VR, Night and sim rate profile names ignores capitalisation and unusual spacing (e.g. IFR night, IFR vr, IFR 2x and IFR  Night all pair).
       - Delayed base TLOD reduction until landing gear-down:
         - Enabled when "DelayLG" appears anywhere in a flight profile name.
         - Activation requires the aircraft to first ascend above Alt TLOD Base.
@@ -798,54 +898,21 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
 <summary><strong>Expert settings in full (automation methods, TLOD, Night Mode, Auto OLOD, cloud quality, settings reduction, VRAM+)</strong></summary>
 
 - Expert Settings
-  - Auto Method – FPS Sensitivity generally gives the best results for most users, including when using a true fixed FPS, and hence is the default. Use FPS Tolerance if you experience stuttering issues. Use Auto TLOD if you want a DynamicLOD‑like experience. FPS Cap and FPS Tolerance are both legacy modes; FPS Cap was previously recommended when using a true fixed FPS, but FPS Sensitivity with Fixed Target FPS is now the preferred option.
+  - Auto Method – FPS Sensitivity generally gives the best results for most users, including when using a true fixed FPS, and hence is the default. Use Auto TLOD if you want a DynamicLOD‑like experience. FPS Tolerance and FPS Cap were retired in 0.5.5.1 (see below).
     - FPS Sensitivity - smaller changes more often.
       - Determines how sensitive the app will be to the variance between your current and target FPS.
       - Also determines the largest TLOD step size you will see, being double the FPS sensitivity number.
       - The lower the setting the smaller the changes will be, which is useful if you are experiencing stuttering with the default value of 5. Vice versa for higher settings. (1 - 20 allowable)
-    - FPS Tolerance (legacy) - larger changes less often.
-      - Determines how much variance from your target FPS must occur before the app will adjust MSFS settings to achieve the target FPS and what nominal magnitude those changes will be.
-      - The lower the setting, the more reactive the app will be, the more MSFS settings changes will occur and the changes will be smaller. (1% - 20% allowable)
     - Auto TLOD – operates like Auto OLOD by using an altitude‑based schedule, and is the mode most closely aligned with DynamicLOD_ResetEdition behaviour.
       - TLOD will adjust based on an altitude band with a base and top level and with TLOD values defined for each of these altitudes.
       - The app will set TLOD Base at or below the Alt TLOD Base (AGL), set the TLOD Top at or above Alt TLOD Top (AGL) and interpolate in between.
       - The nominal LOD Step Size can be set to allow users experiencing stuttering issues to try different LOD step sizes to help resolve the issue. The default value is 5. (1 - 20 allowable)
+      - Alt TLOD Top in this mode was reduced from 1000 to 100 ft in 0.5.5.1, as 1000 was unnecessarily restrictive.
       - This method completely ignores FPS hence all FPS-related settings are removed from the UI.
-    - FPS Cap (legacy) - a specific configuration of Auto TLOD optimised for when a true fixed FPS is in use, but FPS Sensitivity with Fixed Target FPS is now the preferred option.
-      - TLOD Extra – additional TLOD applied under favourable performance conditions.
-        - Applicable to FPS Cap mode in Expert mode, and to Non‑Expert mode when an FPS cap is auto‑detected.
-        - When enabled, set target FPS equal to your fixed FPS if using one, or slightly below your usual FPS if not, for correct logic.
-        - TLOD Base Extra in FPS Cap mode
-          - When enabled, allows TLOD Extra below Alt TLOD Top.
-          - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Min + Top Extra.
-          - Multiplier tooltip shows TLOD Min including Extra total.
-        - TLOD Top Extra
-          - Force‑enabled to ensure TLOD/altitude logic functions correctly in this mode.
-          - Allows TLOD Extra above Alt TLOD Top.
-          - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so Top Max ≤ SimMaxLOD (default 1000).
-          - Multiplier tooltip shows TLOD Max including Extra total.
-        - TLOD Extra seek process starts automatically:
-          - At flight commencement (regardless of aircraft position) and again when landed and stopped.
-          - On climb through Alt TLOD Top.
-          - Periodically, every 30 seconds above Alt TLOD Top, if not already at TLOD Top Max and provided the fixed FPS is consistently being met.
-        - Seek can be restarted manually via Reset if flight conditions change and invalidate the original TLOD Base.
-        - When seeking:
-          - Large steps (up to TLOD Base) on the ground, prioritising timeliness.
-          - Small steps (TLOD Step Size) in the air, prioritising stutter minimisation.
-          - Intentional overshoot then reduction by headroom amount (default 25) to create margin.
-        - Fixed FPS breaches trigger immediate headroom reduction proportional to the magnitude of the breach (non‑seek occurrences).
-        - Avoid rapid external view panning, especially during initial scenery loading, to prevent temporary FPS drops and unnecessary reductions.
-        - If FPS drops below target during takeoff and TLOD decreases, it will progressively restore once conditions improve after passing Alt TLOD Top.
-        - Calculated TLOD Base Extra is applied as an offset, increasing the entire TLOD altitude schedule by that amount.
-        - If VRAM+ limiting is active, Base Extra is frozen or fully reset if the limitation is severe.
-        - Config file settings allow adjustment of headroom amount and re‑seek behaviour.
-      - The following guidelines should be observed to get the best result from this mode:
-        - Set TLOD Base Min and TLOD Top Min values within your fixed FPS for worst-case performance during your flight type profile. TLOD Extra may increase TLOD with better performance but won't drop below the set values.
-        - TLOD Base Extra is applied across the entire altitude schedule, potentially allowing very high TLOD Top Max at high multipliers if performance conditions are favourable, so be particularly conservative when setting TLOD Top Min.
-        - When on the ground and stopped:
-           - The initial seek process may temporarily destabilize FPS while identifying performance limits, but it typically stabilizes within 60 seconds once the ideal TLOD is determined.
-           - Post-seek, panning may cause stuttering due to how MSFS handles high TLOD scenery loading, irrespective of whether you or this app has set them that high.
-           - If stuttering persists, either uncheck TLOD Base Extra, use a lower multiplier, or use AutoTLOD for the lowest possible TLOD on the ground.
+    - FPS Tolerance and FPS Cap (retired in 0.5.5.1)
+      - The Auto Method dropdown lists only FPS Sensitivity and Auto TLOD.
+      - Profiles on FPS Tolerance are switched to FPS Sensitivity automatically, with a message. Profiles on FPS Cap are converted automatically to FPS Sensitivity, also setting Fixed Target FPS for every graphics mode of the profile, with a message.
+      - The FPS Cap TLOD Extra seek process, and the `TLOD+ Seek` and `FPSCap` status text, no longer exist. For locked frame rates use FPS Sensitivity with Fixed Target FPS.
   - Periodic Spike Detection/Protection:
     - Requires RTSS to be running and configured to monitor frame time data. 
     - Detection is auto enabled in Expert mode and disabled in Non-Expert mode.
@@ -860,7 +927,7 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
     - Additional diagnostic logging occurs when Log+ is enabled.
   - TLOD Base Min - Sets the minimum TLOD the automation algorithm will use at or below the Base altitude. (Range: 10 - TLOD Max-10)
   - Alt TLOD Base – Altitude (AGL) at or below which TLOD will be at TLOD Base Min. (Range: 100 ft to 100,000 ft; N/A in Free TLOD mode)
-  - TLOD Base Extra option in FPS Sensitivity or Tolerance modes in Manual or Fixed Target FPS:
+  - TLOD Base Extra option in FPS Sensitivity mode in Manual or Fixed Target FPS:
     - Fixed:
       - No TLOD Base Extra is used.
       - Forced for Auto Target FPS due to mutual exclusivity with this mode.
@@ -869,7 +936,7 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
       - Multiplier configurable between 1.5 and 4 (default 2); auto‑limited so TLOD Base Min + Base Extra ≤ TLOD Top Max.
       - Multiplier tooltip shows TLOD Min including Extra.
       - On the ground at ≤ 5 knots, Base Extra increases progressively (larger initial steps) until a higher TLOD Base Min is reached, up to the maximum allowable.
-      - During critical flight phases (ground speed > 5 knots or below Alt TLOD Base), Base Extra is limited to reductions only to minimise stutters.
+      - During critical flight phases (ground speed above 20 knots, above 5 knots while accelerating, or below Alt TLOD Base in the air), Base Extra is limited to reductions only to minimise stutters.
       - Avoid rapid view changes or fast panning, especially while scenery loads, as this may trigger unnecessary reductions.
       - If VRAM+ limiting is active, Base Extra seeking is cancelled and may fully reset if severe.
     - Free:
@@ -880,39 +947,37 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
     - When enabled, starts with maximum TLOD Extra instead of beginning at minimum and ramping upward.
     - Replaces the initial 30-second FPS timer with a normal settle event, reducing startup settle time at the cost of potentially incomplete initial stabilisation.
     - Due to the aggressive nature of this feature, initial performance may be sub-optimal and the final achievable TLOD Extra may be lower than when the feature is disabled.
+    - Start Max is skipped when VRAM at session start is above the VRAM+ recovery threshold (VRAM+ users with GPU-Z running), so the profile starts at Base Min TLOD with the normal FPS settle. A log line records it, and there is no change when VRAM+ is off or no GPU-Z reading is available.
+    - Start Max is cancelled automatically if VRAM reaches the VRAM+ reduce threshold while the FPS settle after it is still running. The Start Max extra is cleared and TLOD is dropped straight to Base Min, with a log line. VRAM is now monitored throughout the settle.
   - TLOD Top
-    - FPS Sensitivity and Tolerance modes:
+    - FPS Sensitivity mode:
       - TLOD Top Max – Maximum TLOD the automation algorithm may use. (Range: TLOD Base Min+10 to 1000)
       - Alt TLOD Top – Altitude (AGL) at or above which TLOD may increase up to TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft; N/A in Free TLOD mode)
     - Auto TLOD mode:
       - TLOD Top Max – Fixed maximum TLOD the automation algorithm will use. (Range: TLOD Base Min+10 to 1000)
       - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be fixed at TLOD Top Max. (Range: Alt TLOD Base+1 to 100,000 ft)
-    - FPS Cap mode:
-      - TLOD Top Min – Minimum TLOD the automation algorithm will apply before any TLOD Top Extra. (Range: TLOD Base Min+10 to 1000)
-      - Alt TLOD Top – Altitude (AGL) at or above which TLOD will be at least TLOD Top Min. (Range: Alt TLOD Base+1 to 100,000 ft)
     - All modes, except when Free TLOD is enabled:
-      - Default Alt TLOD Top values are reduced in FPS Sensitivity and Tolerance modes to account for free‑ranging TLOD Max.
-        - IFR: Base 1000 ft, Top (Sensitivity/Tolerance) 2000 ft, Top (Auto TLOD/FPS Cap) 3333 ft – aligns with recommended max 2000 fpm descent rate.
-        - VFR: Base 100 ft, Top (Sensitivity/Tolerance) 1000 ft, Top (Auto TLOD/FPS Cap) 2350 ft – aligns with recommended max 1350 fpm descent rate.
-      - Default Alt TLOD Top values are now lower in FPS Sensitivity and Tolerance modes to account for free-ranging TLOD Max.
-        - IFR Base: 1000 ft, IFR Top (Sensitivity Tolerance): 2000 ft, IFR Top: 3333 ft for recommended max 2000 fpm descent rate.
-        - VFR Base: 100 ft, VFR Top (Sensitivity Tolerance): 1000 ft, VFR Top: 2350 ft for recommended max 1350 fpm descent rate.
+      - Default Alt TLOD Top values are lower in FPS Sensitivity mode to account for free‑ranging TLOD Max.
+        - IFR: Base 1000 ft, Top (Sensitivity) 2000 ft, Top (Auto TLOD) 3333 ft – aligns with recommended max 2000 fpm descent rate.
+        - VFR: Base 100 ft, Top (Sensitivity) 1000 ft, Top (Auto TLOD) 2350 ft – aligns with recommended max 1350 fpm descent rate.
       - TLOD Top Min/Max Tooltip – Displays recommended maximum average descent rate for current settings.
       - Alt TLOD Top Tooltip – Displays altitude to set for recommended IFR/VFR descent rates.
         - Profiles with "VFR" in their name (case‑insensitive) automatically show VFR info.
         - Default fpm constants are stored in the associated MSFS version config file for easier adjustment.
-  - Mtns - additional TLOD Max in high elevation areas for all modes except FPS Cap.
+  - Mtns - additional TLOD Max in high elevation areas for all modes.
     - When enabled, extends TLOD Max in areas where the terrain is higher than Mtn Alt Min (Range: 100 ft - 100,000 ft) by the TLOD Mtn Amt amount (Range: 10 - 1000), progressively increasing by the TLOD step size per second until completely activated.
     - When Free TLOD mode is active in FPS Sensitivity mode, Mountains+ applies at all altitudes, including on the ground, allowing TLOD to reach up to TLOD Top Max + Mountains Extra everywhere based on performance.
     - If terrain drops below Mtn Alt Min, Mtns will remain fixed for 5 minutes then progressively reduce by the TLOD step size per second until completely deactivated.
-  - Night Mode - unified per-profile night-time performance optimisation
-    - Replaces the previous checkbox with a per-profile dropdown offering four modes: Off, TLOD÷2, Clds-X, and Both.
+  - Night Mode - per-profile night-time performance optimisation (see the Night Mode entry in the Expert Mode Reference Guide for the Day/Night switch level, hold and cloud reduction settings)
+    - Per-profile dropdown with four modes: Off, TLOD÷2, Clds-X, and Both.
     - Decouples night-time cloud reduction from TLOD halving, allowing users to reduce cloud overhead while preserving full draw distance for city lights and runways.
-    - Steps down volumetric cloud quality by configurable levels (default 2, minimum Low) at night and cleanly restores daytime settings at sunrise.
+    - Steps down volumetric cloud quality by the Night cloud reduction levels (never below Low) at night and cleanly restores daytime settings at sunrise.
     - Automatically clears any active daytime cloud boost (IncCloudQ) upon entering night mode and restores it at sunrise.
-    - Works with all automation methods: FPS Sensitivity, FPS Tolerance, and Auto TLOD.
-    - Settings adjust progressively when transitioning between day and night based on local time and aircraft position.
+    - Works with all automation methods: FPS Sensitivity and Auto TLOD.
+    - Settings adjust progressively when transitioning between day and night.
     - The status line displays Day, Night, or Δ while transitioning between them.
+    - Fixed in 0.5.5.1: night cloud reduction not reapplying after a night, day, night sequence (Increase Cloud Quality could run before the night restore and block the next reduction), and settings reduction recovery raising clouds one level above the night level after a reduction cycle at night.
+    - Night and day transitions no longer compound TLOD Min, Mountains and spike reductions during the transition, and the mid altitude reset TLOD uses the halved Max TLOD only at night.
   - Auto OLOD
     - When enabled, four user definable parameters relating to this feature will be revealed on the UI.
     - Rather than the automation being FPS based, which would cause contention with TLOD changes at the same time, OLOD will adjust based on an altitude band with a base (1000ft minimum and less than top) and top level (2000ft minimum, 100000ft maximum and greater than base) and with OLOD values defined for each of these altitudes (10 - 1000 allowable).
@@ -927,7 +992,7 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
           - Most suitable for systems where cloud quality has a similar or larger impact on desired MSFS performance than TLOD does.
           - Reduction occurs only when FPS falls below target by at least the margin specified by the current TLOD automation method.
         - All flight type profiles will use the same cloud reduction method.
-      - TLOD (FPS Sensitivity and FPS Tolerance TLOD Automation Methods)
+      - TLOD (FPS Sensitivity TLOD Automation Method)
         - Decreases when TLOD has already auto reduced to TLOD Base Min and FPS is still below target FPS by more than the FPS tolerance.
         - Cloud Recovery TLOD with optional + (resultant TLOD must fall within TLOD Base Min+5 and TLOD Max-5)
           - The TLOD level required to cancel an active cloud quality reduction state and restore cloud quality back to its initial higher quality level.
@@ -950,16 +1015,13 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
       - Automatically reduces settings if the current FPS falls below the target FPS and TLOD is already at a minimum.
       - Activation and recovery are automatically paused during critical flight phases (takeoff, initial climb, final approach, landing).
       - When enabled the default values of the applicable settings are the same as for Non-Expert except Reduction Settings Suite: LODs, Clouds, Trees, and RT Shadows (which covers the settings most likely to improve FPS when they are reduced).
-        - TLOD reductions with FPS Cap or AutoTLOD with TLOD Base+ enabled reduce are normally calculated TLOD applicable to your aircraft's current altitude above ground rather than simply adjusting TLOD Base like the other two modes.
         - OLOD reductions are proportional to TLOD reductions.
         - AutoFPS-controlled LOD reductions are replaced with MSFS dynamic settings control when enabled. Resulting reductions are internal to MSFS and not reflected in external LOD values.
         - Settings reduction activation cancels the TLOD Extra seek process if active.
       - Automatically restores settings if the current FPS rises above the target FPS by the default tolerance or if the current FPS matches the target FPS and the TLOD has automatically increased by an acceptable margin.
         - Settings recovery will commence recovery immediately in any mode if the current FPS is above the target FPS by the FPS tolerance amount.
-        - In FPS Cap mode, the reseek process will be triggered at least 30 seconds after the last time settings reduction level was reduced and the target FPS is being achieved once again.
         - Displacement Maps will not restore to enabled until above 100 ft AGL, as it is known to cause texture corruption at low altitudes.
       - TLOD Top Max and OLOD will be progressively reduced at the user-defined LOD step rate by up to 50%.
-        - TLOD Base Min gets reduced by the same proportional amount that TLOD Top gets reduced for FPS Cap mode.
       - Max Levels setting determines how many levels the settings other than LODs will be reduced by in subsequent reduction cycles. 
       - Floor setting determines the minimum setting quality level that settings will be reduced to, including off if an allowable state for a setting.
       - Recover setting determines at which altitude (ground, Alt TLOD Base or Alt TLOD Top / equivalent) settings reduction recovery can occur as enabling it at lower altitudes may not be acceptable for some users. The default is Alt TLOD Base, being the middle option.
@@ -967,22 +1029,7 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
         - The presets are based on research that identified the settings most likely to improve FPS and/or reduce VRAM consumption when they are reduced, in decreasing order of effectiveness.
         - Custom Reduction Settings Suite allow the user to select which individual settings to reduce rather than the preset sets, the individual settings for which will appear when the user mouses over the reduction settings suite label or drop down list and Custom is currently selected. 
       - The Reset button will restore all settings to their default values.
-    - VRAM+
-      - Optional VRAM overflow protection that invokes auto settings reduction if VRAM usage exceeds a reduction threshold, nominally 98% and changeable in the config file.
-      - Enabled by default and applies globally, including Non-Expert mode.
-      - Requires the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app to be installed and running. See the FAQ section VRAM+ entry for details on how to configure correctly.
-        - If the required companion app GPU-Z in not running, a message suggesting to the user to start it will be displayed during the initial 30 second settle timer of each session.
-      - Settings reduction commences if the VRAM reduction threshold is exceeded, and continues until it is not longer exceeded, regardless of whether auto settings reduction is enabled or not. 
-      - VRAM settings recovery threshold, nominally 5% below the VRAM limit reduction threshold, allows adequate VRAM usage headroom before settings recovery is activated.
-      - With MSFS 2024, user auto reduce settings are overridden while VRAM reduction is active to the maximum possible reduction, namely max reductions steps the greater of 2 or the current setting, reduction settings floor off and reduction settings suite to full.
-      - VRAM LOD reductions occur proportionally based on how far VRAM usage exceeds the reduce threshold until TLOD Min is reached, after which reductions occur at twice the normal rate to more quickly address VRAM overflow.
-      - VRAM LOD recovery rate is half the normal LOD recovery rate to more gently recover from VRAM overflow.
-      - VRAM protection will limit LOD reductions to 50% max, aligning it with normal settings reduction. 
-      - VRAM+ triggering requires two consecutive threshold breaches before activating, in order to reduce the likelihood of false triggering.
-      - Recovery is allowed at any altitude, including on the ground, due to the conservative 5% minimum reduction in VRAM use below the VRAM reduce threshold being required before recovery is allowed.
-        - Each VRAM+ recovery will increase the recovery altitude setting by one, up to Alt TLOD Top, to reduce instances of VRAM+ cycling too often.
-      - "Reduce" sim value label changes to "VRAM+" and shows in red when VRAM settings reduction is active, indicating that the app is actively reducing settings to manage VRAM usage.
-      - The app status line will also append HLD or RED to VRAM+ to indicate VRAM+ hold and reduction events respectively.
+    - VRAM+: see *VRAM+ in full* above.
     - Auto Increase Clouds
       - Auto increase cloud quality option with TLOD Base Extra enabled.
       - Increases cloud quality by one level if not already at ultra and sufficient TLOD or FPS performance margin exists at the conclusion of the seek process.
@@ -1020,11 +1067,7 @@ Versions up to and including v0.5.5.0 were released under the MIT Licence, which
         - PerfLogBufferSize – number of pre‑breach and post‑recovery samples, default 15.
         - PerfLoggingAlways – always enabled, regardless of what it is set to in the config file.
         - EwmaAlpha – EWMA smoothing coefficient, default 0.1.
-        - MonitorMode – default false; disables all AutoFPS automation for baseline MSFS performance monitoring.
-          - Hides the Expert settings panel.
-          - Excludes irrelevant log lines.
-          - Does not back up or restore UserCfg.opt.
-          - Shows Monitor Mode in the title bar.
+        - MonitorMode – no longer enables monitoring. The config key now only stores the Monitor only Flight Type selection (see Flight type - Monitor only).
 - Virtual screen coordinates and window position logging on app startup.
   - Detailed settings initialisation, reduction and recovery event logging, to aid troubleshooting and performance monitoring.
   - Verbose compatibility test results in log file.
@@ -1069,7 +1112,7 @@ Some Notes:
   - Desktop Icon: Create a desktop icon for the app.
   - MSFS Widget: Deploys the AutoFPS In-Game Toolbar Widget to the Community folder of any installed MSFS versions.
   - Close to Tray: App Closes to the System Tray.
-  - Reset Configs: Resets the app Common, MSFS 2020 and MSFS 2024 config files.
+  - Reset Configs: Resets the app Common, MSFS 2020 and MSFS 2024 config files. When upgrading from 0.5.5.0 or earlier, the config files are first backed up to a `ConfigBackup_<version>` folder (an existing backup folder is left alone, and a backup failure is logged and does not stop the installation).
   - Repair: Reinstalls core files, including latest Visual C++ Redistributable and .NET 8 runtime versions, MobiFlight, and In-Game Widget (if enabled), keeping your app config intact.
   - Auto Start Options: Remove, Retain, FSUIPC (via FSUIPC.ini) or MSFS (via EXE.xml).
   - Custom Community Folders: Allows choosing custom Community folder locations for MSFS 2020 and MSFS 2024 via the `2020 Folder...` and `2024 Folder...` buttons. Ideal for Addons Linker or custom drive configurations. Right-click on either button to quickly reset back to auto-detected simulator defaults.
@@ -1084,7 +1127,7 @@ Some Notes:
     - Click 'Yes' to close AutoFPS immediately and postpone the update until the next launch with MSFS closed.
   - Minimizing to the system tray is unaffected and leaves the update queued for when MSFS exits.
   - Updates that do not contain widget changes continue to install immediately while MSFS is running.
-- If the installer did not download or is zero size, try redownloading again with a different browser and possibly with AV temporarily disabled if required. It should be about 1.5Mb in size. 
+- If the installer did not download or is zero size, try redownloading again with a different browser and possibly with AV temporarily disabled if required. It should be about 3 MB in size. 
 - If the installer will not run at all:
   - Windows SmartScreen is potentially blocking it because the app is so new. The solution to try is:
     - Right-click on the Installer and select properties
@@ -1117,6 +1160,7 @@ Some Notes:
 - The app will automatically check for updates on startup and will notify you accordingly on the app status line.
   - If you wish to only be notified of mandatory updates, select the Mandatory Updates options.
   - In test versions, notification of all app updates will be enabled as a minimum by default, regardless of what you have previously chosen for update notification, in order to encourage maintenance of a current test baseline.
+  - Auto-update verifies the downloaded installer's SHA-256 against the digest published by GitHub before launching it, re-downloading on a mismatch and refusing the update if no digest is available.
 - If you wish to retain your settings for an update version, do NOT uninstall first, as that deletes all app files, including the config file. Just run the installer, select update and your settings will be retained.
 - The app may be blocked by Windows Security or your AV-Scanner, if so try to unblock or set an exception (for the whole Folder).
 - The Installation-Location is fixed to %appdata%\MSFS_AutoFPS (your Users AppData\Roaming Folder) and can't be changed.
@@ -1128,9 +1172,9 @@ Some Notes:
   - Try reinstalling the app with the Repair option selected, then reboot. If any of the redistributables fail to install during this process, try downloading and installing/repairing (as applicable):
     - A Microsoft official version of “Microsoft Visual C++ 2015 - 2022 Redistributable”, which may be missing from your Windows installation. Try installing [this](https://aka.ms/vs/17/release/vc_redist.x86.exe) and [this](https://aka.ms/vs/17/release/vc_redist.x64.exe).
     - The NET desktop runtime from [here](https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/8.0.15/windowsdesktop-runtime-8.0.15-win-x64.exe) if still available. Alternatively, go to the Microsoft .NET 8.0 download page [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) and download and install the latest .NET Desktop Runtime X64 version.
-  - If still not resolved and the error code in your AutoFPS log file is Exception 31, you most likely have a corrupt MSFS WASM installation.
+  - If still not resolved and the log shows a SimConnect / WASM exception such as Exception 31 or Exception 25, you most likely have a corrupt MSFS WASM installation.
     - First, try deleting the MSFS WASM folder, located under the Microsoft Flight Simulator directory in either %appdata% or %localappdata% for Steam and MS Store install directories respectively, which will rebuild when you next run MSFS. Rebooting is also recommended.
-    - If that doesn't fix it, a full clean reinstall of MSFS will be required per the explicit instructions in the FAQ entry [here](https://github.com/ResetXPDR/MSFS_AutoFPS?tab=readme-ov-file#msfs-clean-reinstallation-instructions).
+    - If that doesn't fix it, a full clean reinstall of MSFS will be required per the explicit instructions in [MSFS Clean Reinstallation Instructions](#msfs-clean-reinstallation-instructions).
 - If you get an "Unable to attach MSFS - app disabled." message, the most likely causes are that MSFS is loading in very slowly and the attachment process is timing out, MSFS and this app are running at different permission privilege levels, or your anti-virus/malware app is blocking this app. To resolve, try the following:
   - Restart this app after MSFS has loaded in to the main menu.
   - Check that MSFS is not running as administrator.
@@ -1155,7 +1199,7 @@ Some Notes:
 </details>
 
 <details>
-<summary><strong>Other FAQ entries from the original README</strong></summary>
+<summary><strong>FAQ answers in full</strong></summary>
 
 ### How does AutoFPS compare to the in-built Dynamic Setting feature that MS included in MSFS 2024?
 - Dynamic Setting adjusts both TLOD and OLOD, the former initially then the latter if still significantly under target FPS. AutoFPS adjusts these settings independently, with OLOD changing inversely proportional to altitude by default, and can also change a lot more settings when auto settings reduction and VRAM+ are active.
@@ -1176,24 +1220,12 @@ Some Notes:
 - Once you are comfortable with how the app operates, enable expert settings and start reading the tooltip and readme on what each setting does.
 - When making changes, it is best to make small changes to only a few settings so that you can see the effect of them and adjust as desired.
 
-### What does this VRAM+ feature do? How do I use it?
-- MSFS 2024 and MSFS 2020 in DX12 mode are very demanding on VRAM use which can result in situations where its VRAM usage can completely fill all available VRAM on your GPU and overflow into much slower system RAM.
-- VRAM overflow situations often lead to significant reductions in performance, in some cases down to single digit FPS, and makes MSFS much more prone to CTD.
-- While MS/Asobo have reduced VRAM usage in MSFS 2024 SU2, many users with GPUs having less than 16GB VRAM are still regularly encountering VRAM overflow situations, even with modest settings.
-- VRAM+ mitigates these potential overflow events by detecting an impending VRAM overflow and either hold or, if close enough, commence reducing key settings known to free up VRAM.
-- Settings will automatically reduce, up to 50% for LODs (no further for MSFS 2020) and down by 2 quality levels for other settings, but only as far as is required to avert the VRAM overflow.
-- When VRAM usage reduces to an acceptable level, these setting will automatically increase again, potentially back to their default values if sufficient VRAM headroom now exists.
-- In order to use VRAM+ automatically, you will need to have VRAM+ enabled (default) and also run the [GPU-Z](https://www.techpowerup.com/download/techpowerup-gpu-z/) companion app as it is needed to provide current VRAM usage to the app.
-  - Recommended GPU-Z settings are to minimise on close, load at windows startup (minimised), and to minimise to the system tray on the general tab, and refresh sensors while GPU-Z is in the background on the sensors tab.
-  - Ensure the GPU shown on the GPU-Z GPU dropdown list is the same as the GPU being used for MSFS.
-
 ### I am getting major stuttering (visual or sound), freezes or CTDs in MSFS using this app. What can I do to stop them?
 - By far the most common reason is users have enabled Expert settings and have modified the default settings to be way beyond what their system is capable of, even without running the app.
 - As such, the first step to resolve is to restore the app's default settings, which you can do by using the installer and selecting the Reset Configs options, which will recreate your config files.
 - Rerun the app and try Non-Expert mode with IFR flight type and Auto Target FPS checked.
 - If you have enabled the MSFS Performance Optimiser, which can cause stutters on some systems (especially with sound), try disabling it.
 - If this doesn't resolve it, try enabling Expert options and reducing the FPS Sensitivity setting to 2, to allow smaller TLOD changes.
-- If still not resolved, try the FPS Tolerance mode, which was the automation method in the original release version that had larger TLOD changes but they occurred less often, with a setting of 5.
 
 ### My default MSFS graphics settings are messed up and each time I try to change them back they get messed up again. How do I fix this?
 - You are likely trying to change these default MSFS settings while the app is still running and you are in an active flight, where the app will override any such changes you try to make.
